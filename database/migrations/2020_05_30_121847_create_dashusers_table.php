@@ -15,12 +15,12 @@ class CreateDashusersTable extends Migration
     {
 
         Schema::create('dash_types', function (Blueprint $table){
-            $table->increments('id');
+            $table->id();
             $table->string('DHTP_NAME');
         });
 
         Schema::create('dash_users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('DASH_USNM');
             $table->string('DASH_FLNM');
             $table->string('DASH_PASS');

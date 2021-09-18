@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
 
+    public function __construct()
+    {
+      
+    }
+
     public function login()
     {
 
@@ -49,8 +54,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function admin()
     {
+        $this->middleware('auth');
         return view('home');
     }
 }
