@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -70,18 +71,30 @@ class BrandsController extends Controller
 
         $request->validate([
             "name"      => "required|unique:brands,BRND_NAME",
-            "logo"      => "required_if:isActive,on"
+            "logo"      => "required_if:isActive,on",
+            "image"     => "required_if:isActive,on"
         ]);
 
-        $brand = new Brand();
-        $brand->BRND_NAME = $request->name;
-        $brand->BRND_ARBC_NAME = $request->arbcName;
-        if ($request->hasFile('logo')) {
-            $brand->BRND_LOGO = $request->logo->store('images/brands/' . $brand->BRND_NAME, 'public');
-        }
-        $brand->BRND_ACTV = $request->isActive == 'on' ? 1 : 0;
+        $filesHandler = new FilesHandler();
 
-        $brand->save();
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = $filesHandler->uploadFile($request->logo, 'images/brands/' . $request->name);
+        }
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $filesHandler->uploadFile($request->image, 'images/brands/' . $request->name);
+        }
+        try {
+            $brand = Brand::create($request->name, $request->arbcName, $request->isActive, $logoPath, $imagePath);
+        } catch (Exception $e) {
+            $brand = null;
+            if ($logoPath != null)
+                $filesHandler->deleteFile($logoPath);
+            if ($imagePath != null)
+                $filesHandler->deleteFile($imagePath);
+        }
+
         return redirect($this->homeURL);
     }
 
@@ -91,21 +104,29 @@ class BrandsController extends Controller
             "id" => "required",
         ]);
         $brand = Brand::findOrFail($request->id);
+        $filesHandler = new FilesHandler();
 
         $request->validate([
             "name" => ["required",  Rule::unique('brands', "BRND_NAME")->ignore($brand->BRND_NAME, "BRND_NAME"),],
             "id"        => "required",
-            "logo"      => "required_if:isActive,on"
+            "logo"      => "required_if:isActive,on",
+            "image"     => "required_if:isActive,on",
         ]);
 
-        $brand->BRND_NAME = $request->name;
-        $brand->BRND_ARBC_NAME = $request->arbcName;
         if ($request->hasFile('logo')) {
-            $this->deleteOldBrandPhoto($brand->BRND_LOGO);
-            $brand->BRND_LOGO = $request->logo->store('images/brands/' . $brand->BRND_NAME, 'public');
+            $logoPath = $filesHandler->uploadFile($request->logo,  'images/brands/' . $brand->BRND_NAME, 'public');
         }
-        $brand->BRND_ACTV = $request->isActive == 'on' ? 1 : 0;
-        $brand->save();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $filesHandler->uploadFile($request->image, 'images/brands/' . $brand->BRND_NAME);
+        }
+        try {
+
+            $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath, $imagePath);
+        } catch (Exception $e) {
+            $filesHandler->deleteFile($logoPath);
+            $filesHandler->deleteFile($imagePath);
+        }
 
         return redirect($this->homeURL);
     }
@@ -117,21 +138,12 @@ class BrandsController extends Controller
         return back();
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $brand = Brand::withCount('models')->findOrFail($id);
-        if($brand->models_count == 0){
+        if ($brand->models_count == 0) {
             $brand->delete();
         }
         return back();
-    }
-
-    private function deleteOldBrandPhoto($brandFilePath)
-    {
-        if (isset($brandFilePath) && $brandFilePath != '') {
-            try {
-                unlink(public_path('storage/' . $brandFilePath));
-            } catch (Exception $e) {
-            }
-        }
     }
 }

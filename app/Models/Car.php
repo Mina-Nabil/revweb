@@ -20,6 +20,21 @@ class Car extends Model
     ];
 
 
+    ////Catalog Functions
+    /***
+     * load cars by brand ID
+     * @param brandIDs array
+     */
+    static public function getCarsByBrandIDs($brandIDs)
+    {
+       
+        return self::join("models", "CAR_MODL_ID", "=", "models.id")
+            ->join("brands", "MODL_BRND_ID", "=", "brands.id")
+            ->whereIn("brands.id", $brandIDs)
+            ->select("cars.*", "models.MODL_NAME", "models.MODL_ARBC_NAME", "models.id as MODL_ID", "brands.BRND_NAME", "brands.BRND_ARBC_NAME", "brands.id as BRND_ID")
+            ->get();
+    }
+
 
     public function getImageAttribute()
     {
@@ -78,25 +93,4 @@ class Car extends Model
         return $accessories;
     }
 
-    public function toggleOffer()
-    {
-        if (isset($this->CAR_OFFR)) {
-            $this->CAR_OFFR = null;
-            if ($this->save()) return 0;
-        } else {
-            $this->CAR_OFFR = new DateTime();
-            if ($this->save()) return 1;
-        }
-    }
-
-    public function toggleTrending()
-    {
-        if (isset($this->CAR_TRND)) {
-            $this->CAR_TRND = null;
-            if ($this->save()) return 0;
-        } else {
-            $this->CAR_TRND = new DateTime();
-            if ($this->save()) return 1;
-        }
-    }
 }

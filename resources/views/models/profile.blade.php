@@ -8,10 +8,7 @@
     <div class="col-lg-4 col-xlg-3 col-md-5">
         <div class="card"> <img class="card-img" src="{{  (isset($model->MODL_IMGE)) ? asset( 'storage/'. $model->MODL_IMGE ) : asset('images/def-car.png')}}" alt="Card image">
         </div>
-        <div class="card"> <img class="card-img"
-                src="{{  (isset($model->MODL_BRCH)) ? "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Findd.adobe.com%2Fview%2F{$model->MODL_BRCH}&choe=UTF-8"  : asset('images/def-car.png')}}"
-                alt="Card image">
-        </div>
+
     </div>
     <!-- Column -->
     <!-- Column -->
@@ -57,21 +54,8 @@
                         </div>
                         <hr>
                         <div class=row>
-                            <div class="col-md-12 col-xs-12 b-r ">
-                                <strong>Interactive PDF Brochure</strong>
-                                @if(isset($model->MODL_BRCH))
-                                <iframe style="border: 1px solid #777; width:100% " src="https://indd.adobe.com/embed/{{$model->MODL_BRCH}}?startpage=1&allowFullscreen=false" height="371px"
-                                    class="m-t-10" frameborder="0" allowfullscreen=""></iframe>
-                                @else
-                                <p class="text-muted">Interactive Brochure Area</p>
-                                @endif
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class=row>
                             <div class="col-12 b-r">
-                                <strong>Static PDF Brochure</strong>
+                                <strong>Option PDF Brochure</strong>
                                 @isset($model->MODL_PDF)
                                 <embed class="m-t-10" src="{{asset('storage/' . $model->MODL_PDF)}}" width="100%" height="375px">
                                 @endisset
@@ -113,19 +97,23 @@
                         <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
-                                @foreach($model->colorImages as $image)
-                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : ''}}></li>
+                                @foreach($model->colors as $image)
+                                @isset($image->COLR_IMGE)
+                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
                                 <?php $i++; ?>
+                                @endisset
                                 @endforeach
                             </ol>
                             <div class="carousel-inner" role="listbox">
                                 <?php $i=0; ?>
-                                @foreach($model->colorImages as $image)
+                                @foreach($model->colors as $image)
+                                @isset($image->COLR_IMGE)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
                                     <img class="img-fluid" src="{{ asset( 'storage/'. $image->MOIM_URL ) }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
+                                @endisset
                                 @endforeach
                             </div>
                             <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev" style="background-color:#DCDCDC">
@@ -142,32 +130,95 @@
                         <form class="form pt-3" method="post" action="{{ $imageFormURL }}" enctype="multipart/form-data">
                             @csrf
                             <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
+
                             <div class="form-group">
-                                <label>Color*</label>
+                                <label>Color Name*</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Example: Baby Blue" name=color required>
+                                    <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name value="{{old('name')}}" required>
                                 </div>
-                                <small class="text-muted">Default is 500, the image with the higher value appears before other image</small>
-                                <small class="text-danger">{{$errors->first('color')}}</small>
+                                <small class="text-muted">Model Color name as stated in Cars brochures</small>
+                                <small class="text-danger">{{$errors->first('name')}}</small>
                             </div>
+
                             <div class="form-group">
-                                <label>Sort Value*</label>
+                                <label>Arabic Color Name</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-dollar-sign"></i></span>
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
                                     </div>
-                                    <input type="number" class="form-control" placeholder="Example: 900" name=value value="{{ old('value') ?? 500}}" required>
+                                    <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName value="{{old('arbcName')}}">
                                 </div>
-                                <small class="text-muted">Default is 500, the image with the higher value appears before other image</small>
-                                <small class="text-danger">{{$errors->first('value')}}</small>
+                                <small class="text-muted">Model Color name as stated in Cars brochures</small>
+                                <small class="text-danger">{{$errors->first('name')}}</small>
                             </div>
+
+                            <div class="form-group">
+                                <label>Hex Value</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Example: FF650C" name=hex value="{{old('hex')}}">
+                                </div>
+                                <small class="text-muted">Model Color hex code (optional)</small>
+                                <small class="text-danger">{{$errors->first('hex')}}</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Red Value</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                    <input type="number" max=255 min=0 step="1" class="form-control" name=red value="{{old('red')}}" required>
+                                </div>
+                                <small class="text-muted">Model Color Red Value under RGB code</small>
+                                <small class="text-danger">{{$errors->first('red')}}</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Blue Value</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                    <input type="number" max=255 min=0 step="1" class="form-control" name=blue value="{{old('blue')}}" required>
+                                </div>
+                                <small class="text-muted">Model Color Blue Value under RGB code</small>
+                                <small class="text-danger">{{$errors->first('blue')}}</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Green Value</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                    <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" required>
+                                </div>
+                                <small class="text-muted">Model Color Green Value under RGB code</small>
+                                <small class="text-danger">{{$errors->first('green')}}</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Alpha Value</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                    <input type="number" max=100 min=0 step="1" class="form-control" name=alpha value="{{old('alpha') ?? 100}}" required>
+                                </div>
+                                <small class="text-muted">Model Color Alpha Value (0-100) - Default 100</small>
+                                <small class="text-danger">{{$errors->first('alpha')}}</small>
+                            </div>
+
                             <div class="form-group">
                                 <label for="input-file-now-custom-1">New Photo</label>
                                 <div class="input-group mb-3">
-                                    <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('photo') }}" />
+                                    <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('photo') }}" data-max-file-size="2M" />
                                 </div>
                                 <small class="text-muted">Optimum Resolution is 346 * 224</small>
                             </div>
@@ -181,24 +232,38 @@
                             <div class="table-responsive m-t-40">
                                 <table class="table color-bordered-table table-striped full-color-table full-primary-table hover-table" data-display-length='-1' data-order="[]">
                                     <thead>
-                                        <th>#</th>
+                                        <th>RGB</th>
                                         <th>Color</th>
                                         <th>Image</th>
                                         <th>Url</th>
                                         <th>Actions</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($model->colorImages as $image)
+                                        @foreach ($model->colors as $image)
+                                        <div style="display: none">
+                                            <div id="imageName{{$image->id}}">{{$image->COLR_NAME}}</div>
+                                            <div id="imageArbcName{{$image->id}}">{{$image->COLR_ARBC_NAME}}</div>
+                                            <div id="imageHex{{$image->id}}">{{$image->COLR_HEX}}</div>
+                                            <div id="imageRed{{$image->id}}">{{$image->COLR_RED}}</div>
+                                            <div id="imageBlue{{$image->id}}">{{$image->COLR_BLUE}}</div>
+                                            <div id="imageGreen{{$image->id}}">{{$image->COLR_GREN}}</div>
+                                            <div id="imageAlpha{{$image->id}}">{{$image->COLR_ALPH}}</div>
+                                            <div id="imageURL{{$image->id}}">{{$image->COLR_IMGE}}</div>
+                                        </div>
                                         <tr>
-                                            <td id="imageValue{{$image->id}}">{{$image->MOIM_SORT}}</td>
-                                            <td id="imageColor{{$image->id}}">{{$image->MOIM_COLR}}</td>
-                                            <td> <img src="{{ asset( 'storage/'. $image->MOIM_URL ) }} " width="60px"> </td>
-                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->MOIM_URL ) }}">
-                                                    {{(strlen($image->MOIM_URL) < 25) ? $image->MOIM_URL : substr($image->MOIM_URL, 0, 25).'..' }}
+                                            <td>rgb({{$image->COLR_RED}}, {{$image->COLR_GREN}}, {{$image->COLR_BLUE}})</td>
+                                            <td>{{$image->COLR_NAME}}-{{$image->COLR_ARBC_NAME}}</td>
+                                            <td>
+                                                @isset($image->COLR_IMGE)
+                                                <img src="{{ asset( 'storage/'. $image->COLR_IMGE ) }} " width="60px">
+                                                @endisset
+                                            </td>
+                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->COLR_IMGE ) }}">
+                                                    {{(strlen($image->COLR_IMGE) < 25) ? $image->COLR_IMGE : substr($image->COLR_IMGE, 0, 25).'..' }}
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
-                                                    <a href="javascript:void(0)" class="openEditImage" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
+                                                    <a href="javascript:void(0)" onclick="loadEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
                                                         <img src="{{ asset('images/edit.png') }}" width=25 height=25>
                                                     </a>
                                                     <a href="javascript:void(0);" onclick="deleteImage({{$image->id}})">
@@ -312,7 +377,7 @@
                                     <div class="col-md-5 m-b-15">
                                         <h4 class="card-title">Active</h4>
                                         <input type="checkbox" data-size="large" {{(isset($model) && $model->MODL_ACTV) ? 'checked' : ''}} data-on-color="success" data-off-color="danger"
-                                            data-on-text="Active" data-off-text="Hidden" name="isActive">
+                                        data-on-text="Active" data-off-text="Hidden" name="isActive">
                                     </div>
                                     <small class="text-muted">This model and all its linked cars can be hidden/published using this option</small>
                                 </div>
@@ -321,7 +386,7 @@
                                     <div class="col-md-5 m-b-15">
                                         <h4 class="card-title">Main</h4>
                                         <input type="checkbox" data-size="large" {{(isset($model) && $model->MODL_MAIN) ? 'checked' : ''}} data-on-color="success" data-off-color="danger"
-                                            data-on-text="Yes" data-off-text="No" name="isMain">
+                                        data-on-text="Yes" data-off-text="No" name="isMain">
                                     </div>
                                     <small class="text-muted">The model can be published on the home page using this option</small>
                                 </div>
@@ -393,125 +458,151 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Image</h4>
+                <h4 class="modal-title">Edit Color</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <input type=hidden name=id id=modalImageID value="">
+                <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
+                    @csrf
+                    <input type=hidden name=id id=modalImageID value="">
 
-                <div class="form-group col-md-12 m-t-0">
-                    <h5>Value</h5>
-                    <input type="text" class="form-control form-control-line" name=value id=sortModal>
-                </div>
-                <div class="form-group col-md-12 m-t-0">
-                    <h5>Color</h5>
-                    <input type="text" class="form-control form-control-line" name=color id=colorModal>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="form-group col-12 m-t-10">
-                        <button onclick="updateImageInfo()" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
+                    <div class="form-group">
+                        <label>Color Name*</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name id=nameModal>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label>Arabic Color Name</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName id=arbcNameModal>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hex Value</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Example: FF650C" name=hex id=hexModal>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Red Value</label>
+                        <div class="input-group mb-3">
+                            <input type="number" max=255 min=0 step="1" class="form-control" name=red id=redModal required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Blue Value</label>
+                        <div class="input-group mb-3">
+                            <input type="number" max=255 min=0 step="1" class="form-control" name=blue id=blueModal required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Green Value</label>
+                        <div class="input-group mb-3">
+                            <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" id=greenModal required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Alpha Value</label>
+                        <div class="input-group mb-3">
+                            <input type="number" max=100 min=0 step="1" class="form-control" name=alpha id=alphaModal required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-file-now-custom-1">New Photo</label>
+                        <div class="input-group mb-3">
+                            <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=photoModal data-max-file-size="2M" />
+                        </div>
+                        <small class="text-muted">Optimum Resolution is 346 * 224</small>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group col-12 m-t-10">
+                            <button onclick="updateImageInfo()" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<script>
 
-function deleteImage(id){
-            var http = new XMLHttpRequest();
-            var url = "{{$delImageUrl}}" + '/' +  id;
-            http.open('GET', url, true);
-            //Send the proper header information along with the request
-            http.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                if(this.responseText=='1')
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Image will disappear after reload..",
-                    icon: "success"
-                })
-                else 
-                Swal.fire({
-                    title: "Error!",
-                    text: "Something went wrong..",
-                    icon: "error"
-                })
-            } else {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Something went wrong.. Please refresh",
-                    icon: "error"
-                })
-            }
-        };
-
-        http.send();
-    }
-
-
-    function updateImageInfo(){
-        var http = new XMLHttpRequest();
-        var url = "{{$updateImageInfoURL}}" ;
-
-        var imageID = $('#modalImageID').val();
-        var sort = $('#sortModal').val();
-        var color = $('#colorModal').val();
-        console.log(imageID)
-
-        var formdata = new FormData();
-        formdata.append('_token','{{ csrf_token() }}');
-        formdata.append('id',imageID);
-        formdata.append('value',sort);
-        formdata.append('color',color);
-   
-        http.open('POST', url, true);
-        //Send the proper header information along with the request
-        http.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            if(this.responseText=='1'){
-                Swal.fire({
-                title: "Success!",
-                text: "Image successfully updated",
-                icon: "success"
-            })
-            $('#imageValue'+imageID).html(sort);
-            $('#imageColor'+imageID).html(color);
-            } else {
-                Swal.fire({
-                title: "No Change!",
-                text: "Something went wrong.. Please refresh",
-                icon: "warning"
-            })
-            }
-
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "Something went wrong.. Please refresh",
-                icon: "error"
-            })
-        }
-    };
-    http.send(formdata, true);
-    }
-
-</script>
 @endsection
 
 @section('js_content')
 <script>
-    $('#openEditImage').on("click", function () {
-  
-        var id = $(this).data('id');
-        var sort = $('#imageValue'+id).html();
-        var color = $('#imageColor'+id).html();
+    function loadEditModal (id) {
+        
+        console.log("HAHAHAHHA");
 
-        $(".modal-body #sortModal").val(sort);
-        $(".modal-body #colorModal").val(color);
-        $(".modal-body #modalImageID").val(id);
+        var name = $('#imageName'+id).html();
+        var arbcName = $('#imageArbcName'+id).html();
+        var hex = $('#imageHex'+id).html();
+        var red = $('#imageRed'+id).html();
+        var blue = $('#imageBlue'+id).html();
+        var green = $('#imageGreen'+id).html();
+        var alpha = $('#imageAlpha'+id).html();
+        var imgURL = $('#imageURL'+id).html();
 
-    });
+        $(".modal-body #nameModal").val(name);
+        $(".modal-body #arbcNameModal").val(arbcName);
+        $(".modal-body #hexModal").val(hex);
+        $(".modal-body #redModal").val(red);
+        $(".modal-body #blueModal").val(blue);
+        $(".modal-body #greenModal").val(green);
+        $(".modal-body #alphaModal").val(alpha);
+        $(".modal-body #photoModal").attr("data-default-file", imgURL);
+        $(".modal-body #photoModal").dropify();
+
+    }
+
+
+    function deleteImage(id){
+            Swal.fire({
+                title: "Delete",
+                text: "Are you sure you want to delete the image?",
+                icon: "warning",
+                showCancelButton: true,
+            }).then((isConfirm) => {
+                if(isConfirm.value){
+
+                    var http = new XMLHttpRequest();
+                    var url = "{{$delImageUrl}}" + '/' +  id;
+                    http.open('GET', url, true);
+                    //Send the proper header information along with the request
+                    http.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if(this.responseText=='1')
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Image will disappear after reload..",
+                            icon: "success"
+                        })
+                        else 
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong..",
+                            icon: "error"
+                        })
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong.. Please refresh",
+                            icon: "error"
+                        })
+                    }
+                };
+
+                http.send();
+            }});
+    }
+
 </script>
 @endsection

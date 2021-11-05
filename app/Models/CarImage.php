@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,10 +19,8 @@ class CarImage extends Model
 
     public function deleteImage()
     {
-        try {
-            unlink(public_path('storage/' . $this->CIMG_URL));
-        } catch (Exception $e) {
-        }
+        $fileHandler = new FilesHandler();
+        $fileHandler->deleteFile('storage/' . $this->CIMG_URL);
         $this->delete();
         return 1;
     }

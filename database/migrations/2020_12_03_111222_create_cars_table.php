@@ -19,8 +19,6 @@ class CreateCarsTable extends Migration
             $table->foreignId('CAR_MODL_ID')->constrained('models');
             $table->string('CAR_CATG');
             $table->integer('CAR_PRCE');
-            $table->integer('CAR_DISC')->default(0);
-
             $table->integer('CAR_VLUE')->default(500);  //the higher the better
 
             $table->tinyInteger('CAR_ACTV')->default(0);
@@ -44,9 +42,7 @@ class CreateCarsTable extends Migration
             $table->string('CAR_TTL2')->nullable();
             $table->text('CAR_PRG2')->nullable();
 
-            //Car Offer
-            $table->dateTime('CAR_OFFR')->nullable(); //is offer on car
-            $table->dateTime('CAR_TRND')->nullable(); //is trending car
+
 
             $table->timestamps();
             $table->softDeletes();

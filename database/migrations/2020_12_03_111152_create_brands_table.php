@@ -17,7 +17,7 @@ class CreateBrandsTable extends Migration
             $table->id();
             $table->string('BRND_NAME')->unique();
             $table->string('BRND_ARBC_NAME')->nullable();
-            $table->tinyInteger('BRND_ACTV')->default(1);
+            $table->tinyInteger('BRND_ACTV')->default(0);
             $table->string('BRND_LOGO')->nullable();
             $table->string('BRND_IMGE')->nullable();
         });

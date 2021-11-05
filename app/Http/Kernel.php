@@ -2,7 +2,12 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthenticateAdmin;
+use App\Http\Middleware\AuthenticateBuyer;
+use App\Http\Middleware\AuthenticateSeller;
+use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
 {
@@ -15,6 +20,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        ForceJsonResponse::class,
         \App\Http\Middleware\TrustProxies::class,
         \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\CheckForMaintenanceMode::class,
@@ -29,6 +35,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareGroups = [
+        "admin" => [
+            \App\Http\Middleware\Authenticate::class,
+            AuthenticateAdmin::class
+        ],
+
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
@@ -40,8 +51,22 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            // EnsureFrontendRequestsAreStateful::class,
+            ForceJsonResponse::class,
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+
+        'sellers_api' => [
+            // EnsureFrontendRequestsAreStateful::class,
+            "auth:sanctum",
+            AuthenticateSeller::class
+        ],
+
+        'buyers_api' => [
+            // EnsureFrontendRequestsAreStateful::class,
+            "auth:sanctum",
+            AuthenticateBuyer::class
         ],
     ];
 

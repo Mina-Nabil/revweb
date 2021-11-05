@@ -16,7 +16,7 @@ class CreateAccessoriesTable extends Migration
         Schema::create('accessories', function (Blueprint $table) {
             $table->id();
             $table->string('ACSR_NAME')->unique();
-            $table->string('ACSR_ARBC_NAME')->nullable();
+            $table->string('ACSR_ARBC_NAME');
         });
 
         Schema::create('accessories_cars', function (Blueprint $table) {

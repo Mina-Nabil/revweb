@@ -26,7 +26,7 @@
     <link href="{{ asset('dist/css/pages/stylish-tooltip.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/node_modules/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/frontend/extensions/toast-master/css/jquery.toast.css') }}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{ asset('assets/frontend/extensions/toast-master/css/jquery.toast.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oregano" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald" />
@@ -332,7 +332,7 @@
     <script src="{{ asset('dist/js/pages/jasny-bootstrap.js') }}"></script>
     <script src="{{ asset('assets/node_modules/dropify/dist/js/dropify.min.js')}}"></script>
     <script src="{{ asset('assets/node_modules/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
-    <script src="{{asset('assets/frontend/extensions/toast-master/js/jquery.toast.js') }}"></script>
+    {{-- <script src="{{ asset('assets/frontend/extensions/toast-master/js/jquery.toast.js') }}"></script> --}}
 
     <!-- Start Table Search Script -->
     <script>

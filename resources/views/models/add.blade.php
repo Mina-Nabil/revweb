@@ -81,16 +81,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Interactive Brochure</label>
+                        <label for="input-file-now-custom-1">Options File</label>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon22"><i class="fas fa-barcode"></i></span>
-                            </div>
-                            <input type="text" class="form-control" name=brochureCode placeholder="Interactive brochure code, example: 452336e5-81ed-43be-a4be-f7552f6366fd "
-                                value="{{ (isset($model)) ? $model->MODL_BRCH : old('brochureCode')}}">
+                            <input type="file" id="input-file-now-custom-1" name=pdf class="dropify"
+                                data-default-file="{{ (isset($model->MODL_PDF)) ? asset( 'storage/'. $model->MODL_PDF ) : old('pdf') }}" />
                         </div>
-                        <small class="text-muted">Use only the code written after the indesign url, https://indd.adobe.com/view/<strong>452336e5-81ed-43be-a4be-f7552f6366fd</strong> </small><br>
-                        <small class="text-danger">{{$errors->first('brochureCode')}}</small>
+                        <small class="text-muted">Model Options File. Only PDF format is supported</small><br>
+                        <small class="text-danger">{{$errors->first('pdf')}}</small>
                     </div>
 
 
@@ -119,7 +116,6 @@
                         <small class="text-muted">Image size should be 346 * 224 -- It appears on the home page if this is a main model -- The background should be transparent (.png)
                             format</small><br>
                         <small class="text-danger">{{$errors->first('image')}}</small>
-
                     </div>
 
                     <div class="form-group">

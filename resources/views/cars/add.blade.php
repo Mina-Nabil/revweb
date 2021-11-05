@@ -123,18 +123,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Discount</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon11"><i class="far fa-calendar"></i></span>
-                            </div>
-                            <input type="number" class="form-control" placeholder="Enter discount amount" name=disc value="{{ (isset($car)) ? $car->CAR_DISC : old('disc')}}">
-                        </div>
-                        <small class="text-muted">Use only to show <span style="text-decoration:line-through">old price</span> and <strong>new price</strong></small><br>
-                        <small class="text-danger">{{$errors->first('disc')}}</small>
-                    </div>
-
-                    <div class="form-group">
                         <label for="exampleInputEmail1">Sorting Value</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">

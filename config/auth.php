@@ -46,6 +46,18 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'seller_api' => [
+            'driver' => 'token',
+            'provider' => 'sellers',
+            'hash' => false,
+        ],
+
+        'buyer_api' => [
+            'driver' => 'token',
+            'provider' => 'buyers',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -66,9 +78,13 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'sellers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Seller::class,
+        ],
+        'buyers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Buyer::class,
         ],
         'dash_users' => [
             'driver' => 'eloquent',

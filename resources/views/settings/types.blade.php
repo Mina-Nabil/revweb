@@ -36,14 +36,6 @@
                         <small class="text-danger">{{$errors->first('arbcName')}}</small>
                     </div>
 
-                    <div class="form-group bt-switch">
-                        <div class="col-md-5 m-b-15">
-                            <h4 class="card-title">Main Type</h4>
-                            <input type="checkbox" data-size="large" {{(isset($type) && $type->TYPE_MAIN) ? 'checked' : ''}} data-on-color="info" data-off-color="warning" data-on-text="Yes" data-off-text="No" name="isActive">
-                        </div>
-                        <small class="text-muted">Set it to 'Yes' to show the type in the home page main types</small>
-                    </div>
-
                     <button type="submit" class="btn btn-success mr-2">Submit</button>
                     @if($isCancel)
                     <a href="{{url($homeURL) }}" class="btn btn-dark">Cancel</a>

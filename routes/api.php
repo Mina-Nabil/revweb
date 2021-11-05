@@ -12,8 +12,13 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+| This file shall be used only by authentication function for both Sellers and Buyers
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/seller/register', "SellersProfileApi@register");
+
+Route::post('/buyer/register', "BuyersProfileApi@register");
+
+Route::post('/seller/login', "SellersProfileApi@login");
+
+Route::post('/buyer/login', "BuyersProfileApi@login");

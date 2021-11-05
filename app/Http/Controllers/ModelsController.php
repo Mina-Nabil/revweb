@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Car;
+use App\Models\CarImage;
 use App\Models\CarModel;
 use App\Models\CarType;
+use App\Models\ModelColor;
 use App\Models\ModelImage;
+use App\Services\FilesHandler;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -58,29 +62,33 @@ class ModelsController extends Controller
             "pdf"  => "required_if:isMain,on|mimes:pdf",
         ]);
 
-        $model = new CarModel();
-        $model->MODL_BRND_ID = $request->brand;
-        $model->MODL_TYPE_ID = $request->type;
-        $model->MODL_NAME = $request->name;
-        $model->MODL_ARBC_NAME = $request->arbcName;
-        $model->MODL_BRCH = $request->brochureCode;
-        $model->MODL_YEAR = $request->year;
-        $model->MODL_OVRV = $request->overview;
+        $filesHandler = new FilesHandler();
+
+        $imagePath = null;
         if ($request->hasFile('image')) {
-            $model->MODL_IMGE = $request->image->store('images/models/' . $model->MODL_NAME, 'public');
+            $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
         }
+
+        $backgroundPath = null;
         if ($request->hasFile('background')) {
-            $model->MODL_BGIM = $request->background->store('images/models/' . $model->MODL_NAME, 'public');
+            $backgroundPath = $filesHandler->uploadFile($request->background, 'images/models/' . $request->name);
         }
+        $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $model->MODL_PDF = $request->pdf->store('images/models/' . $model->MODL_NAME, 'public');
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
         }
-        $model->MODL_ACTV = $request->isActive == 'on' ? 1 : 0;
-        $model->MODL_MAIN = $request->isMain == 'on' ? 1 : 0;
 
-
-        $model->save();
-        return redirect($this->profileURL . $model->id);
+        $isActive = $request->isActive == 'on' ? 1 : 0;
+        $isMain = $request->isMain == 'on' ? 1 : 0;
+        try {
+            $newCar = CarModel::create($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $backgroundPath, $pdfPath, $isActive, $isMain);
+            return redirect($this->profileURL . $newCar->id);
+        } catch (Exception $e) {
+            $filesHandler->deleteFile($backgroundPath);
+            $filesHandler->deleteFile($pdfPath);
+            $filesHandler->deleteFile($imagePath);
+            throw $e;
+        }
     }
 
     public function update(Request $request)
@@ -89,7 +97,7 @@ class ModelsController extends Controller
             "id" => "required",
         ]);
         $model = CarModel::findOrFail($request->id);
-
+        $filesHandler = new FilesHandler();
         $request->validate([
             "name" => "required",
             "brand"      => "required|exists:brands,id",
@@ -97,15 +105,15 @@ class ModelsController extends Controller
             "year"      => "required",
             "overview"  => "required_if:isMain,on",
         ]);
-        if (is_null($model->MODL_IMGE) || $model->MODL_IMGE=="")
+        if (is_null($model->MODL_IMGE) || $model->MODL_IMGE == "")
             $request->validate([
                 "image"  => "required_if:isMain,on|image",
             ]);
-        if (is_null($model->MODL_BGIM) || $model->MODL_BGIM=="")
+        if (is_null($model->MODL_BGIM) || $model->MODL_BGIM == "")
             $request->validate([
                 "background"  => "required_if:isMain,on|image",
             ]);
-        if (is_null($model->MODL_PDF) || $model->MODL_PDF=="")
+        if (is_null($model->MODL_PDF) || $model->MODL_PDF == "")
             $request->validate([
                 "pdf"  => "required_if:isMain,on|mimes:pdf",
             ]);
@@ -117,13 +125,16 @@ class ModelsController extends Controller
         $model->MODL_BRCH = $request->brochureCode;
         $model->MODL_YEAR = $request->year;
         if ($request->hasFile('image')) {
-            $model->MODL_IMGE = $request->image->store('images/models/' . $model->MODL_NAME, 'public');
+            $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
+            $model->MODL_IMGE = $imagePath;
         }
         if ($request->hasFile('background')) {
-            $model->MODL_BGIM = $request->background->store('images/models/' . $model->MODL_NAME, 'public');
+            $imagePath = $filesHandler->uploadFile($request->background, 'images/models/' . $request->name);
+            $model->MODL_BGIM = $imagePath;
         }
         if ($request->hasFile('pdf')) {
-            $model->MODL_PDF = $request->pdf->store('images/models/' . $model->MODL_NAME, 'public');
+            $imagePath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
+            $model->MODL_PDF = $imagePath;
         }
         $model->MODL_ACTV = $request->isActive == 'on' ? 1 : 0;
         $model->MODL_MAIN = $request->isMain == 'on' ? 1 : 0;
@@ -151,21 +162,33 @@ class ModelsController extends Controller
     public function attachImage(Request $request)
     {
         $request->validate([
-            "modelID" => "required|exists:models,id",
-            "photo" => "file",
-            'value' => 'required',
-            'color' => 'required',
+            "modelID"   =>  "required|exists:models,id",
+            'name'      =>  'required',
+            "photo"     =>  "nullable|file",
+            'red'       =>  "nullable|max:256",
+            'green'     =>  "nullable|max:256",
+            'blue'      =>  "nullable|max:256",
+            'alpha'     =>  "nullable|max:256",
+            'hex'       =>  ['nullable', 'regex:/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
         $model = CarModel::findOrFail($request->modelID);
-        $newImage = new ModelImage();
+        $filesHandler = new FilesHandler();
+        $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $newImage->MOIM_URL = $request->photo->store('images/models/' . $model->MODL_NAME, 'public');
+            $imageURL = $filesHandler->uploadFile($request->photo, "cars/" . $model->MODL_NAME . '/colors//');
         }
-        $newImage->MOIM_MODL_ID = $request->modelID;
-        $newImage->MOIM_SORT = $request->value;
-        $newImage->MOIM_COLR = $request->color;
-        $newImage->save();
-        $newImage->compress();
+
+        $model->colors()->create([
+            "COLR_NAME" => $request->name,
+            "COLR_ARBC_NAME" => $request->arbcName,
+            "COLR_IMGE" => $imageURL ?? NULL,
+            "COLR_HEX" => $request->hex,
+            "COLR_RED" => $request->red,
+            "COLR_GREN" => $request->green,
+            "COLR_BLUE" => $request->blue,
+            "COLR_ALPH" => $request->alpha
+        ]);
+
         return back();
     }
 
@@ -179,22 +202,36 @@ class ModelsController extends Controller
     public function editImage(Request $request)
     {
         $request->validate([
-            "id"    => "required",
-            'value' => 'required',
-            'color' => 'required',
+            "id"        => "required",
+            "modelID"   =>  "required|exists:models,id",
+            'name'      =>  'required',
+            "photo"     =>  "nullable|file",
+            'red'       =>  "nullable|max:256",
+            'green'     =>  "nullable|max:256",
+            'blue'      =>  "nullable|max:256",
+            'alpha'     =>  "nullable|max:256",
+            'hex'       =>  ['nullable', 'regex:/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
-        $image = ModelImage::findOrFail($request->id);
+        $image = ModelColor::findOrFail($request->id);
+        $image->editInfo(
+            $request->name,
+            $request->arbcName,
+            $imageURL ?? NULL,
+            $request->hex,
+            $request->red,
+            $request->green,
+            $request->blue,
+            $request->alpha
+        );
 
-        $image->MOIM_SORT = $request->value;
-        $image->MOIM_COLR = $request->color;
-        echo $image->save();
+         return back();
     }
 
 
     //////////////////// Data functions
     private function initProfileArr($modelID)
     {
-        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colorImages')->findOrFail($modelID);
+        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colors')->findOrFail($modelID);
         //Model Categories
         $this->data['items'] = $this->data['model']->cars;
         $this->data['title'] = "Available Categories";
@@ -210,12 +247,13 @@ class ModelsController extends Controller
 
     private function initDataArr()
     {
-        $this->data['items'] = CarModel::orderBy('MODL_ACTV')->get();
+        $this->data['items'] = CarModel::with("brand")->orderBy('MODL_ACTV')->get();
         $this->data['title'] = "Available Models";
         $this->data['subTitle'] = "Check all Available Models";
-        $this->data['cols'] = ['Image', 'Name', 'Arabic', 'Year', 'Active', 'Main', 'Overview'];
+        $this->data['cols'] = ['Image', 'Brand', 'Name', 'Arabic', 'Year', 'Active', 'Main', 'Overview'];
         $this->data['atts'] = [
             ['assetImg' => ['att' => 'MODL_IMGE']],
+            ['foreign' => ['att' => 'BRND_NAME', 'rel' => 'brand']],
             ['dynamicUrl' => ['att' => 'MODL_NAME', 'val' => 'id', 'baseUrl' => 'admin/models/profile/']],
             ['dynamicUrl' => ['att' => 'MODL_ARBC_NAME', 'val' => 'id', 'baseUrl' => 'admin/models/profile/']],
             'MODL_YEAR',

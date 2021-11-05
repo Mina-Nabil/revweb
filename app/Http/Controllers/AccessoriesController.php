@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accessories;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,7 @@ class AccessoriesController extends Controller
     private function initDataArr()
     {
         $this->data['items'] = Accessories::all();
-        $this->data['title'] = "Available Types";
+        $this->data['title'] = "Available Accessories";
         $this->data['subTitle'] = "Manage all Available Accessories/Options such as: Power Steering - ABS - Airbags";
         $this->data['cols'] = ['Name', 'Arabic', 'Edit'];
         $this->data['atts'] = [
@@ -28,7 +29,7 @@ class AccessoriesController extends Controller
     public function home()
     {
         $this->initDataArr();
-        $this->data['formTitle'] = "Add Type";
+        $this->data['formTitle'] = "Add Accessory";
         $this->data['formURL'] = "admin/accessories/insert";
         $this->data['isCancel'] = false;
         return view('settings.accessories', $this->data);
@@ -38,7 +39,7 @@ class AccessoriesController extends Controller
     {
         $this->initDataArr();
         $this->data['accessory'] = Accessories::findOrFail($id);
-        $this->data['formTitle'] = "Edit Type ( " . $this->data['accessory']->ACSR_NAME . " )";
+        $this->data['formTitle'] = "Edit Accessory ( " . $this->data['accessory']->ACSR_NAME . " )";
         $this->data['formURL'] = "admin/accessories/update";
         $this->data['isCancel'] = true;
         return view('settings.accessories', $this->data);
@@ -49,13 +50,13 @@ class AccessoriesController extends Controller
 
         $request->validate([
             "name"      => "required|unique:accessories,ACSR_NAME",
+            "arbcName"      => "required",
         ]);
+        try {
+            $accessory = new Accessories($request->name, $request->arbcName);
+        } catch (Exception $e) {
+        }
 
-        $accessory = new Accessories();
-        $accessory->ACSR_NAME = $request->name;
-        $accessory->ACSR_ARBC_NAME = $request->arbcName;
-
-        $accessory->save();
         return redirect($this->homeURL);
     }
 
@@ -70,12 +71,10 @@ class AccessoriesController extends Controller
             "name" => ["required",  Rule::unique('accessories', "ACSR_NAME")->ignore($accessory->ACSR_NAME, "ACSR_NAME"),],
             "id"        => "required",
         ]);
-
-        $accessory->ACSR_NAME = $request->name;
-        $accessory->ACSR_ARBC_NAME = $request->arbcName;
-        $accessory->save();
-
+        try {
+            $accessory->updateInfo($accessory->ACSR_NAME, $accessory->ACSR_ARBC_NAME);
+        } catch (Exception $e) {
+        }
         return redirect($this->homeURL);
     }
-
 }

@@ -16,28 +16,10 @@ class CarTypesController extends Controller
         $this->data['items'] = CarType::all();
         $this->data['title'] = "Available Types";
         $this->data['subTitle'] = "Manage all Available Types such as: SUV - Sedan - Hatchback";
-        $this->data['cols'] = ['Name', 'Arabic', 'Main', 'Edit', 'Delete'];
+        $this->data['cols'] = ['Name', 'Arabic', 'Edit', 'Delete'];
         $this->data['atts'] = [
             'TYPE_NAME',
             'TYPE_ARBC_NAME',
-            [
-                'toggle' => [
-                    "att"   =>  "TYPE_MAIN",
-                    "url"   =>  "admin/types/toggle/",
-                    "states" => [
-                        "1" => "True",
-                        "0" => "False",
-                    ],
-                    "actions" => [
-                        "1" => "show the type in the home page",
-                        "0" => "hide the type from the home page",
-                    ],
-                    "classes" => [
-                        "1" => "label-success",
-                        "0" => "label-danger",
-                    ],
-                ]
-            ],
             ['edit' => ['url' => 'admin/types/edit/', 'att' => 'id']],
             ['del' => ['url' => 'admin/types/delete/', 'att' => 'id', 'msg' => 'delete the car type, system will not delete if there is any model linked with the type']],
         ];
@@ -73,7 +55,6 @@ class CarTypesController extends Controller
         $type = new CarType();
         $type->TYPE_NAME = $request->type;
         $type->TYPE_ARBC_NAME = $request->arbcName;
-        $type->TYPE_MAIN = $request->isActive == 'on' ? 1 : 0;
 
         $type->save();
         return redirect($this->homeURL);
@@ -93,23 +74,16 @@ class CarTypesController extends Controller
 
         $type->TYPE_NAME = $request->type;
         $type->TYPE_ARBC_NAME = $request->arbcName;
-        $type->TYPE_MAIN = $request->isActive == 'on' ? 1 : 0;
         $type->save();
 
         return redirect($this->homeURL);
     }
 
-    public function toggle($id)
-    {
-        $type = CarType::findOrFail($id);
-        $type->toggle();
-        return back();
-    }
 
     public function delete($id){
-        $brand = CarType::withCount('models')->findOrFail($id);
-        if($brand->models_count == 0){
-            $brand->delete();
+        $type = CarType::withCount('models')->findOrFail($id);
+        if($type->models_count == 0){
+            $type->delete();
         }
         return back();
     }

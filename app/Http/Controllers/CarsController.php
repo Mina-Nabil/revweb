@@ -56,7 +56,6 @@ class CarsController extends Controller
         $car->CAR_MODL_ID   =   $request->model;
         $car->CAR_CATG      =   $request->category;
         $car->CAR_PRCE      =   $request->price;
-        $car->CAR_DISC      =   $request->discount ?? 0;
         $car->CAR_VLUE      =   $request->sort ?? 500;
 
         //specs
@@ -77,6 +76,8 @@ class CarsController extends Controller
         $car->CAR_PRG1      =   $request->prgp1;
         $car->CAR_TTL2      =   $request->title2;
         $car->CAR_PRG2      =   $request->prgp2;
+
+        $car->CAR_ACTV = $request->isActive == 'on' ? 1 : 0;
 
         $car->save();
 
@@ -108,7 +109,6 @@ class CarsController extends Controller
         $car->CAR_MODL_ID   =   $request->model;
         $car->CAR_CATG      =   $request->category;
         $car->CAR_PRCE      =   $request->price;
-        $car->CAR_DISC      =   $request->discount ?? 0;
         $car->CAR_VLUE      =   $request->sort ?? 500;
 
         //specs
@@ -129,6 +129,8 @@ class CarsController extends Controller
         $car->CAR_PRG1      =   $request->prgp1;
         $car->CAR_TTL2      =   $request->title2;
         $car->CAR_PRG2      =   $request->prgp2;
+
+        $car->CAR_ACTV = $request->isActive == 'on' ? 1 : 0;
 
         $car->save();
 
@@ -285,10 +287,11 @@ class CarsController extends Controller
         $this->data['items'] = Car::with(["model.brand", "model.type"])->orderBy('CAR_VLUE', 'desc')->get();
         $this->data['title'] = "Available Cars";
         $this->data['subTitle'] = "Check all Available Cars";
-        $this->data['cols'] = ['Category', 'Model', 'Year', 'Active?'];
+        $this->data['cols'] = ['Brand', 'Model', 'Category', 'Year', 'Active?'];
         $this->data['atts'] = [
-            ['dynamicUrl' => ['att' => 'CAR_CATG', 'val' => 'id', 'baseUrl' => 'admin/cars/profile/']],
+            ['foreignForeign' => ['rel1' => 'model', 'rel2' => 'brand','att' => 'BRND_NAME']],
             ['foreignUrl' => ['rel' => 'model', 'att' => 'MODL_NAME', 'baseUrl' => 'admin/models/profile', 'urlAtt' => 'id']],
+            ['dynamicUrl' => ['att' => 'CAR_CATG', 'val' => 'id', 'baseUrl' => 'admin/cars/profile/']],
             ['foreign' => ['rel' => 'model', 'att' => 'MODL_YEAR']],
             [
                 'state' => [
