@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-    protected $timestamps = false;
+    public $timestamps = false;
     protected $table = true;
 
     function cities(){
