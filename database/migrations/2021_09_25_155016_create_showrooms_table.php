@@ -68,6 +68,7 @@ class CreateShowroomsTable extends Migration
         Schema::dropIfExists('join_request');
         Schema::table('sellers', function (Blueprint $table){
             $table->dropForeign(["SLLR_SHRM_ID"]);
+            $table->dropColumn("SLLR_SHRM_ID"); 
             $table->dropColumn("SLLR_CAN_MNGR"); 
         });
         Schema::dropIfExists('showrooms');
