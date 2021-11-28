@@ -24,27 +24,27 @@ class CitiesSeedData extends Seeder
         DB::table('cities')->insert([
             "CITY_CNTR_ID" => 1,
             "CITY_NAME" => "Cairo",
-            "CNTR_ARBC_NAME" => "القاهره",
+            "CITY_ARBC_NAME" => "القاهره",
         ]);
         DB::table('cities')->insert([
             "CITY_CNTR_ID" => 1,
             "CITY_NAME" => "Alex",
-            "CNTR_ARBC_NAME" => "الاسكندريه",
+            "CITY_ARBC_NAME" => "الاسكندريه",
         ]);
         DB::table('cities')->insert([
             "CITY_CNTR_ID" => 1,
             "CITY_NAME" => "Suez",
-            "CNTR_ARBC_NAME" => "السويس",
+            "CITY_ARBC_NAME" => "السويس",
         ]);
         DB::table('cities')->insert([
             "CITY_CNTR_ID" => 2,
             "CITY_NAME" => "Dubai",
-            "CNTR_ARBC_NAME" => "دبي",
+            "CITY_ARBC_NAME" => "دبي",
         ]);
         DB::table('cities')->insert([
             "CITY_CNTR_ID" => 2,
             "CITY_NAME" => "Abu Dhabi",
-            "CNTR_ARBC_NAME" => "ابو ظبي",
+            "CITY_ARBC_NAME" => "ابو ظبي",
         ]);
         
     }
