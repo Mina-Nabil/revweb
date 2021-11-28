@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/showroom', "ShowroomProfileApi@getShowroom");
 Route::post('/set/banking', "ShowroomProfileApi@setBankInfo");
 Route::post('/create/showroom', "ShowroomProfileApi@createShowroom");
+Route::get('/cities', "ShowroomProfileApi@getCities");
 
 //catalog functions
 Route::get('/get/catalog', "ShowroomCatalogApiController@getCatalog");
@@ -31,6 +32,7 @@ Route::get('/get/colors/{modelID}', "ShowroomCatalogApiController@getColorsByMod
 Route::get('/get/my/brands', "ShowroomCatalogApiController@getShowroomBrands");
 Route::get('/get/carpool', "ShowroomCatalogApiController@getCatalogCarPool");
 Route::post('/add/car', "ShowroomCatalogApiController@addCar");
+
 
 //profile functions
 Route::get('/user', "SellersProfileApi@getUser");

@@ -16,6 +16,7 @@ class CreateShowroomsTable extends Migration
         Schema::create('showrooms', function (Blueprint $table) {
             $table->id();
             $table->foreignId("SHRM_OWNR_ID")->constrained("sellers");
+            $table->foreignId("SHRM_CITY_ID")->constrained("cities");
             $table->string("SHRM_NAME")->unique();
             $table->string("SHRM_MAIL")->unique();
             $table->string("SHRM_MOB1")->unique();

@@ -13,6 +13,7 @@ class SellersProfileApi extends AbstractApiController
     function register(Request $request)
     {
         parent::validateRequest($request, [
+            "deviceName"    => "required",
             "name"          => "required",
             "email"         => "required|unique:sellers,SLLR_MAIL",
             "password"      => "required|min:6",
@@ -42,7 +43,8 @@ class SellersProfileApi extends AbstractApiController
         parent::sendResponse(true, "Registration Succeeded!", (object)["seller" => $newSeller, "token" => $newSeller->getApiToken($request->deviceName)]);
     }
 
-    function getUser(Request $request){
+    function getUser(Request $request)
+    {
         parent::sendResponse(true, "User Retrieved Successfully", (object)["user" => $request->user()]);
     }
 

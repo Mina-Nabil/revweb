@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Showroom;
 use App\Rules\Iban;
 use App\Services\FilesHandler;
@@ -16,6 +17,8 @@ class ShowroomProfileApi extends AbstractApiController
             "name"          => "required",
             "email"         => "required|email|unique:showrooms,SHRM_MAIL",
             "mobNumber1"    => "required|unique:showrooms,SHRM_MOB1",
+            "address"    => "required",
+            "cityID"    => "required|exists:cities",
             "displayImage"  =>  "nullable|image|size:10000", //10 MB max
         ], "Showroom Creation Failed");
 
@@ -101,5 +104,9 @@ class ShowroomProfileApi extends AbstractApiController
             $filesHandler->deleteFile($showroomRecordImgFront);
             $filesHandler->deleteFile($showroomRecordImgBack);
         }
+    }
+
+    public function getCities(){
+        parent::sendResponse(true, City::with("country")->all(),"Unable to load Cities");
     }
 }

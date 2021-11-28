@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Country extends Model
+{
+    protected $timestamps = false;
+    protected $table = true;
+
+    function cities(){
+        return $this->hasMany(City::class, "CITY_CNTR_ID");
+    }
+
+    function showrooms(){
+        return $this->hasManyThrough(Showroom::class, City::class, "CITY_CNTR_ID", "SHRM_CITY_ID");
+    }
+}
