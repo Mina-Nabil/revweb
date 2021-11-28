@@ -107,6 +107,6 @@ class ShowroomProfileApi extends AbstractApiController
     }
 
     public function getCities(){
-        parent::sendResponse(true, City::with("country")->all(),"Unable to load Cities");
+        parent::sendResponse(true, City::with("country")->get(),"Unable to load Cities");
     }
 }
