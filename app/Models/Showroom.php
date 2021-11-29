@@ -203,6 +203,7 @@ class Showroom extends Model
         try {
             DB::transaction(function () {
                 $this->SHRM_BANK_ID = null;
+                $this->save();
                 $this->bankInfo->delete();
             });
         } catch (Exception $e) {
