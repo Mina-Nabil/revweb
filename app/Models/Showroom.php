@@ -181,12 +181,13 @@ class Showroom extends Model
             }
         } else {
             $this->load("bankInfo");
-            $this->bankInfo->BANK_HLDR_NAME = $bankAccountHolderName;
-            $this->bankInfo->BANK_ACNT = $bankAccount;
-            $this->bankInfo->BANK_BRCH = $bankBranchName;
-            $this->bankInfo->BANK_IBAN = $ibanNumber;
+            $oldBank = $this->bankInfo;
+            $oldBank->BANK_HLDR_NAME = $bankAccountHolderName;
+            $oldBank->BANK_ACNT = $bankAccount;
+            $oldBank->BANK_BRCH = $bankBranchName;
+            $oldBank->BANK_IBAN = $ibanNumber;
             try {
-                return $this->bankInfo->save();
+                return $oldBank->save();
             } catch (Exception $e) {
                 return false;
             }
