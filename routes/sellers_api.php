@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/showroom', "ShowroomProfileApi@getShowroom");
 Route::get('/get/banking', "ShowroomProfileApi@getBankInfo");
 Route::post('/set/banking', "ShowroomProfileApi@setBankInfo");
+Route::delete('/delete/banking', "ShowroomProfileApi@deleteBankInfo");
 Route::post('/create/showroom', "ShowroomProfileApi@createShowroom");
 Route::get('/cities', "ShowroomProfileApi@getCities");
 
