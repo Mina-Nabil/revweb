@@ -167,7 +167,7 @@ class Showroom extends Model
         if (!$this->isOwner()) {
             return false;
         }
-        if ($this->hasBank()) {
+        if (!$this->hasBank()) {
             $newBank = new BankInfo();
             $newBank->BANK_HLDR_NAME = $bankAccountHolderName;
             $newBank->BANK_ACNT = $bankAccount;
@@ -196,7 +196,7 @@ class Showroom extends Model
 
     function hasBank()
     {
-        return $this->SHRM_BANK_ID !== NULL && is_numeric($this->SHRM_BANK_ID);
+        return ($this->SHRM_BANK_ID != NULL && is_numeric($this->SHRM_BANK_ID));
     }
 
 
