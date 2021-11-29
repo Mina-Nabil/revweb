@@ -200,16 +200,7 @@ class Showroom extends Model
         if (!$this->isOwner() || !$this->hasBank()) {
             return false;
         }
-        try {
-            DB::transaction(function () {
-                $this->SHRM_BANK_ID = null;
-                $this->load("bankInfo");
-                $this->save();
-                $this->bankInfo->delete();
-            });
-        } catch (Exception $e) {
-            return false;
-        }
+        $this->bankInfo->delete();
         return true;
     }
 
