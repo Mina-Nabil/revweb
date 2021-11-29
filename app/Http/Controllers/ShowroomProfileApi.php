@@ -57,7 +57,8 @@ class ShowroomProfileApi extends AbstractApiController
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
     }
 
-    function getBankInfo(Request $request){
+    function getBankInfo(Request $request)
+    {
         $seller = $request->user();
         $seller->load("showroom");
         if (!$seller->showroom->isOwner()) {
@@ -65,7 +66,7 @@ class ShowroomProfileApi extends AbstractApiController
         }
         $showroom = $seller->showroom;
         $showroom->load("bankInfo");
-        parent::sendResponse($showroom->bankInfo!=null, "Banking info retrieved successfully", $showroom->bankInfo);
+        parent::sendResponse($showroom->bankInfo != null, "Banking info retrieved successfully", $showroom->bankInfo);
     }
 
     function setBankInfo(Request $request)
@@ -88,6 +89,21 @@ class ShowroomProfileApi extends AbstractApiController
         } else {
             parent::sendResponse(false, "Banking Info Failed");
         }
+    }
+
+    function deleteBankInfo(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        $showroom = $seller->showroom;
+        if ($showroom == NULL)  parent::sendResponse(false, "Unable to load Showroom");
+        if (!$showroom->isOwner()) {
+            parent::sendResponse(false, "Unauthorized");
+        }
+        if ($showroom->deleteBankInfo()); {
+            parent::sendResponse(true, "Banking Info Deleted");
+        }
+        parent::sendResponse(false, "Bank Info deletion failed");
     }
 
     function addCommercialRecord(Request $request)
@@ -118,7 +134,8 @@ class ShowroomProfileApi extends AbstractApiController
         }
     }
 
-    public function getCities(){
+    public function getCities()
+    {
         parent::sendResponse(true, "Cities loaded successfully", Country::with("cities")->get());
     }
 }

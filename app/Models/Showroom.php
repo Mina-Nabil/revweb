@@ -164,34 +164,51 @@ class Showroom extends Model
 
     function setBankInfo($bankBranchName, $bankAccountHolderName, $bankAccount, $ibanNumber)
     {
-        if (!$this->isOwner()) {
+        try {
+            DB::transaction(function () use ($bankBranchName, $bankAccountHolderName, $bankAccount, $ibanNumber) {
+                if (!$this->isOwner()) {
+                    return false;
+                }
+                if (!$this->hasBank()) {
+                    $newBank = new BankInfo();
+                    $newBank->BANK_HLDR_NAME = $bankAccountHolderName;
+                    $newBank->BANK_ACNT = $bankAccount;
+                    $newBank->BANK_BRCH = $bankBranchName;
+                    $newBank->BANK_IBAN = $ibanNumber;
+                    $newBank->BANK_SHRM_ID = $this->id;
+                    $newBank->save();
+                    $this->SHRM_BANK_ID = $newBank->id;
+                    $this->save();
+                } else {
+                    $this->load("bankInfo");
+                    $oldBank = $this->bankInfo;
+                    $oldBank->BANK_HLDR_NAME = $bankAccountHolderName;
+                    $oldBank->BANK_ACNT = $bankAccount;
+                    $oldBank->BANK_BRCH = $bankBranchName;
+                    $oldBank->BANK_IBAN = $ibanNumber;
+                    return $oldBank->save();
+                }
+            });
+        } catch (Exception $e) {
             return false;
         }
-        if (!$this->hasBank()) {
-            $newBank = new BankInfo();
-            $newBank->BANK_HLDR_NAME = $bankAccountHolderName;
-            $newBank->BANK_ACNT = $bankAccount;
-            $newBank->BANK_BRCH = $bankBranchName;
-            $newBank->BANK_IBAN = $ibanNumber;
-            $newBank->BANK_SHRM_ID = $this->id;
-            try {
-                return $newBank->save();
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
-            $this->load("bankInfo");
-            $oldBank = $this->bankInfo;
-            $oldBank->BANK_HLDR_NAME = $bankAccountHolderName;
-            $oldBank->BANK_ACNT = $bankAccount;
-            $oldBank->BANK_BRCH = $bankBranchName;
-            $oldBank->BANK_IBAN = $ibanNumber;
-            try {
-                return $oldBank->save();
-            } catch (Exception $e) {
-                return false;
-            }
+        return true;
+    }
+
+    function deleteBankInfo()
+    {
+        if (!$this->isOwner() || !$this->hasBank()) {
+            return false;
         }
+        try {
+            DB::transaction(function () {
+                $this->SHRM_BANK_ID = null;
+                $this->bankInfo->delete();
+            });
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     function hasBank()
