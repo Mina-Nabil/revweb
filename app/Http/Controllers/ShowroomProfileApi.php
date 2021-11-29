@@ -19,7 +19,7 @@ class ShowroomProfileApi extends AbstractApiController
             "email"         => "required|email|unique:showrooms,SHRM_MAIL",
             "mobNumber1"    => "required|unique:showrooms,SHRM_MOB1",
             "address"    => "required",
-            "cityID"    => "required|exists:cities",
+            "cityID"    => "required|exists:cities,id",
             "displayImage"  =>  "nullable|image|size:10000", //10 MB max
         ], "Showroom Creation Failed");
 
