@@ -54,6 +54,7 @@ class ShowroomProfileApi extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         if ($seller->showroom == NULL)  parent::sendResponse(false, "Unable to load Showroom");
+        $seller->showroom->SHRM_CAN_MNGR = $seller->showroom->isManager();
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
     }
 
