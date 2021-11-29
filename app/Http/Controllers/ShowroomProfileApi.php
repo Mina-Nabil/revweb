@@ -54,8 +54,17 @@ class ShowroomProfileApi extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         if ($seller->showroom == NULL)  parent::sendResponse(false, "Unable to load Showroom");
-        $seller->showroom->SHRM_CAN_MNGR = $seller->showroom->isManager();
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
+    }
+
+    function getBankInfo(Request $request){
+        $seller = $request->user();
+        $seller->load("showroom");
+        if (!$seller->showroom->isOwner()) {
+            parent::sendResponse(false, "Unauthorized");
+        }
+        $seller->showroom->load("bankInfo");
+        parent::sendResponse(true, "Banking info retrieved successfully", $seller->showroom->bankInfo);
     }
 
     function setBankInfo(Request $request)

@@ -79,7 +79,7 @@ class Showroom extends Model
             });
             return true;
         } catch (Exception $e) {
-           throw $e;
+            throw $e;
             return false;
         }
     }
@@ -162,20 +162,40 @@ class Showroom extends Model
         }
     }
 
-    function setBankInfo($bankBranchName, $bankAccountHolderName ,$bankAccount, $ibanNumber)
+    function setBankInfo($bankBranchName, $bankAccountHolderName, $bankAccount, $ibanNumber)
     {
         if (!$this->isOwner()) {
             return false;
         }
-        $this->SHRM_BANK_NAME   = $bankAccountHolderName;
-        $this->SHRM_BANK_BRCH   = $bankBranchName;
-        $this->SHRM_BANK_ACNT   = $bankAccount;
-        $this->SHRM_IBAN        = $ibanNumber;
-        try {
-            return $this->save();
-        } catch (Exception $e) {
-            return false;
+        if ($this->hasBank()) {
+            $newBank = new BankInfo();
+            $newBank->BANK_HLDR_NAME = $bankAccountHolderName;
+            $newBank->BANK_ACNT = $bankAccount;
+            $newBank->BANK_BRCH = $bankBranchName;
+            $newBank->BANK_IBAN = $ibanNumber;
+            $newBank->BANK_SHRM_ID = $this->id;
+            try {
+                return $newBank->save();
+            } catch (Exception $e) {
+                return false;
+            }
+        } else {
+            $this->load("bankInfo");
+            $this->bankInfo->BANK_HLDR_NAME = $bankAccountHolderName;
+            $this->bankInfo->BANK_ACNT = $bankAccount;
+            $this->bankInfo->BANK_BRCH = $bankBranchName;
+            $this->bankInfo->BANK_IBAN = $ibanNumber;
+            try {
+                return $this->bankInfo->save();
+            } catch (Exception $e) {
+                return false;
+            }
         }
+    }
+
+    function hasBank()
+    {
+        return $this->SHRM_BANK_ID !== NULL && is_numeric($this->SHRM_BANK_ID);
     }
 
 
@@ -313,11 +333,13 @@ class Showroom extends Model
     }
 
     ////Accessors
-    public function getCreatedAtAttribute($date){
+    public function getCreatedAtAttribute($date)
+    {
         return Carbon::createFromDate($date)->format("Y-m-d H:i:s");
     }
 
-    public function getUpdatedAtAttribute($date){
+    public function getUpdatedAtAttribute($date)
+    {
         return Carbon::createFromDate($date)->format("Y-m-d H:i:s");
     }
 
@@ -327,7 +349,8 @@ class Showroom extends Model
         return $this->belongsToMany(Car::class, CatalogItem::class, "SRCG_SHRM_ID", "SRCG_CAR_ID");
     }
 
-    public function catalogItems(){
+    public function catalogItems()
+    {
         return $this->hasMany(CatalogItem::class, "SRCG_SHRM_ID");
     }
 
@@ -344,6 +367,11 @@ class Showroom extends Model
     public function city()
     {
         return $this->belongsTo(City::class, "SHRM_CITY_ID");
+    }
+
+    public function bankInfo()
+    {
+        return $this->belongsTo(BankInfo::class, "SHRM_BANK_ID");
     }
 
     public function joinRequests()

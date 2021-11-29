@@ -27,10 +27,6 @@ class CreateShowroomsTable extends Migration
             $table->integer("SHRM_MOB1_VRFD")->default(0);
             $table->string("SHRM_MOB2")->nullable();
             $table->integer("SHRM_MOB2_VRFD")->default(0);
-            $table->string("SHRM_BANK_NAME")->nullable(); //Account Holder Name
-            $table->string("SHRM_BANK_ACNT")->nullable();
-            $table->string("SHRM_BANK_BRCH")->nullable();
-            $table->string("SHRM_IBAN")->nullable();
             $table->string("SHRM_RECD")->nullable();
             $table->string("SHRM_IMGE")->nullable();
             $table->enum("SHRM_RECD_STTS", ["Undelivered", "Submitted", "Rejected", "Valid"])->default("Undelivered");
