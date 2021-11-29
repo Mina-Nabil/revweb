@@ -34,7 +34,7 @@ class ShowroomProfileApi extends AbstractApiController
         $error = null;
         $failed = true;
         try {
-            $newShowroom = Showroom::create($request->name, $request->email, $request->mobNumber1, $seller->id, $request->mobNumber2, $displayImageFilePath);
+            $newShowroom = Showroom::create($request->name, $request->email, $request->mobNumber1, $request->address, $seller->id, $request->mobNumber2, $displayImageFilePath);
             $seller->setShowroom($newShowroom->id);
             $failed = false;
         } catch (Exception $e) {
