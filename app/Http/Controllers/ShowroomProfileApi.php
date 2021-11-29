@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Showroom;
 use App\Rules\Iban;
 use App\Services\FilesHandler;
@@ -107,6 +108,6 @@ class ShowroomProfileApi extends AbstractApiController
     }
 
     public function getCities(){
-        parent::sendResponse(true, City::with("country")->get(),"Unable to load Cities");
+        parent::sendResponse(true, "Cities loaded successfully", Country::with("cities")->get());
     }
 }
