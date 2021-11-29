@@ -63,8 +63,9 @@ class ShowroomProfileApi extends AbstractApiController
         if (!$seller->showroom->isOwner()) {
             parent::sendResponse(false, "Unauthorized");
         }
-        $seller->showroom->load("bankInfo");
-        parent::sendResponse(true, "Banking info retrieved successfully", $seller->showroom->bankInfo);
+        $showroom = $seller->showroom;
+        $showroom->load("bankInfo");
+        parent::sendResponse($showroom->bankInfo!=null, "Banking info retrieved successfully", $showroom->bankInfo);
     }
 
     function setBankInfo(Request $request)
