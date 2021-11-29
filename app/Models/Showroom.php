@@ -140,13 +140,14 @@ class Showroom extends Model
     }
 
     ///profile functions
-    static function create($name, $email, $mobileNumber1, $cityID, $ownerID = null, $mobileNumber2 = null, $accountImagePath = null)
+    static function create($name, $email, $mobileNumber1, $cityID, $address, $ownerID = null, $mobileNumber2 = null, $accountImagePath = null)
     {
         $newShowroom = new self();
         $newShowroom->SHRM_NAME = $name;
         $newShowroom->SHRM_MAIL = $email;
         $newShowroom->SHRM_MOB1 = $mobileNumber1;
         $newShowroom->SHRM_CITY_ID = $cityID;
+        $newShowroom->SHRM_ADRS = $address;
         $newShowroom->SHRM_ACTV = 0; //showroom pending activation
         $newShowroom->SHRM_MOB2 = $mobileNumber2;
         $newShowroom->SHRM_IMGE = $accountImagePath;
