@@ -62,8 +62,8 @@ class SellersProfileApi extends AbstractApiController
         } else if ($loginResponse == -2) {
             parent::sendResponse(false, "Incorrect Password");
             die;
-        } else if (is_string($loginResponse)) {
-            parent::sendResponse(true, "Login Succeeded", ["apiKey" => $loginResponse]);
+        } else if (is_arr($loginResponse)) {
+            parent::sendResponse(true, "Login Succeeded", $loginResponse);
         }
     }
 
