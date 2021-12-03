@@ -16,8 +16,8 @@ class ShowroomProfileApi extends AbstractApiController
     {
         parent::validateRequest($request, [
             "name"          => "required",
-            "email"         => "required|email|unique:showrooms,SHRM_MAIL",
-            "mobNumber1"    => "required|unique:showrooms,SHRM_MOB1",
+            "email"         => "required|email",
+            "mobNumber1"    => "required",
             "address"    => "required",
             "cityID"    => "required|exists:cities,id",
             "displayImage"  =>  "nullable|image|size:10000", //10 MB max

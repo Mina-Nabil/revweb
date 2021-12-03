@@ -182,6 +182,20 @@ class Seller extends Authenticatable
         }
     }
 
+    public static function isEmailTaken($email)
+    {
+        $res = self::where("SLLR_MAIL", $email)->get();
+        if (count($res) > 0) return true;
+        else return false;
+    }
+
+    public static function isPhoneTaken($phone)
+    {
+        $res = self::where("SLLR_MOB1", $phone)->orWhere("SLLR_MOB2", $phone)->get();
+        if (count($res) > 0) return true;
+        else return false;
+    }
+
     ////relation
     public function showroom()
     {

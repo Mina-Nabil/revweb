@@ -90,7 +90,7 @@ class SellersProfileApi extends AbstractApiController
 
         parent::validateRequest($request, [
             "name"          => "required",
-            "email"         => ["required", Rule::unique('sellers', "SLLR_NAME")->ignore($seller->SLLR_NAME, "SLLR_NAME")],
+            "email"         => ["required", Rule::unique('sellers', "SLLR_MAIL")->ignore($seller->SLLR_MAIL, "SLLR_MAIL")],
             "password"      => "nullable|min:6",
             "mobNumber1"     => ["required", Rule::unique('sellers', "SLLR_MOB1")->ignore($seller->SLLR_MOB1, "SLLR_MOB1")],
             "displayImage"  =>  "nullable|image|size:10000", //10 MB max
@@ -103,5 +103,23 @@ class SellersProfileApi extends AbstractApiController
         } else {
             parent::sendResponse(false, "Seller updated Failed");
         }
+    }
+
+    function isEmailTaken(Request $request)
+    {
+        $request->validate([
+            "email" => "required"
+        ]);
+        $taken = Seller::isEmailTaken($request->email);
+        parent::sendResponse(true, "Request passed", $taken);
+    }
+
+    function isPhoneTaken(Request $request)
+    {
+        $request->validate([
+            "phone" => "required"
+        ]);
+        $taken = Seller::isPhoneTaken($request->phone);
+        parent::sendResponse(true, "Request passed", $taken);
     }
 }

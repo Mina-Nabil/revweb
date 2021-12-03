@@ -18,9 +18,9 @@ class CreateShowroomsTable extends Migration
             $table->foreignId("SHRM_OWNR_ID")->constrained("sellers");
             $table->foreignId("SHRM_CITY_ID")->constrained("cities");
             $table->string("SHRM_NAME")->unique();
-            $table->string("SHRM_MAIL")->unique();
+            $table->string("SHRM_MAIL");
             $table->string("SHRM_ADRS");
-            $table->string("SHRM_MOB1")->unique();
+            $table->string("SHRM_MOB1");
             $table->integer("SHRM_VRFD")->default(0);
             $table->integer("SHRM_ACTV")->default(0);
             $table->integer("SHRM_MAIL_VRFD")->default(0);

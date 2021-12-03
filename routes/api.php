@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/seller/register', "SellersProfileApi@register");
+Route::post('/seller/check/email', "SellersProfileApi@isEmailTaken");
+Route::post('/seller/check/phone', "SellersProfileApi@isPhoneTaken");
 
 Route::post('/buyer/register', "BuyersProfileApi@register");
 

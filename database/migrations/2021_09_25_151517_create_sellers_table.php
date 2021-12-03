@@ -17,7 +17,7 @@ class CreateSellersTable extends Migration
             $table->id();
             $table->string("SLLR_NAME");
             $table->string("SLLR_MAIL")->unique();
-            $table->string("SLLR_MOB1");
+            $table->string("SLLR_MOB1")->unique();
             $table->string("SLLR_PASS");
             $table->string("SLLR_IMGE")->nullable();
             $table->integer("SLLR_MAIL_VRFD")->default(0);
