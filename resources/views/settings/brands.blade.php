@@ -12,7 +12,7 @@
                 <h4 class="card-title">{{ $formTitle }}</h4>
                 <form class="form pt-3" method="post" action="{{ url($formURL) }}" enctype="multipart/form-data">
                     @csrf
-                    <input type=hidden name=id value="{{(isset($brand)) ? $brand->id : ''}}">
+                    <input type=hidden name=id value="{{(isset($brand)) ? $brand['id'] : ''}}">
                     <div class="form-group">
                         <label>Brand Name*</label>
                         <div class="input-group mb-3">
