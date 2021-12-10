@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
+
 class FilesHandler {
 
     public function uploadFile($requestFile, $path){
-        return "FilePath";
+        return $requestFile->store($path, "s3");
     }
 
     public function deleteFile($path){
-        return true; //or false
+        return Storage::disk('s3')->delete($path);//or false
     }
 }
