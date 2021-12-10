@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Brand extends Model
 {
@@ -56,6 +57,11 @@ class Brand extends Model
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function setBRNDLOGOAttribute($value)
+    {
+        $this->attributes['BRND_LOGO'] = Storage::url($value);
     }
 
     function models()
