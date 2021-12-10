@@ -33,16 +33,19 @@ class Brand extends Model
         $this->BRND_NAME = $name;
         $this->BRND_ARBC_NAME = $arbcName;
         if ($logoPath != null) {
-            $filesHandler->deleteFile($this->BRND_LOGO);
-            $this->BRND_LOGO = $logoPath;
-        }
-        if ($logoPath != null) {
-            $filesHandler->deleteFile($this->BRND_LOGO);
+            if ($this->BRND_LOGO != null)
+                try {
+                    $filesHandler->deleteFile($this->BRND_LOGO);
+                } catch (Exception $e) {
+                }
             $this->BRND_LOGO = $logoPath;
         }
         if ($imagePath != null) {
-            
-            $filesHandler->deleteFile($this->BRND_IMGE);
+            if ($this->BRND_IMGE != null)
+                try {
+                    $filesHandler->deleteFile($this->BRND_IMGE);
+                } catch (Exception $e) {
+                }
             $this->BRND_IMGE = $imagePath;
         }
         $this->BRND_ACTV = $isActive == 'on' ? 1 : 0;
