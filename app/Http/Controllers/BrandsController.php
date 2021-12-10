@@ -127,6 +127,7 @@ class BrandsController extends Controller
                 $filesHandler->deleteFile($logoPath);
             if (isset($imagePath))
                 $filesHandler->deleteFile($imagePath);
+            throw $e;
         }
 
         return redirect($this->homeURL);
