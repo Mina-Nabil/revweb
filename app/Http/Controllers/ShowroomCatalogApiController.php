@@ -126,7 +126,7 @@ class ShowroomCatalogApiController extends AbstractApiController
      */
     function getAllBrands()
     {
-        parent::sendResponse(true, "Brands Retrieved", Brand::all());
+        parent::sendResponse(true, "Brands Retrieved", (object) [ "brands" => Brand::all()]);
     }
 
     /***
