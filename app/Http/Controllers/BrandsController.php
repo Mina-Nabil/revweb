@@ -121,7 +121,7 @@ class BrandsController extends Controller
         }
         try {
 
-            $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath, $imagePath);
+            $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath ?? null, $imagePath ?? null);
         } catch (Exception $e) {
             if (isset($logoPath))
                 $filesHandler->deleteFile($logoPath);
