@@ -39,7 +39,7 @@
                         <label for="input-file-now-custom-1">Brand Logo</label>
                         <div class="input-group mb-3">
                             <input type="file" id="input-file-now-custom-1" name=logo class="dropify"
-                                data-default-file="{{ (isset($brand->BRND_LOGO)) ? Storage::url( $brand->BRND_LOGO ) : old('logo') }}" />
+                                data-default-file="{{  $brand->BRND_LOGO ?? old('logo') }}" />
                         </div>
                         <small class="text-muted">Logo size should be 100 * 60 -- It appears on the bottom of every page in the popular Brands Section</small><br>
                         <small class="text-danger">{{$errors->first('logo')}}</small>
