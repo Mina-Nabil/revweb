@@ -62,7 +62,7 @@ class Brand extends Model
 
     public function getLogoUrlAttribute()
     {
-        return Storage::url($this->attributes['BRND_LOGO']);
+        return (isset($this->attributes['BRND_LOGO'])) ? Storage::url($this->attributes['BRND_LOGO']) : null;
     }
 
     function models()
