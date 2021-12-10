@@ -110,7 +110,6 @@ class BrandsController extends Controller
             "name" => ["required",  Rule::unique('brands', "BRND_NAME")->ignore($brand->BRND_NAME, "BRND_NAME"),],
             "id"        => "required",
             "logo"      => "required_if:isActive,on",
-            "image"     => "required_if:isActive,on",
         ]);
 
         if ($request->hasFile('logo')) {
@@ -124,8 +123,10 @@ class BrandsController extends Controller
 
             $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath, $imagePath);
         } catch (Exception $e) {
-            $filesHandler->deleteFile($logoPath);
-            $filesHandler->deleteFile($imagePath);
+            if (isset($logoPath))
+                $filesHandler->deleteFile($logoPath);
+            if (isset($imagePath))
+                $filesHandler->deleteFile($imagePath);
         }
 
         return redirect($this->homeURL);
