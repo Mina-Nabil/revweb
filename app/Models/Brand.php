@@ -59,9 +59,9 @@ class Brand extends Model
         }
     }
 
-    public function getLogoUrlAttribute()
+    public function getLogoUrlAttribute($val)
     {
-        return Storage::url($this->attributes['BRND_LOGO']);
+        return Storage::url($this->original['BRND_LOGO']);
     }
 
     function models()
