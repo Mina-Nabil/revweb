@@ -72,7 +72,6 @@ class BrandsController extends Controller
         $request->validate([
             "name"      => "required|unique:brands,BRND_NAME",
             "logo"      => "required_if:isActive,on",
-            "image"     => "required_if:isActive,on"
         ]);
 
         $filesHandler = new FilesHandler();
