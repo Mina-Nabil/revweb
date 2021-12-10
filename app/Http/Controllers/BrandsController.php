@@ -85,7 +85,7 @@ class BrandsController extends Controller
             $imagePath = $filesHandler->uploadFile($request->image, 'images/brands/' . $request->name);
         }
         try {
-            $brand = Brand::create($request->name, $request->arbcName, $request->isActive, $logoPath, $imagePath);
+            $brand = Brand::create($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath, $imagePath);
         } catch (Exception $e) {
             $brand = null;
             if ($logoPath != null)

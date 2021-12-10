@@ -19,8 +19,8 @@ class Brand extends Model
         $newBrand->BRND_NAME = $name;
         $newBrand->BRND_ARBC_NAME = $arbcName;
         $newBrand->BRND_LOGO = $logoPath;
-        $newBrand->BRND_LOGO = $imagePath;
-        $newBrand->BRND_ACTV = $isActive == 'on' ? 1 : 0;
+        $newBrand->BRND_IMGE = $imagePath;
+        $newBrand->BRND_ACTV = $isActive ;
         try {
             $newBrand->save();
             return $newBrand;
