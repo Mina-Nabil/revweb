@@ -11,6 +11,7 @@ class Brand extends Model
 {
     protected $table = "brands";
     public $timestamps = false;
+    protected $appends = ['logo_url'];
 
     static function create($name, $arbcName, $isActive, $logoPath = null, $imagePath = null)
     {
