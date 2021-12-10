@@ -60,6 +60,7 @@ class BrandsController extends Controller
     {
         $this->initDataArr();
         $this->data['brand'] = Brand::findOrFail($id);
+        dd($this->data['brand']);
         $this->data['formTitle'] = "Edit Brand ( " . $this->data['brand']->BRND_NAME . " )";
         $this->data['formURL'] = "admin/brands/update";
         $this->data['isCancel'] = true;
