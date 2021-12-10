@@ -29,6 +29,10 @@ class Brand extends Model
         }
     }
 
+    static function getActive(){
+        return self::where("BRND_ACTV", 1)->get();
+    }
+
     public function updateInfo($name, $arbcName, $isActive, $logoPath = null, $imagePath = null)
     {
         $filesHandler = new FilesHandler();
