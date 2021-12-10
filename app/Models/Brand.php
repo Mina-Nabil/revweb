@@ -37,6 +37,7 @@ class Brand extends Model
                 try {
                     $filesHandler->deleteFile($this->BRND_LOGO);
                 } catch (Exception $e) {
+                    throw $e;
                 }
             $this->BRND_LOGO = $logoPath;
         }
@@ -45,6 +46,7 @@ class Brand extends Model
                 try {
                     $filesHandler->deleteFile($this->BRND_IMGE);
                 } catch (Exception $e) {
+                    throw $e;
                 }
             $this->BRND_IMGE = $imagePath;
         }
