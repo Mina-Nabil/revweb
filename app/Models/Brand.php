@@ -56,7 +56,7 @@ class Brand extends Model
                 }
             $this->BRND_IMGE = $imagePath;
         }
-        $this->BRND_ACTV = $isActive == 'on' ? 1 : 0;
+        $this->BRND_ACTV = $isActive ;
         try {
             $this->save();
         } catch (Exception $e) {
