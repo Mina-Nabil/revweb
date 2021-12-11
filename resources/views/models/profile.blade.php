@@ -98,7 +98,7 @@
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
                                 @foreach($model->colors as $image)
-                                @isset($image->COLR_IMGE)
+                                @isset($image->image_url)
                                 <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
                                 <?php $i++; ?>
                                 @endisset
@@ -107,7 +107,7 @@
                             <div class="carousel-inner" role="listbox">
                                 <?php $i=0; ?>
                                 @foreach($model->colors as $image)
-                                @isset($image->COLR_IMGE)
+                                @isset($image->image_url)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
                                     <img class="img-fluid" src="{{ asset( 'storage/'. $image->MOIM_URL ) }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
@@ -255,7 +255,7 @@
                                             <td>{{$image->COLR_NAME}}-{{$image->COLR_ARBC_NAME}}</td>
                                             <td>
                                                 @isset($image->COLR_IMGE)
-                                                <img src="{{ asset( 'storage/'. $image->COLR_IMGE ) }} " width="60px">
+                                                <img src="{{ $image->image_url }} " width="60px">
                                                 @endisset
                                             </td>
                                             <td><a target="_blank" href="{{ asset( 'storage/'. $image->COLR_IMGE ) }}">
