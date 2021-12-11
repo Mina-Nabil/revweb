@@ -15,7 +15,7 @@ class ShowroomCatalogApiController extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
         parent::sendResponse(true, "Catalog", (object)["catalog" => $showroom->getCatalogCars()]);
@@ -26,7 +26,7 @@ class ShowroomCatalogApiController extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
         parent::sendResponse(true, "Car Pool Retrieved Successfully", (object)["cars" => $showroom->getCarpool()]);
@@ -37,7 +37,7 @@ class ShowroomCatalogApiController extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
         parent::sendResponse(true, "Brands Retrieved", (object)["brands" => $showroom->getAssociatedBrands()]);
@@ -52,7 +52,7 @@ class ShowroomCatalogApiController extends AbstractApiController
 
         $seller = $request->user();
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
         if ($showroom->addCarToCatalog($request->carID, $request->colors)) {
@@ -69,7 +69,7 @@ class ShowroomCatalogApiController extends AbstractApiController
         ], "Car not found");
         $seller = $request->user();
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
         if ($showroom->deactivateCarFromCatalog($request->carID)) {
@@ -110,7 +110,7 @@ class ShowroomCatalogApiController extends AbstractApiController
         $seller = $request->user();
         $seller->load("showroom");
         $showroom = $seller->showroom;
-        if($showroom==NULL){
+        if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
 
@@ -126,7 +126,7 @@ class ShowroomCatalogApiController extends AbstractApiController
      */
     function getAllBrands()
     {
-        parent::sendResponse(true, "Brands Retrieved", (object) [ "brands" => Brand::getActive()]);
+        parent::sendResponse(true, "Brands Retrieved", (object) ["brands" => Brand::getActive()]);
     }
 
     /***
@@ -134,7 +134,7 @@ class ShowroomCatalogApiController extends AbstractApiController
      */
     function getModelsByBrand($brandID)
     {
-        $brand = Brand::with("models", "models.type", "models.cars", "models.cars.images", "models.brand")->findOrFail($brandID);
+        $brand = Brand::with("models", "models.type", "models.colors", "models.cars", "models.cars.images", "models.brand")->findOrFail($brandID);
         parent::sendResponse(true, "Models Retrieved", $brand->models);
     }
 
