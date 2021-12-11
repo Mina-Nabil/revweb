@@ -35,6 +35,9 @@ class Car extends Model
             ->get();
     }
 
+    static public function getCarsByModel($modelID){
+        return self::with("images", "model")->where("CAR_MODL_ID", $modelID)->get();
+    }
 
     public function getImageAttribute()
     {
