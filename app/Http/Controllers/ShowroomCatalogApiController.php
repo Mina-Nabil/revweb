@@ -143,9 +143,8 @@ class ShowroomCatalogApiController extends AbstractApiController
      */
     function getCarsByModel($modelID)
     {
-        $model = CarModel::findOrFail($modelID);
-        $model->load('cars');
-        parent::sendResponse(true, "Cars Retrieved", $model->cars);
+        $cars = Car::getCarsByModel($modelID);
+        parent::sendResponse(true, "Cars Retrieved", $cars);
     }
 
     /***
