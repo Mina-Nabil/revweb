@@ -134,9 +134,7 @@ class ShowroomCatalogApiController extends AbstractApiController
      */
     function getModelsByBrand($brandID)
     {
-        $brand = Brand::findOrFail($brandID);
-        $brand->load('models');
-        $brand->load('models.cars');
+        $brand = Brand::with("models", "models.cars")->findOrFail($brandID);
         parent::sendResponse(true, "Models Retrieved", $brand->models);
     }
 
