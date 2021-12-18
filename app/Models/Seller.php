@@ -75,6 +75,7 @@ class Seller extends Authenticatable
         if ($seller != null) {
             $passwordStatus = Hash::check($password, $seller->SLLR_PASS);
             if ($passwordStatus) {
+                $seller->load("showroom");
                 return [
                     "seller" => $seller,
                     "apiKey" => $seller->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken
