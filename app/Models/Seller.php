@@ -78,7 +78,6 @@ class Seller extends Authenticatable
                 $seller->load("showroom");
                 return [
                     "seller" => $seller,
-                    "showroom" => $seller->showroom,
                     "apiKey" => $seller->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken
                 ];
             } else {

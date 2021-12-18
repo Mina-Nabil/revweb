@@ -45,6 +45,8 @@ class SellersProfileApi extends AbstractApiController
 
     function getUser(Request $request)
     {
+        $seller = $request->user();
+        $seller->load("showroom");
         parent::sendResponse(true, "User Retrieved Successfully", (object)["user" => $request->user()]);
     }
 
