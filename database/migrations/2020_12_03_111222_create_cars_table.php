@@ -24,10 +24,10 @@ class CreateCarsTable extends Migration
             $table->tinyInteger('CAR_ACTV')->default(0);
 
             //Car specs -- all nullable as they can add car before publish
-            $table->string('CAR_HPWR')->nullable();
+            $table->integer('CAR_HPWR')->nullable();
             $table->integer('CAR_SEAT')->nullable();
             $table->double('CAR_ACC')->nullable(); //0-100 acceleration
-            $table->string('CAR_ENCC')->nullable();
+            $table->integer('CAR_ENCC')->nullable();
             $table->string('CAR_TORQ')->nullable();
             $table->string('CAR_TRNS')->nullable(); //transmission type
             $table->integer('CAR_TPSP')->nullable(); //top speed
