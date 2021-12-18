@@ -46,7 +46,7 @@ class ShowroomProfileApi extends AbstractApiController
             $filesHandler->deleteFile($displayImageFilePath);
             die;
         }
-        parent::sendResponse(true, "Registration Succeeded!", (object)["showroom" => $newShowroom]);
+        parent::sendResponse(true, "Registration Succeeded!", (object)["showroom" => $newShowroom->fresh()]);
     }
 
     function getShowroom(Request $request)
