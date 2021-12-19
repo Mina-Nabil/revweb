@@ -46,7 +46,7 @@ class CarModel extends Model
             $newModel->MODL_IMGE = $imagePath;
         }
         if ($pdfPath != null) {
-            $newModel->MODL_PDF = $pdfPath;
+            $newModel->MODL_BRCH = $pdfPath;
         }
         $newModel->MODL_ACTV = $isActive ;
 
@@ -69,7 +69,7 @@ class CarModel extends Model
             $this->MODL_IMGE = $imagePath;
         }
         if ($pdfPath!=null) {
-            $this->MODL_PDF = $pdfPath;
+            $this->MODL_BRCH = $pdfPath;
         }
         $this->MODL_ACTV = $isActive;
         $this->MODL_OVRV = $overview;
