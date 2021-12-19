@@ -365,7 +365,7 @@
                                     <label for="input-file-now-custom-1">Model Image</label>
                                     <div class="input-group mb-3">
                                         <input type="file" id="input-file-now-custom-1" name=image class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_IMGE)) ? asset( 'storage/'. $model->MODL_IMGE ) : old('image') }}" />
+                                            data-default-file="{{ (isset($model->MODL_IMGE)) ? $model->getImageUrlAttribute() : old('image') }}" />
                                     </div>
                                     <small class="text-muted">Image size should be 346 * 224 -- It appears on the home page if this is a main model -- The background should be transparent or white in
                                         color</small><br>
@@ -377,7 +377,7 @@
                                     <label for="input-file-now-custom-1">PDF Brochure</label>
                                     <div class="input-group mb-3">
                                         <input type="file" id="input-file-now-custom-1" name=pdf class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_BRCH)) ? asset( 'storage/'. $model->MODL_BRCH ) : old('pdf') }}" />
+                                            data-default-file="{{ (isset($model->MODL_BRCH)) ? $model->getPdfUrlAttribute() : old('pdf') }}" />
                                     </div>
                                     <small class="text-muted">PDF Brochure shall be used in case no interactive Brochure provided</small><br>
                                     <small class="text-danger">{{$errors->first('pdf')}}</small>
