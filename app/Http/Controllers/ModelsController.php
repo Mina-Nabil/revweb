@@ -71,7 +71,7 @@ class ModelsController extends Controller
 
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $pdfPath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'pdfs/models/' . $request->name);
         }
 
         $isActive = $request->isActive == 'on' ? 1 : 0;
@@ -117,7 +117,7 @@ class ModelsController extends Controller
 
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $pdfPath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'pdfs/models/' . $request->name);
         }
         $isActive = $request->isActive == 'on' ? 1 : 0;
         if (!$model->updateInfo($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $pdfPath, $isActive)) {
