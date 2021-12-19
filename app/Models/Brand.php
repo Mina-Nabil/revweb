@@ -69,6 +69,10 @@ class Brand extends Model
         return (isset($this->attributes['BRND_LOGO'])) ? Storage::url($this->attributes['BRND_LOGO']) : null;
     }
 
+    function activeModels(){
+        return $this->models()->where("MODL_ACTV", 1)->get();
+    }
+
     function models()
     {
         return $this->hasMany('App\Models\CarModel', 'MODL_BRND_ID');
