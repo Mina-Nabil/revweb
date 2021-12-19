@@ -12,6 +12,7 @@ use App\Models\ModelImage;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class ModelsController extends Controller
@@ -56,10 +57,9 @@ class ModelsController extends Controller
             "brand"      => "required|exists:brands,id",
             "type"      => "required|exists:types,id",
             "year"      => "required",
-            "overview"  => "required_if:isMain,on",
-            "image"  => "required_if:isMain,on|file",
-            "background"  => "required_if:isMain,on|image",
-            "pdf"  => "required_if:isMain,on|mimes:pdf",
+            "overview"  => "required_if:isActive,on",
+            "image"  => "required_if:isActive,on|file",
+            "pdf"  => "required_if:isActive,on|mimes:pdf",
         ]);
 
         $filesHandler = new FilesHandler();
@@ -69,26 +69,19 @@ class ModelsController extends Controller
             $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
         }
 
-        $backgroundPath = null;
-        if ($request->hasFile('background')) {
-            $backgroundPath = $filesHandler->uploadFile($request->background, 'images/models/' . $request->name);
-        }
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
             $pdfPath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
         }
 
         $isActive = $request->isActive == 'on' ? 1 : 0;
-        $isMain = $request->isMain == 'on' ? 1 : 0;
-        try {
-            $newCar = CarModel::create($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $backgroundPath, $pdfPath, $isActive, $isMain);
-            return redirect($this->profileURL . $newCar->id);
-        } catch (Exception $e) {
-            $filesHandler->deleteFile($backgroundPath);
+
+        $newCar = CarModel::create($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $pdfPath, $isActive);
+        if (!$newCar) {
             $filesHandler->deleteFile($pdfPath);
             $filesHandler->deleteFile($imagePath);
-            throw $e;
         }
+        return redirect($this->profileURL . $newCar->id);
     }
 
     public function update(Request $request)
@@ -98,49 +91,39 @@ class ModelsController extends Controller
         ]);
         $model = CarModel::findOrFail($request->id);
         $filesHandler = new FilesHandler();
+
         $request->validate([
             "name" => "required",
+            "arbcName" => "required_if:isActive,on",
             "brand"      => "required|exists:brands,id",
             "type"      => "required|exists:types,id",
             "year"      => "required",
-            "overview"  => "required_if:isMain,on",
+            "overview"  => "required_if:isActive,on",
         ]);
         if (is_null($model->MODL_IMGE) || $model->MODL_IMGE == "")
             $request->validate([
-                "image"  => "required_if:isMain,on|image",
+                "image"  => "required_if:isActive,on|image",
             ]);
-        if (is_null($model->MODL_BGIM) || $model->MODL_BGIM == "")
-            $request->validate([
-                "background"  => "required_if:isMain,on|image",
-            ]);
+
         if (is_null($model->MODL_PDF) || $model->MODL_PDF == "")
             $request->validate([
-                "pdf"  => "required_if:isMain,on|mimes:pdf",
+                "pdf"  => "required_if:isActive,on|mimes:pdf",
             ]);
 
-        $model->MODL_BRND_ID = $request->brand;
-        $model->MODL_TYPE_ID = $request->type;
-        $model->MODL_NAME = $request->name;
-        $model->MODL_ARBC_NAME = $request->arbcName;
-        $model->MODL_BRCH = $request->brochureCode;
-        $model->MODL_YEAR = $request->year;
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
-            $model->MODL_IMGE = $imagePath;
         }
-        if ($request->hasFile('background')) {
-            $imagePath = $filesHandler->uploadFile($request->background, 'images/models/' . $request->name);
-            $model->MODL_BGIM = $imagePath;
-        }
-        if ($request->hasFile('pdf')) {
-            $imagePath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
-            $model->MODL_PDF = $imagePath;
-        }
-        $model->MODL_ACTV = $request->isActive == 'on' ? 1 : 0;
-        $model->MODL_MAIN = $request->isMain == 'on' ? 1 : 0;
-        $model->MODL_OVRV = $request->overview;
 
-        $model->save();
+        $pdfPath = null;
+        if ($request->hasFile('pdf')) {
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'images/models/' . $request->name);
+        }
+        $isActive = $request->isActive == 'on' ? 1 : 0;
+        if (!$model->updateInfo($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $pdfPath, $isActive)) {
+            $filesHandler->deleteFile($pdfPath);
+            $filesHandler->deleteFile($imagePath);
+        };
 
         return redirect($this->profileURL . $model->id);
     }
@@ -224,7 +207,7 @@ class ModelsController extends Controller
             $request->alpha
         );
 
-         return back();
+        return back();
     }
 
 
