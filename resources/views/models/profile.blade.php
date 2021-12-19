@@ -359,14 +359,7 @@
                                     <small class="text-muted">This model and all its linked cars can be hidden/published using this option</small>
                                 </div>
 
-                                <div class="form-group bt-switch">
-                                    <div class="col-md-5 m-b-15">
-                                        <h4 class="card-title">Main</h4>
-                                        <input type="checkbox" data-size="large" {{(isset($model) && $model->MODL_MAIN) ? 'checked' : ''}} data-on-color="success" data-off-color="danger"
-                                        data-on-text="Yes" data-off-text="No" name="isMain">
-                                    </div>
-                                    <small class="text-muted">The model can be published on the home page using this option</small>
-                                </div>
+                           
 
                                 <div class="form-group">
                                     <label for="input-file-now-custom-1">Model Image</label>
