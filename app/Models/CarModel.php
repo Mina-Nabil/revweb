@@ -5,11 +5,13 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CarModel extends Model
 {
     protected $table = "models";
     public $timestamps = false;
+    protected $appends = ['image_url', 'pdf_url'];
 
     public function brand()
     {
@@ -83,6 +85,15 @@ class CarModel extends Model
         }
     }
 
+    public function getImageUrlAttribute()
+    {
+        return (isset($this->attributes['MODL_IMGE'])) ? Storage::url($this->attributes['MODL_IMGE']) : null;
+    }
+
+    public function getPdfUrlAttribute()
+    {
+        return (isset($this->attributes['MODL_BRCH'])) ? Storage::url($this->attributes['MODL_BRCH']) : null;
+    }
 
     function toggleMain()
     {
