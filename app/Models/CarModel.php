@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class CarModel extends Model
 {
@@ -30,7 +31,7 @@ class CarModel extends Model
         return $this->hasMany(ModelColor::class, 'COLR_MODL_ID');
     }
 
-    static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $backgroundImgPath = null, $pdfPath = null, $isActive = false, $isMain = false)
+    static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
     {
         $newModel = new self();
         $newModel->MODL_BRND_ID = $brandID;
@@ -44,20 +45,41 @@ class CarModel extends Model
         if ($imagePath != null) {
             $newModel->MODL_IMGE = $imagePath;
         }
-        if ($backgroundImgPath != null) {
-            $newModel->MODL_BGIM = $backgroundImgPath;
-        }
         if ($pdfPath != null) {
             $newModel->MODL_PDF = $pdfPath;
         }
-        $newModel->MODL_ACTV = $isActive == 'on' ? 1 : 0;
-        $newModel->MODL_MAIN = $isMain == 'on' ? 1 : 0;
+        $newModel->MODL_ACTV = $isActive ;
 
         try {
             $newModel->save();
             return $newModel;
         } catch (Exception $e) {
-            throw $e;
+            Log::alert($e->getMessage());
+            return false;
+        }
+    }
+
+    function updateInfo($brand, $type, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0 ) {
+        $this->MODL_BRND_ID = $brand;
+        $this->MODL_TYPE_ID = $type;
+        $this->MODL_NAME = $name;
+        $this->MODL_ARBC_NAME = $arbcName;
+        $this->MODL_YEAR = $year;
+        if ($imagePath!=null) {
+            $this->MODL_IMGE = $imagePath;
+        }
+        if ($pdfPath!=null) {
+            $this->MODL_PDF = $pdfPath;
+        }
+        $this->MODL_ACTV = $isActive;
+        $this->MODL_OVRV = $overview;
+
+        try {
+            $this->save();
+            return $this;
+        } catch (Exception $e) {
+            Log::alert($e->getMessage());
+            return false;
         }
     }
 

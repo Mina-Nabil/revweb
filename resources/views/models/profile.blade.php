@@ -62,15 +62,6 @@
                             </div>
                         </div>
                         <hr>
-
-                        <div class=row>
-                            <div class="col-12 b-r">
-                                <strong>Background Image</strong>
-                                <img class="card-img m-t-10" src="{{  (isset($model->MODL_BGIM)) ? asset( 'storage/'. $model->MODL_BGIM ) : asset('images/def-car.png')}}" alt="Card image">
-                            </div>
-                        </div>
-                        <hr>
-                        <hr>
                         <div class=row>
                             <div class="col-12 b-r">
                                 <strong>Overview</strong>
@@ -358,20 +349,6 @@
                                     <small class="text-danger">{{$errors->first('arbcName')}}</small>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Interactive Brochure</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon22"><i class="fas fa-barcode"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" name=brochureCode placeholder="Interactive brochure code, example: 452336e5-81ed-43be-a4be-f7552f6366fd "
-                                            value="{{ (isset($model)) ? $model->MODL_BRCH : old('brochureCode')}}">
-                                    </div>
-                                    <small class="text-muted">Use only the code written after the indesign url, https://indd.adobe.com/view/<strong>452336e5-81ed-43be-a4be-f7552f6366fd</strong>
-                                    </small><br>
-                                    <small class="text-danger">{{$errors->first('brochureCode')}}</small>
-                                </div>
-
 
                                 <div class="form-group bt-switch">
                                     <div class="col-md-5 m-b-15">
@@ -400,17 +377,6 @@
                                     <small class="text-muted">Image size should be 346 * 224 -- It appears on the home page if this is a main model -- The background should be transparent or white in
                                         color</small><br>
                                     <small class="text-danger">{{$errors->first('image')}}</small>
-
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="input-file-now-custom-1">Background Image</label>
-                                    <div class="input-group mb-3">
-                                        <input type="file" id="input-file-now-custom-1" name=background class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_BGIM)) ? asset( 'storage/'. $model->MODL_BGIM ) : old('background') }}" />
-                                    </div>
-                                    <small class="text-muted">Image size should be 1920 * 400 -- It appears on the models listing page</small><br>
-                                    <small class="text-danger">{{$errors->first('background')}}</small>
 
                                 </div>
 
