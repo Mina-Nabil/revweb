@@ -70,7 +70,7 @@ class Brand extends Model
     }
 
     function activeModels(){
-        return $this->models()->where("MODL_ACTV", 1)->get();
+        return $this->models()->with("brand", "type")->where("MODL_ACTV", 1)->get();
     }
 
     function models()
