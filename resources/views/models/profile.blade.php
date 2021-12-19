@@ -56,8 +56,8 @@
                         <div class=row>
                             <div class="col-12 b-r">
                                 <strong>Option PDF Brochure</strong>
-                                @isset($model->MODL_PDF)
-                                <embed class="m-t-10" src="{{asset('storage/' . $model->MODL_PDF)}}" width="100%" height="375px">
+                                @isset($model->MODL_BRCH)
+                                <embed class="m-t-10" src="{{asset('storage/' . $model->MODL_BRCH)}}" width="100%" height="375px">
                                 @endisset
                             </div>
                         </div>
@@ -377,7 +377,7 @@
                                     <label for="input-file-now-custom-1">PDF Brochure</label>
                                     <div class="input-group mb-3">
                                         <input type="file" id="input-file-now-custom-1" name=pdf class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_PDF)) ? asset( 'storage/'. $model->MODL_PDF ) : old('pdf') }}" />
+                                            data-default-file="{{ (isset($model->MODL_BRCH)) ? asset( 'storage/'. $model->MODL_BRCH ) : old('pdf') }}" />
                                     </div>
                                     <small class="text-muted">PDF Brochure shall be used in case no interactive Brochure provided</small><br>
                                     <small class="text-danger">{{$errors->first('pdf')}}</small>
