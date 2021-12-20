@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Facades\Log;
 
 class Buyer extends Authenticatable
 {
@@ -43,6 +43,7 @@ class Buyer extends Authenticatable
             $newbuyer->save();
             return $newbuyer;
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
             throw $e;
         }
     }
@@ -106,7 +107,12 @@ class Buyer extends Authenticatable
 
         if ($emailHandler->confirmEmailVerfication($this->BUYR_MAIL, $emailCode)) {
             $this->BUYR_MAIL_VRFD = 1;
-            $this->save();
+            try{
+                $this->save();
+            } catch (Exception $e) {
+                Log::alert($e->getMessage(), ["DB" => self::class] );
+                throw $e;
+            }
             return true;
         } else {
             return false;
@@ -118,6 +124,12 @@ class Buyer extends Authenticatable
         $smsHandler = new SmsHandler();
         if ($smsHandler->confirmMobNumber($this->BUYR_MOB1, $sentSMSCode)) {
             $this->BUYR_MOB1_VRFD = 1;
+            try {
+                $this->save();
+            } catch (Exception $e) {
+                Log::alert($e->getMessage(), ["DB" => self::class] );
+                throw $e;
+            }
         } else {
             return false;
         }
@@ -128,6 +140,12 @@ class Buyer extends Authenticatable
         $smsHandler = new SmsHandler();
         if ($smsHandler->confirmMobNumber($this->BUYR_MOB2, $sentSMSCode)) {
             $this->BUYR_MOB2_VRFD = 1;
+            try {
+                $this->save();
+            } catch (Exception $e) {
+                Log::alert($e->getMessage(), ["DB" => self::class] );
+                throw $e;
+            }
         } else {
             return false;
         }
@@ -139,7 +157,12 @@ class Buyer extends Authenticatable
         $this->BUYR_NTID_FRNT = $frontImage;
         $this->BUYR_NTID_BACK = $backImage;
         $this->BUYR_NTID_STTS = "Submitted";
-        return $this->save();
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
+            throw $e;
+        }
     }
 
     function toggleNationalIDVerificationStatus($status = true)
@@ -147,14 +170,23 @@ class Buyer extends Authenticatable
         if ($status)
             $this->BUYR_NTID_STTS = "Valid";
         $this->BUYR_NTID_STTS = "Rejected";
-
-        $this->save();
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
+            throw $e;
+        }
     }
 
     function setImage($imagePath)
     {
         $this->BUYR_IMGE = $imagePath;
-        $this->save();
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
+            throw $e;
+        }
     }
 
 

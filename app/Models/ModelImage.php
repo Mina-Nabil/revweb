@@ -2,22 +2,49 @@
 
 namespace App\Models;
 
+use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ModelImage extends Model
 {
     protected $table = "model_images";
     public $timestamps = false;
+    protected $appends = ["image_url"];
+
+    public $fillable = [
+        "MOIM_URL", "MOIM_SORT"
+    ];
+
+    public function getImageUrlAttribute()
+    {
+        return isset($this->MOIM_URL) ? Storage::url($this->MOIM_URL) : null;
+    }
 
     public function deleteImage()
     {
         try {
-            unlink(public_path('storage/' . $this->MOIM_URL));
+            $filesHandler = new FilesHandler();
+            return $filesHandler->deleteFile($this->MOIM_URL) && $this->delete();
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class]);
+            throw $e;
         }
-        $this->delete();
-        return 1;
+    }
+
+    public function editInfo($sort, $imageURL)
+    {
+        try{
+            return $this->update([
+                "MOIM_SORT" => $sort,
+                "MOIM_URL" => $imageURL ?? $this->MOIM_URL ,
+            ]);
+        }  catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" , self::class]);
+            return false;
+        }
     }
 
 
@@ -80,5 +107,10 @@ class ModelImage extends Model
                 imageflip($img, IMG_FLIP_HORIZONTAL);
         }
         return $img;
+    }
+
+    public function model()
+    {
+        return $this->belongsTo(CarModel::class, "MOIM_MODL_ID");
     }
 }

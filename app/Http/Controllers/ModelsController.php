@@ -28,6 +28,7 @@ class ModelsController extends Controller
         $this->data['formTitle'] = "Edit Model(" . $this->data['model']->MODL_NAME . ")";
         $this->data['formURL'] = url("admin/models/update");
         $this->data['imageFormURL'] = url("admin/models/add/image");
+        $this->data['updateColorInfoURL'] = url("admin/models/update/color");
         $this->data['updateImageInfoURL'] = url("admin/models/update/image");
         $this->data['delImageUrl'] = url("admin/models/image/delete/");
         $this->data['isCancel'] = false;
@@ -141,7 +142,7 @@ class ModelsController extends Controller
         $model->toggleActive();
         return back();
     }
-    ///////////images functions
+    ///////////color images functions
     public function attachColor(Request $request)
     {
         $request->validate([
@@ -158,10 +159,10 @@ class ModelsController extends Controller
         $filesHandler = new FilesHandler();
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $imageURL = $filesHandler->uploadFile($request->photo, "cars/" . $model->MODL_NAME . '/colors');
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/colors//' . $request->COLR_NAME);
         }
 
-        $model->colors()->create([
+        if (!$model->colors()->create([
             "COLR_NAME" => $request->name,
             "COLR_ARBC_NAME" => $request->arbcName,
             "COLR_IMGE" => $imageURL ?? NULL,
@@ -170,7 +171,9 @@ class ModelsController extends Controller
             "COLR_GREN" => $request->green,
             "COLR_BLUE" => $request->blue,
             "COLR_ALPH" => $request->alpha
-        ]);
+        ])) {
+            $filesHandler->deleteFile($imageURL);
+        }
 
         return back();
     }
@@ -178,7 +181,7 @@ class ModelsController extends Controller
 
     public function delColor($id)
     {
-        $image = ModelImage::findOrFail($id);
+        $image = ModelColor::findOrFail($id);
         echo $image->deleteImage();
     }
 
@@ -195,26 +198,100 @@ class ModelsController extends Controller
             'alpha'     =>  "nullable|max:256",
             'hex'       =>  ['nullable', 'regex:/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
-        $image = ModelColor::findOrFail($request->id);
-        $image->editInfo(
+        $color = ModelColor::findOrFail($request->id);
+        $color->load("model");
+        $filesHandler = new FilesHandler();
+        $oldURL = $color->COLR_IMGE;
+        $imageURL = NULL;
+        if ($request->hasFile('photo')) {
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $color->model->MODL_NAME . '/colors//' . $color->COLR_NAME);
+        }
+        $editRes =  $color->editInfo(
             $request->name,
             $request->arbcName,
-            $imageURL ?? NULL,
+            $imageURL ?? $oldURL,
             $request->hex,
             $request->red,
             $request->green,
             $request->blue,
             $request->alpha
         );
+        if ($editRes && $oldURL != null && $imageURL != NULL) {
+            $filesHandler->deleteFile($oldURL);
+        } else if (!$editRes && $imageURL != NULL) {
+            $filesHandler->deleteFile($imageURL);
+        }
+
+        return back();
+    }
+
+    /////////images functions
+    public function attachImage(Request $request)
+    {
+        $request->validate([
+            "modelID"   =>  "required|exists:models,id",
+            "photo"     =>  "required|file",
+            "sort"     =>  "required",
+        ]);
+        $model = CarModel::findOrFail($request->modelID);
+        $filesHandler = new FilesHandler();
+        $imageURL = NULL;
+        if ($request->hasFile('photo')) {
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/images');
+        }
+
+        if (!$model->images()->create([
+            "MOIM_SORT" => $request->name,
+            "MOIM_URL" => $imageURL,
+        ])) {
+            $filesHandler->deleteFile($imageURL);
+        }
 
         return back();
     }
 
 
+    public function delImage($id)
+    {
+        $image = ModelImage::findOrFail($id);
+        echo $image->deleteImage();
+    }
+
+    public function editImage(Request $request)
+    {
+        $request->validate([
+            "id"        => "required",
+            "modelID"   =>  "required|exists:models,id",
+            "photo"     =>  "required|file",
+            "sort"     =>  "required",
+        ]);
+        $image = ModelImage::findOrFail($request->id);
+        $image->load("model");
+        $filesHandler = new FilesHandler();
+        $oldURL = $image->MOIM_URL;
+        $imageURL = NULL;
+        if ($request->hasFile('photo')) {
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $image->model->MODL_NAME . '/images');
+        }
+
+        $editRes = $image->editInfo(
+            $request->name,
+            $imageURL ?? $oldURL,
+        );
+
+        if ($editRes && $imageURL != NULL && $oldURL != NULL) {
+            $filesHandler->deleteFile($oldURL);
+        } elseif (!$editRes && $imageURL != null) {
+            $filesHandler->deleteFile($imageURL);
+        }
+
+        return back();
+    }
+
     //////////////////// Data functions
     private function initProfileArr($modelID)
     {
-        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colors')->findOrFail($modelID);
+        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colors', 'images')->findOrFail($modelID);
         //Model Categories
         $this->data['items'] = $this->data['model']->cars;
         $this->data['title'] = "Available Categories";
