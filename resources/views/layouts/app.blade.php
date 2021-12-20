@@ -43,7 +43,7 @@
     <script>
         function showSwalErrorsAlert(title, msgArray){
         text = "";
-        msgArray.forEach(element => {
+        [...msgArray].forEach(element => {
             text += element + "\n"
         });
 
