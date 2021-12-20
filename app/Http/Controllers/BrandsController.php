@@ -20,7 +20,7 @@ class BrandsController extends Controller
         $this->data['subTitle'] = "Manage all Available Brands that should appear on this website such as Peugeot";
         $this->data['cols'] = ['Logo', 'Name', 'Arabic', 'Active', 'Edit', 'Delete'];
         $this->data['atts'] = [
-            ['assetImg' => ['att' => 'BRND_LOGO']],
+            ['assetImg' => ['att' => 'logo_url']],
             'BRND_NAME',
             'BRND_ARBC_NAME',
             [
@@ -59,7 +59,7 @@ class BrandsController extends Controller
     public function edit($id)
     {
         $this->initDataArr();
-        $this->data['brand'] = Brand::findOrFail($id)->toArray();
+        $this->data['brand'] = Brand::findOrFail($id);
         $this->data['formTitle'] = "Edit Brand ( " . $this->data['brand']['BRND_NAME'] . " )";
         $this->data['formURL'] = "admin/brands/update";
         $this->data['isCancel'] = true;

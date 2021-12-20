@@ -142,7 +142,7 @@ class ModelsController extends Controller
         return back();
     }
     ///////////images functions
-    public function attachImage(Request $request)
+    public function attachColor(Request $request)
     {
         $request->validate([
             "modelID"   =>  "required|exists:models,id",

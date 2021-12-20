@@ -18,7 +18,6 @@ class ModelsImages extends Migration
             $table->foreignId("MOIM_MODL_ID")->constrained('models');
             $table->string("MOIM_URL");
             $table->integer("MOIM_SORT");
-            $table->string("MOIM_COLR");
         });
     }
 
