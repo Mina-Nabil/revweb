@@ -1,4 +1,3 @@
-{{dd($errors)}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,7 +59,7 @@
     </script>
 </head>
 
-<body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors)>0) onload=" showSwalErrorsAlert('Error', {{json_encode($errors)}})" @endif>
+<body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors->all())>0) onload=" showSwalErrorsAlert('Error', {{json_encode($errors->all())}})" @endif>
     
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
