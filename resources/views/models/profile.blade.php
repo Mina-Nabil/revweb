@@ -57,7 +57,7 @@
                             <div class="col-12 b-r">
                                 <strong>Option PDF Brochure</strong>
                                 @isset($model->MODL_BRCH)
-                                <embed class="m-t-10" src="{{$model->pdf_url)}}" width="100%" height="375px">
+                                <embed class="m-t-10" src="{{$model->pdf_url}}" width="100%" height="375px">
                                 @endisset
                             </div>
                         </div>
