@@ -158,7 +158,7 @@ class ModelsController extends Controller
         $filesHandler = new FilesHandler();
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $imageURL = $filesHandler->uploadFile($request->photo, "cars/" . $model->MODL_NAME . '/colors//');
+            $imageURL = $filesHandler->uploadFile($request->photo, "cars/" . $model->MODL_NAME . '/colors');
         }
 
         $model->colors()->create([
@@ -176,13 +176,13 @@ class ModelsController extends Controller
     }
 
 
-    public function delImage($id)
+    public function delColor($id)
     {
         $image = ModelImage::findOrFail($id);
         echo $image->deleteImage();
     }
 
-    public function editImage(Request $request)
+    public function editColor(Request $request)
     {
         $request->validate([
             "id"        => "required",

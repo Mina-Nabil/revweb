@@ -87,7 +87,7 @@ class CarModel extends Model
 
     public function getImageUrlAttribute()
     {
-        return (isset($this->attributes['MODL_IMGE'])) ? Storage::url($this->attributes['MODL_IMGE']) : null;
+        return (isset($this->MODL_IMGE)) ? Storage::url($this->MODL_IMGE) : null;
     }
 
     public function getPdfUrlAttribute()

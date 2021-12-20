@@ -100,7 +100,7 @@
                                 @foreach($model->colors as $image)
                                 @isset($image->image_url)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->MOIM_URL ) }} "
+                                    <img class="img-fluid" src="{{ $image->image_url }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
@@ -257,6 +257,105 @@
                                                     <a href="javascript:void(0)" onclick="loadEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
                                                         <img src="{{ asset('images/edit.png') }}" width=25 height=25>
                                                     </a>
+                                                    <a href="javascript:void(0);" onclick="deleteImage({{$image->id}})">
+                                                        <img src="{{ asset('images/del.png') }}" width=25 height=25>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="images" role="tabpanel">
+                    <div class="card-body">
+                        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <?php $i=0; ?>
+                                @foreach($car->images as $image)
+                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : ''}}></li>
+                                <?php $i++; ?>
+                                @endforeach
+                            </ol>
+                            <div class="carousel-inner" role="listbox">
+                                <?php $i=0; ?>
+                                @foreach($car->images as $image)
+                                <div class="carousel-item {{($i==0) ? 'active' : ''}}">
+                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->CIMG_URL ) }} "
+                                        style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
+                                </div>
+                                <?php $i++; ?>
+                                @endforeach
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev" style="background-color:#DCDCDC">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next" style="background-color:#DCDCDC">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <hr>
+                        <h4 class="card-title">Add New Car Image</h4>
+                        <form class="form pt-3" method="post" action="{{ url($imageFormURL) }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type=hidden name=carID value="{{(isset($car)) ? $car->id : ''}}">
+                            <div class="form-group">
+                                <label>Sort Value*</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-dollar-sign"></i></span>
+                                    </div>
+                                    <input type="number" class="form-control" placeholder="Example: 900" name=value value="{{ (isset($car)) ? $car->CAR_VLUE : old('value') ?? 500}}" required>
+                                </div>
+                                <small class="text-muted">Default is 500, the image with the higher value appears before other image</small>
+                                <small class="text-danger">{{$errors->first('value')}}</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-file-now-custom-1">New Photo</label>
+                                <div class="input-group mb-3">
+                                    <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('photo') }}" />
+                                </div>
+                                <small class="text-muted">Optimum Resolution is 900 * 560</small>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                            @if($isCancel)
+                            <a href="{{url($homeURL) }}" class="btn btn-dark">Cancel</a>
+                            @endif
+                        </form>
+                    </div>
+                    <hr>
+                    <div>
+                        <div class=col>
+                            <h4 class="card-title">Car Images</h4>
+                            <div class="table-responsive m-t-40">
+                                <table class="table color-bordered-table table-striped full-color-table full-primary-table hover-table" data-display-length='-1' data-order="[]">
+                                    <thead>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Url</th>
+                                        <th>Action</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($car->images as $image)
+                                        <tr>
+                                            <td id="imageValue{{$image->id}}">{{$image->CIMG_VLUE}}</td>
+                                            <td> <img src="{{ asset( 'storage/'. $image->CIMG_URL ) }} " width="60px"> </td>
+                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->CIMG_URL ) }}">
+                                                    {{(strlen($image->CIMG_URL) < 25) ? $image->CIMG_URL : substr($image->CIMG_URL, 0, 25).'..' }}
+                                                </a></td>
+                                            <td>
+                                                <div class=" row justify-content-center ">
+                                                    <a href="javascript:void(0)" class="openEditImage" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
+                                                        <img src="{{ asset('images/edit.png') }}" width=25 height=25>
+                                                    </a>
+
                                                     <a href="javascript:void(0);" onclick="deleteImage({{$image->id}})">
                                                         <img src="{{ asset('images/del.png') }}" width=25 height=25>
                                                     </a>
