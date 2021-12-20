@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Accessories extends Model
 {
@@ -17,6 +18,7 @@ class Accessories extends Model
         try {
             $this->save();
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -28,6 +30,7 @@ class Accessories extends Model
         try {
             $this->save();
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
             throw $e;
         }
     }

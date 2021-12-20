@@ -28,9 +28,12 @@ Route::post('models/update', 'ModelsController@update');
 Route::post('models/insert', 'ModelsController@insert');
 Route::get('models/toggle/main/{id}', 'ModelsController@toggleMain');
 Route::get('models/toggle/active/{id}', 'ModelsController@toggleActive');
-Route::post('models/add/image', 'ModelsController@attachColor');
-Route::post('models/update/image', 'ModelsController@editColor');
-Route::get('models/image/delete/{id}', 'ModelsController@delColor');
+Route::post('models/add/image', 'ModelsController@attachImage');
+Route::post('models/update/image', 'ModelsController@editImage');
+Route::get('models/image/delete/{id}', 'ModelsController@delImage');
+Route::post('models/add/color', 'ModelsController@attachColor');
+Route::post('models/update/color', 'ModelsController@editColor');
+Route::get('models/color/delete/{id}', 'ModelsController@delColor');
 
 //Accessories routes
 Route::get('accessories/show', 'AccessoriesController@home');

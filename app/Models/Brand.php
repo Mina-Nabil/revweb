@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Brand extends Model
@@ -25,6 +26,7 @@ class Brand extends Model
             $newBrand->save();
             return $newBrand;
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
             throw $e;
         }
     }
@@ -43,6 +45,7 @@ class Brand extends Model
                 try {
                     $filesHandler->deleteFile($this->BRND_LOGO);
                 } catch (Exception $e) {
+                    Log::alert($e->getMessage(), ["DB" => self::class] );
                     throw $e;
                 }
             $this->BRND_LOGO = $logoPath;
@@ -52,6 +55,7 @@ class Brand extends Model
                 try {
                     $filesHandler->deleteFile($this->BRND_IMGE);
                 } catch (Exception $e) {
+                    Log::alert($e->getMessage(), ["DB" => self::class] );
                     throw $e;
                 }
             $this->BRND_IMGE = $imagePath;
@@ -60,6 +64,7 @@ class Brand extends Model
         try {
             $this->save();
         } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
             throw $e;
         }
     }
@@ -91,6 +96,11 @@ class Brand extends Model
         } else {
             $this->BRND_ACTV = 0;
         }
-        $this->save();
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            Log::alert($e->getMessage(), ["DB" => self::class] );
+            throw $e;
+        }
     }
 }

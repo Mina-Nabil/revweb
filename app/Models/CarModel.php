@@ -33,6 +33,11 @@ class CarModel extends Model
         return $this->hasMany(ModelColor::class, 'COLR_MODL_ID');
     }
 
+    public function images()
+    {
+        return $this->hasMany(ModelImage::class, 'MOIM_MODL_ID');
+    }
+
     static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
     {
         $newModel = new self();

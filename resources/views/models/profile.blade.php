@@ -254,7 +254,7 @@
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
-                                                    <a href="javascript:void(0)" onclick="loadEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
+                                                    <a href="javascript:void(0)" onclick="loadColorEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-color">
                                                         <img src="{{ asset('images/edit.png') }}" width=25 height=25>
                                                     </a>
                                                     <a href="javascript:void(0);" onclick="deleteImage({{$image->id}})">
@@ -333,7 +333,7 @@
                     <hr>
                     <div>
                         <div class=col>
-                            <h4 class="card-title">Car Images</h4>
+                            <h4 class="card-title">Model Images</h4>
                             <div class="table-responsive m-t-40">
                                 <table class="table color-bordered-table table-striped full-color-table full-primary-table hover-table" data-display-length='-1' data-order="[]">
                                     <thead>
@@ -348,11 +348,11 @@
                                             <td id="imageValue{{$image->id}}">{{$image->MOIM_VLUE}}</td>
                                             <td> <img src="{{ $image->image_url }} " width="60px"> </td>
                                             <td><a target="_blank" href="{{ $image->image_url }}">
-                                                    {{(strlen($image->MOIM_URL) < 25) ? $image->MOIM_URL : substr($image->MOIM_URL, 0, 25).'..' }}
+                                                    {{(strlen($image->MOIM_URL) < 25) ? $image->image_url : substr($image->image_url, 0, 25).'..' }}
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
-                                                    <a href="javascript:void(0)" class="openEditImage" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
+                                                    <a href="javascript:void(0)" onclick="loadImageEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-image">
                                                         <img src="{{ asset('images/edit.png') }}" width=25 height=25>
                                                     </a>
 
@@ -512,7 +512,7 @@
 </div>
 
 
-<div id="edit-image" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<div id="edit-color" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -520,7 +520,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
+                <form class="form pt-3" method="post" action="{{ $updateColorInfoURL }}" enctype="multipart/form-data">
                     @csrf
                     <input type=hidden name=id id=modalImageID value="">
 
@@ -583,7 +583,46 @@
 
                     <div class="col-lg-3">
                         <div class="form-group col-12 m-t-10">
-                            <button onclick="updateImageInfo()" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="edit-color" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Color</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
+                    @csrf
+                    <input type=hidden name=id id=modalImageID value="">
+
+                    <div class="form-group">
+                        <label>Sort Value</label>
+                        <div class="input-group mb-3">
+                            <input type="number" max=255 min=0 step="1" class="form-control" name=sort id=sortModal required>
+                        </div>
+                    </div>             
+
+                    <div class="form-group">
+                        <label for="input-file-now-custom-1">New Photo</label>
+                        <div class="input-group mb-3">
+                            <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=photoModal data-max-file-size="2M" />
+                        </div>
+                        <small class="text-muted">Optimum Resolution is 300 * 150</small>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group col-12 m-t-10">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -596,10 +635,8 @@
 
 @section('js_content')
 <script>
-    function loadEditModal (id) {
+    function loadColorEditModal (id) {
         
-        console.log("HAHAHAHHA");
-
         var name = $('#imageName'+id).html();
         var arbcName = $('#imageArbcName'+id).html();
         var hex = $('#imageHex'+id).html();
