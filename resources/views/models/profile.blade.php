@@ -276,16 +276,16 @@
                         <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
-                                @foreach($car->images as $image)
+                                @foreach($model->images as $image)
                                 <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : ''}}></li>
                                 <?php $i++; ?>
                                 @endforeach
                             </ol>
                             <div class="carousel-inner" role="listbox">
                                 <?php $i=0; ?>
-                                @foreach($car->images as $image)
+                                @foreach($model->images as $image)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->CIMG_URL ) }} "
+                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->image_url ) }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
@@ -301,17 +301,17 @@
                             </a>
                         </div>
                         <hr>
-                        <h4 class="card-title">Add New Car Image</h4>
+                        <h4 class="card-title">Add New Model Image</h4>
                         <form class="form pt-3" method="post" action="{{ url($imageFormURL) }}" enctype="multipart/form-data">
                             @csrf
-                            <input type=hidden name=carID value="{{(isset($car)) ? $car->id : ''}}">
+                            <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
                             <div class="form-group">
                                 <label>Sort Value*</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon11"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                    <input type="number" class="form-control" placeholder="Example: 900" name=value value="{{ (isset($car)) ? $car->CAR_VLUE : old('value') ?? 500}}" required>
+                                    <input type="number" class="form-control" placeholder="Example: 900" name=value value="{{old('value')??500}}" required>
                                 </div>
                                 <small class="text-muted">Default is 500, the image with the higher value appears before other image</small>
                                 <small class="text-danger">{{$errors->first('value')}}</small>
@@ -321,7 +321,7 @@
                                 <div class="input-group mb-3">
                                     <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('photo') }}" />
                                 </div>
-                                <small class="text-muted">Optimum Resolution is 900 * 560</small>
+                                <small class="text-muted">Optimum Resolution is 300 * 150</small>
                             </div>
 
                             <button type="submit" class="btn btn-success mr-2">Submit</button>
@@ -343,12 +343,12 @@
                                         <th>Action</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($car->images as $image)
+                                        @foreach ($model->images as $image)
                                         <tr>
-                                            <td id="imageValue{{$image->id}}">{{$image->CIMG_VLUE}}</td>
-                                            <td> <img src="{{ asset( 'storage/'. $image->CIMG_URL ) }} " width="60px"> </td>
-                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->CIMG_URL ) }}">
-                                                    {{(strlen($image->CIMG_URL) < 25) ? $image->CIMG_URL : substr($image->CIMG_URL, 0, 25).'..' }}
+                                            <td id="imageValue{{$image->id}}">{{$image->MOIM_VLUE}}</td>
+                                            <td> <img src="{{ $image->image_url }} " width="60px"> </td>
+                                            <td><a target="_blank" href="{{ $image->image_url }}">
+                                                    {{(strlen($image->MOIM_URL) < 25) ? $image->MOIM_URL : substr($image->MOIM_URL, 0, 25).'..' }}
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
