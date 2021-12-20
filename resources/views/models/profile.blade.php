@@ -6,7 +6,7 @@
 <div class="row">
     <!-- Column -->
     <div class="col-lg-4 col-xlg-3 col-md-5">
-        <div class="card"> <img class="card-img" src="{{  (isset($model->MODL_IMGE)) ? asset( 'storage/'. $model->MODL_IMGE ) : asset('images/def-car.png')}}" alt="Card image">
+        <div class="card"> <img class="card-img" src="{{  (isset($model->MODL_IMGE)) ? $model->getImageUrlAttribute() : asset('images/def-car.png')}}" alt="Card image">
         </div>
 
     </div>
