@@ -18,7 +18,8 @@
             <ul class="nav nav-tabs profile-tab" role="tablist">
                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Model Info</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cars" role="tab">Cars</a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#colors" role="tab">Color Images</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#colors" role="tab">Colors</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#images" role="tab">Images</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
             </ul>
             <!-- Tab panes -->
@@ -100,8 +101,7 @@
                                 @foreach($model->colors as $image)
                                 @isset($image->image_url)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ $image->image_url }} "
-                                        style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
+                                    <img class="img-fluid" src="{{ $image->image_url }} " style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
                                 @endisset
@@ -230,34 +230,34 @@
                                         <th>Actions</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($model->colors as $image)
+                                        @foreach ($model->colors as $color)
                                         <div style="display: none">
-                                            <div id="imageName{{$image->id}}">{{$image->COLR_NAME}}</div>
-                                            <div id="imageArbcName{{$image->id}}">{{$image->COLR_ARBC_NAME}}</div>
-                                            <div id="imageHex{{$image->id}}">{{$image->COLR_HEX}}</div>
-                                            <div id="imageRed{{$image->id}}">{{$image->COLR_RED}}</div>
-                                            <div id="imageBlue{{$image->id}}">{{$image->COLR_BLUE}}</div>
-                                            <div id="imageGreen{{$image->id}}">{{$image->COLR_GREN}}</div>
-                                            <div id="imageAlpha{{$image->id}}">{{$image->COLR_ALPH}}</div>
-                                            <div id="imageURL{{$image->id}}">{{$image->COLR_IMGE}}</div>
+                                            <div id="colorName{{$color->id}}">{{$color->COLR_NAME}}</div>
+                                            <div id="colorArbcName{{$color->id}}">{{$color->COLR_ARBC_NAME}}</div>
+                                            <div id="colorHex{{$color->id}}">{{$color->COLR_HEX}}</div>
+                                            <div id="colorRed{{$color->id}}">{{$color->COLR_RED}}</div>
+                                            <div id="colorBlue{{$color->id}}">{{$color->COLR_BLUE}}</div>
+                                            <div id="colorGreen{{$color->id}}">{{$color->COLR_GREN}}</div>
+                                            <div id="colorAlpha{{$color->id}}">{{$color->COLR_ALPH}}</div>
+                                            <div id="colorURL{{$color->id}}">{{$color->COLR_IMGE}}</div>
                                         </div>
                                         <tr>
-                                            <td>rgb({{$image->COLR_RED}}, {{$image->COLR_GREN}}, {{$image->COLR_BLUE}})</td>
-                                            <td>{{$image->COLR_NAME}}-{{$image->COLR_ARBC_NAME}}</td>
+                                            <td>rgb({{$color->COLR_RED}}, {{$color->COLR_GREN}}, {{$color->COLR_BLUE}})</td>
+                                            <td>{{$color->COLR_NAME}}-{{$color->COLR_ARBC_NAME}}</td>
                                             <td>
-                                                @isset($image->COLR_IMGE)
-                                                <img src="{{ $image->image_url }} " width="60px">
+                                                @isset($color->COLR_IMGE)
+                                                <img src="{{ $color->color_url }} " width="60px">
                                                 @endisset
                                             </td>
-                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->COLR_IMGE ) }}">
-                                                    {{(strlen($image->COLR_IMGE) < 25) ? $image->COLR_IMGE : substr($image->COLR_IMGE, 0, 25).'..' }}
+                                            <td><a target="_blank" href="{{  $color->image_url }}">
+                                                    {{(strlen($color->COLR_IMGE) < 25) ? $color->COLR_IMGE : substr($color->COLR_IMGE, 0, 25).'..' }}
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
-                                                    <a href="javascript:void(0)" onclick="loadColorEditModal({{$image->id}})" data-toggle="modal" data-id="{{$image->id}}" data-target="#edit-color">
+                                                    <a href="javascript:void(0)" onclick="loadColorEditModal({{$color->id}})" data-toggle="modal" data-id="{{$color->id}}" data-target="#edit-color">
                                                         <img src="{{ asset('images/edit.png') }}" width=25 height=25>
                                                     </a>
-                                                    <a href="javascript:void(0);" onclick="deleteImage({{$image->id}})">
+                                                    <a href="javascript:void(0);" onclick="deleteImage({{$color->id}})">
                                                         <img src="{{ asset('images/del.png') }}" width=25 height=25>
                                                     </a>
                                                 </div>
@@ -277,13 +277,17 @@
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
                                 @foreach($model->images as $image)
-                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : ''}}></li>
+                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
                                 <?php $i++; ?>
                                 @endforeach
                             </ol>
                             <div class="carousel-inner" role="listbox">
                                 <?php $i=0; ?>
                                 @foreach($model->images as $image)
+                                <div style="display: none">
+                                    <div id="imageSort{{$image->id}}">{{$image->MOIM_SORT}}</div>
+                                    <div id="imageURL{{$image->id}}">{{$image->MOIM_URL}}</div>
+                                </div>
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
                                     <img class="img-fluid" src="{{ asset( 'storage/'. $image->image_url ) }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
@@ -458,7 +462,7 @@
                                     <small class="text-muted">This model and all its linked cars can be hidden/published using this option</small>
                                 </div>
 
-                           
+
 
                                 <div class="form-group">
                                     <label for="input-file-now-custom-1">Model Image</label>
@@ -523,6 +527,7 @@
                 <form class="form pt-3" method="post" action="{{ $updateColorInfoURL }}" enctype="multipart/form-data">
                     @csrf
                     <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
+                    <input type=hidden name=id id=colorIDModal>
 
                     <div class="form-group">
                         <label>Color Name*</label>
@@ -576,7 +581,7 @@
                     <div class="form-group">
                         <label for="input-file-now-custom-1">New Photo</label>
                         <div class="input-group mb-3">
-                            <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=photoModal data-max-file-size="2M" />
+                            <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=colorPhotoModal data-max-file-size="2M" />
                         </div>
                         <small class="text-muted">Optimum Resolution is 346 * 224</small>
                     </div>
@@ -597,20 +602,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Color</h4>
+                <h4 class="modal-title">Edit Image</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
                 <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
                     @csrf
                     <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
+                    <input type=hidden name=id id=imageID value="">
 
                     <div class="form-group">
                         <label>Sort Value</label>
                         <div class="input-group mb-3">
                             <input type="number" max=255 min=0 step="1" class="form-control" name=sort id=sortModal required>
                         </div>
-                    </div>             
+                    </div>
 
                     <div class="form-group">
                         <label for="input-file-now-custom-1">New Photo</label>
@@ -637,15 +643,16 @@
 <script>
     function loadColorEditModal (id) {
         
-        var name = $('#imageName'+id).html();
-        var arbcName = $('#imageArbcName'+id).html();
-        var hex = $('#imageHex'+id).html();
-        var red = $('#imageRed'+id).html();
-        var blue = $('#imageBlue'+id).html();
-        var green = $('#imageGreen'+id).html();
-        var alpha = $('#imageAlpha'+id).html();
-        var imgURL = $('#imageURL'+id).html();
+        var name = $('#colorName'+id).html();
+        var arbcName = $('#colorArbcName'+id).html();
+        var hex = $('#colorHex'+id).html();
+        var red = $('#colorRed'+id).html();
+        var blue = $('#colorBlue'+id).html();
+        var green = $('#colorGreen'+id).html();
+        var alpha = $('#colorAlpha'+id).html();
+        var imgURL = $('#colorURL'+id).html();
 
+        $(".modal-body #colorIDModal").val(id);
         $(".modal-body #nameModal").val(name);
         $(".modal-body #arbcNameModal").val(arbcName);
         $(".modal-body #hexModal").val(hex);
@@ -653,6 +660,18 @@
         $(".modal-body #blueModal").val(blue);
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
+        $(".modal-body #colorPhotoModal").attr("data-default-file", imgURL);
+        $(".modal-body #colorPhotoModal").dropify();
+
+    }
+
+    function loadImageEditModal (id) {
+        
+        var name = $('#imageSort'+id).html();
+        var imgURL = $('#imageURL'+id).html();
+
+        $(".modal-body #imageIDModal").val(id);
+        $(".modal-body #sortModal").val(name);
         $(".modal-body #photoModal").attr("data-default-file", imgURL);
         $(".modal-body #photoModal").dropify();
 
