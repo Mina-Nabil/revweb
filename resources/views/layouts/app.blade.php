@@ -44,7 +44,7 @@
         function showSwalErrorsAlert(title, msgArray){
             console.log(msgArray)
             text = "";
-            [...msgArray].forEach(element => {
+            msgArray.forEach(element => {
                 console.log(element)
                 text += element + "\n"
             });
@@ -60,6 +60,7 @@
 </head>
 
 <body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors)>0) onload=" showSwalErrorsAlert('Error', {{json_encode($errors)}})" @endif>
+    {{json_encode($errors)}}
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
