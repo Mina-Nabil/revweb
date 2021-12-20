@@ -522,7 +522,7 @@
             <div class="modal-body">
                 <form class="form pt-3" method="post" action="{{ $updateColorInfoURL }}" enctype="multipart/form-data">
                     @csrf
-                    <input type=hidden name=id id=modalImageID value="">
+                    <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
 
                     <div class="form-group">
                         <label>Color Name*</label>
@@ -603,7 +603,7 @@
             <div class="modal-body">
                 <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
                     @csrf
-                    <input type=hidden name=id id=modalImageID value="">
+                    <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
 
                     <div class="form-group">
                         <label>Sort Value</label>
