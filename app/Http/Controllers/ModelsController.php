@@ -67,7 +67,7 @@ class ModelsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name .'/images');
+            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name . '/images');
         }
 
         $pdfPath = null;
@@ -113,12 +113,12 @@ class ModelsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name .'/images' );
+            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name . '/images');
         }
 
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $pdfPath = $filesHandler->uploadFile($request->pdf, 'models/' . $request->name . '/pdfs' );
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'models/' . $request->name . '/pdfs');
         }
         $isActive = $request->isActive == 'on' ? 1 : 0;
         if (!$model->updateInfo($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $pdfPath, $isActive)) {
@@ -311,7 +311,7 @@ class ModelsController extends Controller
         $this->data['subTitle'] = "Check all Available Models";
         $this->data['cols'] = ['Image', 'Brand', 'Name', 'Arabic', 'Year', 'Active', 'Main', 'Overview'];
         $this->data['atts'] = [
-            ['assetImg' => ['att' => 'MODL_IMGE']],
+            ['assetImg' => ['att' => 'image_url']],
             ['foreign' => ['att' => 'BRND_NAME', 'rel' => 'brand']],
             ['dynamicUrl' => ['att' => 'MODL_NAME', 'val' => 'id', 'baseUrl' => 'admin/models/profile/']],
             ['dynamicUrl' => ['att' => 'MODL_ARBC_NAME', 'val' => 'id', 'baseUrl' => 'admin/models/profile/']],

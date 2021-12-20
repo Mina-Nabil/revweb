@@ -38,7 +38,7 @@
 
                         @if(is_array($att))
                         @if(array_key_exists('edit', $att))
-                        <td><a href="{{ $item->{$att['edit']['att']} }}"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a></td>
+                        <td><a href="{{ url( $item->{$att['edit']['url']} . $item->{$att['edit']['att']} ) }}"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a></td>
                         @elseif(array_key_exists('editJS', $att))
                         <td>
                             <div onclick="{{$att['editJS']['func']}}({{$item->id}})"><a href="javascript:void(0)"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a>
@@ -112,7 +112,7 @@
                         @elseif(array_key_exists('assetImg', $att))
                         <td>
                             @isset($item->{$att['assetImg']['att']})
-                            <img src="{{ asset( 'storage/'. $item->{$att['assetImg']['att']}) }}" height="36" style="width: auto" />
+                            <img src="{{ $item->{$att['assetImg']['att']} }}" height="36" style="width: auto" />
                             @endisset
                         </td>
                         @elseif(array_key_exists('comment', $att))
