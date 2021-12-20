@@ -315,10 +315,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon11"><i class="fas fa-dollar-sign"></i></span>
                                     </div>
-                                    <input type="number" class="form-control" placeholder="Example: 900" name=value value="{{old('value')??500}}" required>
+                                    <input type="number" class="form-control" placeholder="Example: 900" name=sort value="{{old('sort')??500}}" required>
                                 </div>
                                 <small class="text-muted">Default is 500, the image with the higher value appears before other image</small>
-                                <small class="text-danger">{{$errors->first('value')}}</small>
+                                <small class="text-danger">{{$errors->first('sort')}}</small>
                             </div>
                             <div class="form-group">
                                 <label for="input-file-now-custom-1">New Photo</label>
