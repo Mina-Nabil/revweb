@@ -42,17 +42,19 @@
 <![endif]-->
     <script>
         function showSwalErrorsAlert(title, msgArray){
-        text = "";
-        [...msgArray].forEach(element => {
-            text += element + "\n"
-        });
+            console.log(msgArray)
+            text = "";
+            [...msgArray].forEach(element => {
+                console.log(element)
+                text += element + "\n"
+            });
 
-        Swal.fire({
-            title: title,
-            text: text,
-            icon: "warning",
-        });
-    }
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: "warning",
+            });
+        }
 
     </script>
 </head>
