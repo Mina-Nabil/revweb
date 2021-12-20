@@ -57,8 +57,9 @@
     </script>
 </head>
 
-<body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors)>0) onload=" showSwalErrorsAlert('Error', {{$errors}})" @endif>
+<body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors)>0) onload=" showSwalErrorsAlert('Error', '{{$errors}}')" @endif>
 {{$errors}}
+{{$errors!==NULL && count($errors)>0}}
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
