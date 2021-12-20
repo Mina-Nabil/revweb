@@ -106,7 +106,7 @@ class ModelsController extends Controller
                 "image"  => "required_if:isActive,on|image",
             ]);
 
-        if (is_null($model->MODL_PDF) || $model->MODL_PDF == "")
+        if (is_null($model->MODL_BRCH) || $model->MODL_BRCH == "")
             $request->validate([
                 "pdf"  => "required_if:isActive,on|mimes:pdf",
             ]);
