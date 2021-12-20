@@ -67,12 +67,12 @@ class ModelsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
+            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name .'/images');
         }
 
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $pdfPath = $filesHandler->uploadFile($request->pdf, 'pdfs/models/' . $request->name);
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'models/' . $request->name . '/pdfs');
         }
 
         $isActive = $request->isActive == 'on' ? 1 : 0;
@@ -113,12 +113,12 @@ class ModelsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'images/models/' . $request->name);
+            $imagePath = $filesHandler->uploadFile($request->image, 'models/' . $request->name .'/images' );
         }
 
         $pdfPath = null;
         if ($request->hasFile('pdf')) {
-            $pdfPath = $filesHandler->uploadFile($request->pdf, 'pdfs/models/' . $request->name);
+            $pdfPath = $filesHandler->uploadFile($request->pdf, 'models/' . $request->name . '/pdfs' );
         }
         $isActive = $request->isActive == 'on' ? 1 : 0;
         if (!$model->updateInfo($request->brand, $request->type, $request->name, $request->arbcName, $request->year, $request->overview, $imagePath, $pdfPath, $isActive)) {
@@ -159,7 +159,7 @@ class ModelsController extends Controller
         $filesHandler = new FilesHandler();
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/colors//' . $request->COLR_NAME);
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/colors/' . $request->COLR_NAME);
         }
 
         if (!$model->colors()->create([
@@ -204,7 +204,7 @@ class ModelsController extends Controller
         $oldURL = $color->COLR_IMGE;
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $color->model->MODL_NAME . '/colors//' . $color->COLR_NAME);
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $color->model->MODL_NAME . '/colors/' . $color->COLR_NAME);
         }
         $editRes =  $color->editInfo(
             $request->name,
