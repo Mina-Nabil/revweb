@@ -84,7 +84,7 @@
                         <label for="input-file-now-custom-1">Options File</label>
                         <div class="input-group mb-3">
                             <input type="file" id="input-file-now-custom-1" name=pdf class="dropify"
-                                data-default-file="{{ (isset($model->MODL_PDF)) ? asset( 'storage/'. $model->MODL_PDF ) : old('pdf') }}" />
+                                data-default-file="{{ (isset($model->MODL_BRCH)) ? asset( 'storage/'. $model->MODL_BRCH ) : old('pdf') }}" />
                         </div>
                         <small class="text-muted">Model Options File. Only PDF format is supported</small><br>
                         <small class="text-danger">{{$errors->first('pdf')}}</small>
