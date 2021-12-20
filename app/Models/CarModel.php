@@ -85,7 +85,7 @@ class CarModel extends Model
             $this->save();
             return $this;
         } catch (Exception $e) {
-            Log::alert($e->getMessage());
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             return false;
         }
     }

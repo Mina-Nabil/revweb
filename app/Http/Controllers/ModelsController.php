@@ -296,12 +296,11 @@ class ModelsController extends Controller
         $this->data['items'] = $this->data['model']->cars;
         $this->data['title'] = "Available Categories";
         $this->data['subTitle'] = "Check all Available Model categories";
-        $this->data['cols'] = ['Sort Value', 'Category', 'Price', 'Discount'];
+        $this->data['cols'] = ['Sort Value', 'Category', 'Price'];
         $this->data['atts'] = [
             'CAR_VLUE',
             ['dynamicUrl' => ['att' => 'CAR_CATG', 'val' => 'id', 'baseUrl' => 'admin/cars/profile/']],
             ['number' => ['att' => 'CAR_PRCE', 'decimals' => 0]],
-            ['number' => ['att' => 'CAR_DISC', 'decimals' => 0]]
         ];
     }
 
