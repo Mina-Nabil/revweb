@@ -38,7 +38,7 @@
 
                         @if(is_array($att))
                         @if(array_key_exists('edit', $att))
-                        <td><a href="{{ url( {$att['edit']['url']} . $item->{$att['edit']['att']} ) }}"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a></td>
+                        <td><a href="{{ url( $att['edit']['url'] . $item->{$att['edit']['att']} ) }}"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a></td>
                         @elseif(array_key_exists('editJS', $att))
                         <td>
                             <div onclick="{{$att['editJS']['func']}}({{$item->id}})"><a href="javascript:void(0)"><img src="{{ asset('images/edit.png') }}" width=25 height=25></a>
