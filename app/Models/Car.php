@@ -10,7 +10,7 @@ class Car extends Model
     protected $table = "cars";
     public $timestamps = true;
     protected $appends = array('image');
-    protected $with = ['model', 'model.type'];
+    // protected $with = ['model', 'model.type'];
     protected $image;
 
     protected $casts = [

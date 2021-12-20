@@ -5,17 +5,22 @@ namespace App\Models;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class CarImage extends Model
 {
     protected $table = "cars_images";
     public $timestamps = false;
+    protected $appends = ["image_url"];
 
     public function car()
     {
         return $this->belongsTo('App\Models\Car', 'CIMG_CAR_ID');
     }
 
+    public function getImageUrlAttribute(){
+        return (isset($this->CIMG_URL)) ? Storage::url($this->CIMG_URL) : null;
+    }
 
     public function deleteImage()
     {
