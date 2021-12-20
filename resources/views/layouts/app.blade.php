@@ -26,7 +26,8 @@
     <link href="{{ asset('dist/css/pages/stylish-tooltip.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/node_modules/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/node_modules/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    {{-- <link href="{{ asset('assets/frontend/extensions/toast-master/css/jquery.toast.css') }}" rel="stylesheet" type="text/css" /> --}}
+    {{--
+    <link href="{{ asset('assets/frontend/extensions/toast-master/css/jquery.toast.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oregano" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald" />
@@ -39,9 +40,25 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+    <script>
+        function showSwalErrorsAlert(title, msgArray){
+        text = "";
+        msgArray.forEach(element => {
+            text += element + "\n"
+        });
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "warning",
+        });
+    }
+
+    </script>
 </head>
 
-<body class="skin-default fixed-layout">
+<body class="skin-default fixed-layout" @if (isset(errors())) onload=" showSwalErrorsAlert('Error', {{errors()}})" @endif>
+
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -77,7 +94,9 @@
                             <!-- dark Logo text -->
                             {{-- <img src="{{ asset('images/dark-text.png') }}" height=40px alt="homepage" class="dark-logo" /> --}}
                             <!-- Light Logo text -->
-                            {{-- <img src="{{ asset('images/light-text.png') }}" height=40px class="light-logo" alt="homepage" /></span> </a> --}}
+                            {{-- <img src="{{ asset('images/light-text.png') }}" height=40px class="light-logo" alt="homepage" />
+                        </span>
+                    </a> --}}
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -129,8 +148,8 @@
                         <div><img src="{{ asset('assets/images/users/def-user.png') }} " alt="user-img" class="img-circle"></div>
                         @endif
                         <div class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle u-dropdown link hide-menu" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                aria-expanded="false">{{ Auth::user()->DASH_USNM }} <span class="caret"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-toggle u-dropdown link hide-menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{
+                                Auth::user()->DASH_USNM }} <span class="caret"></span></a>
                             <div class="dropdown-menu animated flipInY">
                                 <!-- text-->
                                 <a href="{{route('logout')}}" class="dropdown-item"><i class="fa fa-power-off"></i>
@@ -167,7 +186,7 @@
                             </ul>
                         </li>
 
-                 
+
 
                         <li> <a href="{{url('admin/dash/users/all')}}"><i class=" fas fa-users"></i><span class="hide-menu">Admins</span></a></li>
 
