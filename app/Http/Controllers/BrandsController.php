@@ -110,6 +110,8 @@ class BrandsController extends Controller
             "id"        => "required",
 
         ]);
+        $oldLogo = $brand->BRND_LOGO;
+        $logoPath = NULL;
         if ($brand->BRND_LOGO != NULL) {
             $request->validate([
                 "logo"      => "required_if:isActive,on",
@@ -119,20 +121,25 @@ class BrandsController extends Controller
             $logoPath = $filesHandler->uploadFile($request->logo,  'brands/logos/' . $brand->BRND_NAME, 'public');
         }
 
+        // $oldImage = $brand->BRND_IMGE;
         // if ($request->hasFile('image')) {
         //     $imagePath = $filesHandler->uploadFile($request->image, 'brands/images/' . $brand->BRND_NAME);
         // }
+        $updateRes = false;
         try {
 
-            $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath ?? null, $imagePath ?? null);
+            $updateRes = $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath ?? null, $imagePath ?? null);
         } catch (Exception $e) {
-            if (isset($logoPath))
+            if (isset($logoPath) && $logoPath != NULL)
                 $filesHandler->deleteFile($logoPath);
-            if (isset($imagePath))
+            if (isset($imagePath) && $imagePath != NULL)
                 $filesHandler->deleteFile($imagePath);
             throw $e;
         }
-
+        if ($updateRes) {
+            if ($oldLogo != NULL && $logoPath != NULL)
+                $filesHandler->deleteFile($logoPath);
+        }
         return redirect($this->homeURL);
     }
 
