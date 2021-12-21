@@ -166,7 +166,7 @@
                                         </div>
                                         <input type="number" max=255 min=0 step="1" class="form-control" name=red value="{{old('red')}}" required>
                                     </div>
-                                    <small class="text-muted">Model Color Red Value under RGB code</small>
+                                    <small class="text-muted">Red Value under RGB code</small>
                                     <small class="text-danger">{{$errors->first('red')}}</small>
                                 </div>
 
@@ -178,7 +178,7 @@
                                         </div>
                                         <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" required>
                                     </div>
-                                    <small class="text-muted">Model Color Green Value under RGB code</small>
+                                    <small class="text-muted">Green Value under RGB code</small>
                                     <small class="text-danger">{{$errors->first('green')}}</small>
                                 </div>
 
@@ -190,7 +190,7 @@
                                         </div>
                                         <input type="number" max=255 min=0 step="1" class="form-control" name=blue value="{{old('blue')}}" required>
                                     </div>
-                                    <small class="text-muted">Model Color Blue Value under RGB code</small>
+                                    <small class="text-muted">Blue Value under RGB code</small>
                                     <small class="text-danger">{{$errors->first('blue')}}</small>
                                 </div>
                             </div>
