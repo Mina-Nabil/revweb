@@ -241,7 +241,7 @@ class ModelsController extends Controller
         }
 
         if (!$model->images()->create([
-            "MOIM_SORT" => $request->name,
+            "MOIM_SORT" => $request->sort,
             "MOIM_URL" => $imageURL,
         ])) {
             $filesHandler->deleteFile($imageURL);
