@@ -588,6 +588,7 @@
                             <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=colorPhotoModal data-max-file-size="2M" />
                         </div>
                         <small class="text-muted">Optimum Resolution is 148 * 100</small>
+                        <small class="text-muted">Old Photo will be removed ONLY if another photo is added</small>
                     </div>
 
                     <div class="col-lg-3">
@@ -628,6 +629,7 @@
                             <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=photoModal data-max-file-size="2M" />
                         </div>
                         <small class="text-muted">Optimum Resolution is 300 * 150</small>
+                        <small class="text-muted">Old Photo will be removed ONLY if another photo is added</small>
                     </div>
 
                     <div class="col-lg-3">
@@ -664,10 +666,6 @@
         $(".modal-body #blueModal").val(blue);
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
-        console.log($(".modal-body .dropify"))
-        $(".modal-body .dropify").first().dropify({
-            "defaultFile": imgURL
-        });
 
     }
 
@@ -678,10 +676,6 @@
         console.log(imgURL)
         $(".modal-body #imageIDModal").val(id);
         $(".modal-body #sortModal").val(name);
-        $(".modal-body #photoModal").attr("data-default-file", imgURL);
-        $(".modal-body .dropify")[1].dropify({
-            "defaultFile": imgURL
-        });
 
     }
 

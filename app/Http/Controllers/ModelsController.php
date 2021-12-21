@@ -263,13 +263,18 @@ class ModelsController extends Controller
         $request->validate([
             "id"        => "required",
             "modelID"   =>  "required|exists:models,id",
-            "photo"     =>  "required|file",
             "sort"     =>  "required",
         ]);
         $image = ModelImage::findOrFail($request->id);
+        $oldURL = $image->MOIM_URL;
+        if ($oldURL == NULL) {
+            $request->validate([
+                "photo"     =>  "required|file",
+            ]);
+        }
         $image->load("model");
         $filesHandler = new FilesHandler();
-        $oldURL = $image->MOIM_URL;
+
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
             $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $image->model->MODL_NAME . '/images');
