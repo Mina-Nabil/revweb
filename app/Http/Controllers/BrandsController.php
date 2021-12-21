@@ -138,7 +138,7 @@ class BrandsController extends Controller
         }
         if ($updateRes) {
             if ($oldLogo != NULL && $logoPath != NULL)
-                $filesHandler->deleteFile($logoPath);
+                $filesHandler->deleteFile($oldLogo);
         }
         return redirect($this->homeURL);
     }
