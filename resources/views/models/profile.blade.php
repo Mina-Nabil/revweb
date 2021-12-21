@@ -289,7 +289,7 @@
                                     <div id="imageURL{{$image->id}}">{{$image->MOIM_URL}}</div>
                                 </div>
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->image_url ) }} "
+                                    <img class="img-fluid" src="{{ $image->image_url }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
