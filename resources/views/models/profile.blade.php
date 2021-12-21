@@ -673,7 +673,7 @@
         
         var name = $('#imageSort'+id).html();
         var imgURL = $('#imageURL'+id).html();
-
+        console.log(imgURL)
         $(".modal-body #imageIDModal").val(id);
         $(".modal-body #sortModal").val(name);
         $(".modal-body #photoModal").attr("data-default-file", imgURL);
