@@ -48,7 +48,7 @@ class Brand extends Model
         }
         $this->BRND_ACTV = $isActive ;
         try {
-            $this->save();
+            return $this->save();
         } catch (Exception $e) {
             Log::alert($e->getMessage(), ["DB" => self::class] );
             throw $e;
