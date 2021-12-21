@@ -6,11 +6,13 @@
 <div class="row">
     <!-- Column -->
     <div class="col-lg-4 col-xlg-3 col-md-5">
-        <div class="card"> <img class="card-img" src="{{  (isset($car->model->MODL_IMGE)) ? asset( 'storage/'. $car->model->MODL_IMGE ) : asset('images/def-car.png')}}" alt="Card image">
+        <div class="card"> <img class="card-img" src="{{  (isset($car->model->MODL_IMGE)) ?  $car->model->image_url : asset('images/def-car.png')}}" alt="Card image">
         </div>
-        <div class="card"> <img class="card-img"
-                src="{{  (isset($car->model->MODL_BRCH)) ? "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Findd.adobe.com%2Fview%2F{$car->model->MODL_BRCH}&choe=UTF-8"  : asset('images/def-car.png')}}"
-                alt="Card image">
+        <div class="card">
+            @isset($car->model->MODL_BRCH)
+            <embed class="m-t-10" src="{{$model->pdf_url}}" width="100%" height="375px">
+            @else
+            <img class="card-img" src="{{  asset('images/def-car.png')}}" alt="Card image">
         </div>
     </div>
     <!-- Column -->
@@ -40,12 +42,13 @@
                             </div>
                             <div title="Place in offer tab in the home page" class="col-md-3 col-xs-6 b-r"> <strong>Offer</strong>
                                 <br>
-                                <button id="offerLabel" class="label label-{{($car->CAR_OFFR) ? 'success' : 'danger'}}"
-                                    onclick="toggleOffer()">{{($car->CAR_OFFR) ? 'In Offers' : 'Not in Offers'}}</button>
+                                <button id="offerLabel" class="label label-{{($car->CAR_OFFR) ? 'success' : 'danger'}}" onclick="toggleOffer()">{{($car->CAR_OFFR) ? 'In Offers' : 'Not in
+                                    Offers'}}</button>
                             </div>
                             <div class="col-md-3 col-xs-6"> <strong>Trending</strong>
                                 <br>
-                                <button id="trendingLabel" class="label label-{{($car->CAR_TRND) ? 'success' : 'danger'}}"  onclick="toggleTrending()">{{($car->CAR_TRND) ? 'Trending' : 'Not Trending'}}</button>
+                                <button id="trendingLabel" class="label label-{{($car->CAR_TRND) ? 'success' : 'danger'}}" onclick="toggleTrending()">{{($car->CAR_TRND) ? 'Trending' : 'Not
+                                    Trending'}}</button>
                             </div>
                             <div class="col-md-3 col-xs-6 b-r"> <strong>Model Name</strong>
                                 <br>
@@ -180,7 +183,7 @@
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
                                 @foreach($car->images as $image)
-                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : ''}}></li>
+                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
                                 <?php $i++; ?>
                                 @endforeach
                             </ol>
@@ -188,7 +191,7 @@
                                 <?php $i=0; ?>
                                 @foreach($car->images as $image)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->CIMG_URL ) }} "
+                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->image_url ) }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
@@ -288,7 +291,7 @@
                                     <div class="col-md-5 m-b-15">
                                         <h4 class="card-title">Active</h4>
                                         <input type="checkbox" data-size="large" {{(isset($car) && $car->CAR_ACTV) ? 'checked' : ''}} data-on-color="success" data-off-color="danger"
-                                            data-on-text="Active" data-off-text="Hidden" name="isActive">
+                                        data-on-text="Active" data-off-text="Hidden" name="isActive">
                                     </div>
                                     <small class="text-muted">Use this option when the car is ready for publishing</small>
                                 </div>
@@ -546,8 +549,7 @@
                             </form>
                             <hr>
                             <h4 class="card-title">Delete Car</h4>
-                            <button type="button" onclick="confirmAndGoTo('{{url('users/delete/'.$car->model->id )}}', 'delete this Car and all its data ?')"
-                                class="btn btn-danger mr-2">Delete
+                            <button type="button" onclick="confirmAndGoTo('{{url('users/delete/'.$car->model->id )}}', 'delete this Car and all its data ?')" class="btn btn-danger mr-2">Delete
                                 All Car Data</button>
                         </div>
                     </div>

@@ -4,12 +4,13 @@ namespace App\Models;
 
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Car extends Model
 {
     protected $table = "cars";
     public $timestamps = true;
-    protected $appends = array('image');
+    protected $appends = array('image', 'image_url');
     // protected $with = ['model', 'model.type'];
     protected $image;
 
@@ -54,6 +55,20 @@ class Car extends Model
         return $this->image;
     }
 
+    public function getImageUrlAttribute()
+    {
+        if (isset($this->image)) return Storage::url($this->image);
+
+        $mainImage = $this->images()->orderByDesc('CIMG_VLUE')->first();
+        if ($mainImage) {
+            $this->image = $mainImage->CIMG_URL;
+            return Storage::url($mainImage->CIMG_URL);
+        } else {
+            $this->image = $this->model->MODL_IMGE ?? null;
+        }
+        return Storage::url($this->image);
+    }
+
     public function model()
     {
         return $this->belongsTo('App\Models\CarModel', 'CAR_MODL_ID');
@@ -72,6 +87,18 @@ class Car extends Model
             ->select('ACCR_VLUE', 'ACCR_ACSR_ID', 'ACCR_CAR_ID', 'ACSR_NAME', 'ACSR_ARBC_NAME')
             ->where('ACCR_CAR_ID', $this->id)
             ->get();
+    }
+
+    public function addImage($imageURL, $sortValue){
+        $this->images()->create([
+            "CIMG_VLUE" =>  $sortValue,
+            "CIMG_URL"  =>  $imageURL
+        ]);
+    }
+
+    public function deleteImage($id){
+        $image = CarImage::findOrFail($id);
+        $image->deleteImage();
     }
 
     public function images()
