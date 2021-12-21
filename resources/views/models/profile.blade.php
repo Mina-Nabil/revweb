@@ -121,42 +121,32 @@
                         <form class="form pt-3" method="post" action="{{ $colorFormURL }}" enctype="multipart/form-data">
                             @csrf
                             <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
-
-                            <div class="form-group">
-                                <label>Color Name*</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                            <div class=row>
+                                <div class="col-6 form-group">
+                                    <label>Color Name*</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name value="{{old('name')}}" required>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name value="{{old('name')}}" required>
+                                    <small class="text-muted">Model Color name as stated in Cars brochures</small>
+                                    <small class="text-danger">{{$errors->first('name')}}</small>
                                 </div>
-                                <small class="text-muted">Model Color name as stated in Cars brochures</small>
-                                <small class="text-danger">{{$errors->first('name')}}</small>
+
+                                <div class="col-6 form-group">
+                                    <label>Arabic Color Name</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName value="{{old('arbcName')}}">
+                                    </div>
+                                    <small class="text-muted">Model Color name as stated in Cars brochures</small>
+                                    <small class="text-danger">{{$errors->first('name')}}</small>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label>Arabic Color Name</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName value="{{old('arbcName')}}">
-                                </div>
-                                <small class="text-muted">Model Color name as stated in Cars brochures</small>
-                                <small class="text-danger">{{$errors->first('name')}}</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Hex Value</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Example: FF650C" name=hex value="{{old('hex')}}">
-                                </div>
-                                <small class="text-muted">Model Color hex code (optional)</small>
-                                <small class="text-danger">{{$errors->first('hex')}}</small>
-                            </div>
                             <div class=row>
                                 <div class="col-4 form-group">
                                     <label>Red Value</label>
@@ -194,17 +184,30 @@
                                     <small class="text-danger">{{$errors->first('blue')}}</small>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label>Alpha Value</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                            <div class=row>
+                                <div class="col-6 form-group">
+                                    <label>Hex Value</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Example: FF650C" name=hex value="{{old('hex')}}">
                                     </div>
-                                    <input type="number" max=100 min=0 step="1" class="form-control" name=alpha value="{{old('alpha') ?? 100}}" required>
+                                    <small class="text-muted">Model Color hex code (optional)</small>
+                                    <small class="text-danger">{{$errors->first('hex')}}</small>
                                 </div>
-                                <small class="text-muted">Model Color Alpha Value (0-100) - Default 100</small>
-                                <small class="text-danger">{{$errors->first('alpha')}}</small>
+
+                                <div class="col-6 form-group">
+                                    <label>Alpha Value</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="number" max=100 min=0 step="1" class="form-control" name=alpha value="{{old('alpha') ?? 100}}" required>
+                                    </div>
+                                    <small class="text-muted">Model Color Alpha Value (0-100) - Default 100</small>
+                                    <small class="text-danger">{{$errors->first('alpha')}}</small>
+                                </div>
                             </div>
 
                             <div class="form-group">
