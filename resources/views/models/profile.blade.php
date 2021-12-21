@@ -157,41 +157,42 @@
                                 <small class="text-muted">Model Color hex code (optional)</small>
                                 <small class="text-danger">{{$errors->first('hex')}}</small>
                             </div>
-
-                            <div class="form-group">
-                                <label>Red Value</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                            <div class=row>
+                                <div class="col-4 form-group">
+                                    <label>Red Value</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="number" max=255 min=0 step="1" class="form-control" name=red value="{{old('red')}}" required>
                                     </div>
-                                    <input type="number" max=255 min=0 step="1" class="form-control" name=red value="{{old('red')}}" required>
+                                    <small class="text-muted">Model Color Red Value under RGB code</small>
+                                    <small class="text-danger">{{$errors->first('red')}}</small>
                                 </div>
-                                <small class="text-muted">Model Color Red Value under RGB code</small>
-                                <small class="text-danger">{{$errors->first('red')}}</small>
-                            </div>
 
-                            <div class="form-group">
-                                <label>Blue Value</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                <div class="col-4 form-group">
+                                    <label>Green Value</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" required>
                                     </div>
-                                    <input type="number" max=255 min=0 step="1" class="form-control" name=blue value="{{old('blue')}}" required>
+                                    <small class="text-muted">Model Color Green Value under RGB code</small>
+                                    <small class="text-danger">{{$errors->first('green')}}</small>
                                 </div>
-                                <small class="text-muted">Model Color Blue Value under RGB code</small>
-                                <small class="text-danger">{{$errors->first('blue')}}</small>
-                            </div>
 
-                            <div class="form-group">
-                                <label>Green Value</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                <div class="col-4 form-group">
+                                    <label>Blue Value</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11"><i class="fas fa-palette"></i></span>
+                                        </div>
+                                        <input type="number" max=255 min=0 step="1" class="form-control" name=blue value="{{old('blue')}}" required>
                                     </div>
-                                    <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" required>
+                                    <small class="text-muted">Model Color Blue Value under RGB code</small>
+                                    <small class="text-danger">{{$errors->first('blue')}}</small>
                                 </div>
-                                <small class="text-muted">Model Color Green Value under RGB code</small>
-                                <small class="text-danger">{{$errors->first('green')}}</small>
                             </div>
 
                             <div class="form-group">
@@ -531,28 +532,28 @@
                     <div class="form-group">
                         <label>Color Name*</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name id=nameModal>
+                            <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name value="{{old('name')}}" id=nameModal>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Arabic Color Name</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName id=arbcNameModal>
+                            <input type="text" class="form-control" placeholder="Example: ازرق زهري" name=arbcName value="{{old('arbcName')}}" id=arbcNameModal>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Hex Value</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Example: FF650C" name=hex id=hexModal>
+                            <input type="text" class="form-control" placeholder="Example: FF650C" name=hex value="{{old('hex')}}" id=hexModal>
                         </div>
                     </div>
                     <div class=row>
                         <div class="col-4 form-group">
                             <label>Red Value</label>
                             <div class="input-group mb-3">
-                                <input type="number" max=255 min=0 step="1" class="form-control" name=red id=redModal required>
+                                <input type="number" max=255 min=0 step="1" class="form-control" name=red id=redModal value="{{old('red')}}" required>
                             </div>
                         </div>
 
@@ -567,14 +568,14 @@
                         <div class="col-4 form-group">
                             <label>Blue Value</label>
                             <div class="input-group mb-3">
-                                <input type="number" max=255 min=0 step="1" class="form-control" name=blue id=blueModal required>
+                                <input type="number" max=255 min=0 step="1" class="form-control" name=blue value="{{old('blue')}}" id=blueModal required>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Alpha Value</label>
                         <div class="input-group mb-3">
-                            <input type="number" max=100 min=0 step="1" class="form-control" name=alpha id=alphaModal required>
+                            <input type="number" max=100 min=0 step="1" class="form-control" name=alpha id=alphaModal value="{{old('alpha')}}" required>
                         </div>
                     </div>
 
