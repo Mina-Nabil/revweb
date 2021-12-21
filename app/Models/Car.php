@@ -29,7 +29,7 @@ class Car extends Model
      */
     static public function getCarsByBrandIDs($brandIDs)
     {
-       
+
         return self::join("models", "CAR_MODL_ID", "=", "models.id")
             ->join("brands", "MODL_BRND_ID", "=", "brands.id")
             ->whereIn("brands.id", $brandIDs)
@@ -37,8 +37,9 @@ class Car extends Model
             ->get();
     }
 
-    static public function getCarsByModel($modelID){
-        return self::with("images", "model")->where("CAR_MODL_ID", $modelID)->get();
+    static public function getCarsByModel($modelID)
+    {
+        return self::with("images")->where(["CAR_MODL_ID" => $modelID, "CAR_ACTV" => 1])->get();
     }
 
     public function getImageAttribute()
@@ -89,14 +90,16 @@ class Car extends Model
             ->get();
     }
 
-    public function addImage($imageURL, $sortValue){
+    public function addImage($imageURL, $sortValue)
+    {
         $this->images()->create([
             "CIMG_VLUE" =>  $sortValue,
             "CIMG_URL"  =>  $imageURL
         ]);
     }
 
-    public function deleteImage($id){
+    public function deleteImage($id)
+    {
         $image = CarImage::findOrFail($id);
         $image->deleteImage();
     }
@@ -123,5 +126,4 @@ class Car extends Model
         }
         return $accessories;
     }
-
 }
