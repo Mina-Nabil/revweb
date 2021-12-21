@@ -664,6 +664,7 @@
         $(".modal-body #blueModal").val(blue);
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
+        console.log($(".modal-body #colorPhotoModal"))
         $(".modal-body #colorPhotoModal").dropify({
             "defaultFile": imgURL
         });
