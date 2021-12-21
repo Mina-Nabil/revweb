@@ -112,7 +112,7 @@ class BrandsController extends Controller
         ]);
         $oldLogo = $brand->BRND_LOGO;
         $logoPath = NULL;
-        if ($brand->BRND_LOGO != NULL) {
+        if ($brand->BRND_LOGO == NULL) {
             $request->validate([
                 "logo"      => "required_if:isActive,on",
             ]);
