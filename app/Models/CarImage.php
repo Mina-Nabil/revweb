@@ -12,22 +12,22 @@ class CarImage extends Model
     protected $table = "cars_images";
     public $timestamps = false;
     protected $appends = ["image_url"];
+    protected $fillable = ["CIMG_URL", "CIMG_VLUE"];
 
     public function car()
     {
         return $this->belongsTo('App\Models\Car', 'CIMG_CAR_ID');
     }
 
-    public function getImageUrlAttribute(){
+    public function getImageUrlAttribute()
+    {
         return (isset($this->CIMG_URL)) ? Storage::url($this->CIMG_URL) : null;
     }
 
     public function deleteImage()
     {
         $fileHandler = new FilesHandler();
-        $fileHandler->deleteFile('storage/' . $this->CIMG_URL);
-        $this->delete();
-        return 1;
+        return $fileHandler->deleteFile('storage/' . $this->CIMG_URL) &&  $this->delete();
     }
 
 

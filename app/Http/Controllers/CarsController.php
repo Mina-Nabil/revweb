@@ -7,6 +7,7 @@ use App\Models\Car;
 use App\Models\CarAccessory;
 use App\Models\CarImage;
 use App\Models\CarModel;
+use App\Services\FilesHandler;
 use Illuminate\Http\Request;
 
 class CarsController extends Controller
@@ -153,18 +154,19 @@ class CarsController extends Controller
     {
         $request->validate([
             "carID" => "required|exists:cars,id",
-            "photo" => "file",
+            "photo" => "file|required",
             'value' => 'required'
         ]);
         $car = Car::findOrFail($request->carID);
+        $car->load('model');
         $newImage = new CarImage();
+        $fileshandler = new FilesHandler();
         if ($request->hasFile('photo')) {
-            $newImage->CIMG_URL = $request->photo->store('images/cars/' . $car->CAR_CATG, 'public');
+            $newImage->CIMG_URL = $fileshandler->uploadFile($request->photo, $this->getStoragePath($car->model->MODL_NAME, $car->CATG_NAME, "images")); 
         }
         $newImage->CIMG_CAR_ID = $request->carID;
         $newImage->CIMG_VLUE = $request->value;
         $newImage->save();
-        $newImage->compress();
         return back();
     }
 
@@ -172,20 +174,20 @@ class CarsController extends Controller
     public function deleteImage($id)
     {
         $image = CarImage::findOrFail($id);
-        echo $image->deleteImage();
+        echo $image->deleteImage(); //file deletion is handled on model
     }
 
-    public function editImage(Request $request){
+    public function editImage(Request $request)
+    {
         $request->validate([
             "id"    => "required",
             'value' => 'required',
         ]);
         $image = CarImage::findOrFail($request->id);
-
         $image->CIMG_VLUE = $request->value;
         echo $image->save();
+    }
 
-       }
 
     public function linkAccessory(Request $request)
     {
@@ -210,13 +212,15 @@ class CarsController extends Controller
         echo $car->accessories()->detach($accessory);
     }
 
-    public function loadData(Request $request){
+    public function loadData(Request $request)
+    {
         $car = Car::with(["model", "model.brand"])->findOrFail($request->carID);
         echo json_encode($car);
         return;
     }
 
-    public function loadAccessories(Request $request){
+    public function loadAccessories(Request $request)
+    {
 
         $request->validate([
             "id"        =>  "required",
@@ -227,35 +231,14 @@ class CarsController extends Controller
         $car = Car::findOrFail($request->id);
 
         $otherAccessories = $otherCar->getAccessories();
- 
-        $otherAccessories = $otherAccessories->mapWithKeys(function ($item){
-            return [$item->ACCR_ACSR_ID =>[ "ACCR_VLUE" => $item->ACCR_VLUE ]];
+
+        $otherAccessories = $otherAccessories->mapWithKeys(function ($item) {
+            return [$item->ACCR_ACSR_ID => ["ACCR_VLUE" => $item->ACCR_VLUE]];
         });
 
         $car->accessories()->sync($otherAccessories->all());
 
-       return back();
-    }
-
-    public function toggleTrending(Request $request){
-
-        $request->validate([
-            "carID"     =>  "required"
-        ]);
-
-        $car = Car::findOrFail($request->carID);
-        echo $car->toggleTrending();
-
-    }
-
-    public function toggleOffer(Request $request){
-
-        $request->validate([
-            "carID"     =>  "required"
-        ]);
-
-        $car = Car::findOrFail($request->carID);
-        echo $car->toggleOffer();
+        return back();
     }
 
 
@@ -289,7 +272,7 @@ class CarsController extends Controller
         $this->data['subTitle'] = "Check all Available Cars";
         $this->data['cols'] = ['Brand', 'Model', 'Category', 'Year', 'Active?'];
         $this->data['atts'] = [
-            ['foreignForeign' => ['rel1' => 'model', 'rel2' => 'brand','att' => 'BRND_NAME']],
+            ['foreignForeign' => ['rel1' => 'model', 'rel2' => 'brand', 'att' => 'BRND_NAME']],
             ['foreignUrl' => ['rel' => 'model', 'att' => 'MODL_NAME', 'baseUrl' => 'admin/models/profile', 'urlAtt' => 'id']],
             ['dynamicUrl' => ['att' => 'CAR_CATG', 'val' => 'id', 'baseUrl' => 'admin/cars/profile/']],
             ['foreign' => ['rel' => 'model', 'att' => 'MODL_YEAR']],
@@ -315,5 +298,10 @@ class CarsController extends Controller
         $this->data['models'] = CarModel::with('brand', 'type')->get();
         $this->data['cars'] = Car::with('model', 'model.brand')->get();
         $this->data['loadCarURL'] = url("admin/cars/load/data");
+    }
+
+    private function getStoragePath($modelName, $categoryName, $fileType)
+    {
+        return "cars/" . $modelName . "-" . $categoryName . "/" . $fileType;
     }
 }
