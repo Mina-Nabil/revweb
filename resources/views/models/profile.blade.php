@@ -618,7 +618,7 @@
                     <div class="form-group">
                         <label>Sort Value</label>
                         <div class="input-group mb-3">
-                            <input type="number" max=100 min=0 step="1" class="form-control" name=sort id=sortModal required>
+                            <input type="number" step="1" class="form-control" name=sort id=sortModal required>
                         </div>
                     </div>
 
