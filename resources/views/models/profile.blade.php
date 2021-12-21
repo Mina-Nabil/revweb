@@ -243,7 +243,7 @@
                                             <div id="colorBlue{{$color->id}}">{{$color->COLR_BLUE}}</div>
                                             <div id="colorGreen{{$color->id}}">{{$color->COLR_GREN}}</div>
                                             <div id="colorAlpha{{$color->id}}">{{$color->COLR_ALPH}}</div>
-                                            <div id="colorURL{{$color->id}}">{{$color->COLR_IMGE}}</div>
+                                            <div id="colorURL{{$color->id}}">{{$color->image_url}}</div>
                                         </div>
                                         <tr>
                                             <td>rgb({{$color->COLR_RED}}, {{$color->COLR_GREN}}, {{$color->COLR_BLUE}})</td>
@@ -369,7 +369,7 @@
                                                 </div>
                                             </td>
                                         <tr>
-                                            @endforeach
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -602,7 +602,7 @@
 </div>
 
 
-<div id="edit-color" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<div id="edit-image" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
