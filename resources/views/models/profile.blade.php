@@ -665,7 +665,7 @@
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
         console.log($(".modal-body .dropify"))
-        $(".modal-body .dropify").dropify({
+        $(".modal-body .dropify")[0].dropify({
             "defaultFile": imgURL
         });
 
@@ -679,7 +679,7 @@
         $(".modal-body #imageIDModal").val(id);
         $(".modal-body #sortModal").val(name);
         $(".modal-body #photoModal").attr("data-default-file", imgURL);
-        $(".modal-body .dropify").dropify({
+        $(".modal-body .dropify")[1].dropify({
             "defaultFile": imgURL
         });
 
