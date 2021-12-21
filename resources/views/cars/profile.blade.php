@@ -185,7 +185,7 @@
                                 <?php $i=0; ?>
                                 @foreach($car->images as $image)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ asset( 'storage/'. $image->image_url ) }} "
+                                    <img class="img-fluid" src="{{  $image->image_url }} "
                                         style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
@@ -246,9 +246,9 @@
                                         @foreach ($car->images as $image)
                                         <tr>
                                             <td id="imageValue{{$image->id}}">{{$image->CIMG_VLUE}}</td>
-                                            <td> <img src="{{ asset( 'storage/'. $image->CIMG_URL ) }} " width="60px"> </td>
-                                            <td><a target="_blank" href="{{ asset( 'storage/'. $image->CIMG_URL ) }}">
-                                                    {{(strlen($image->CIMG_URL) < 25) ? $image->CIMG_URL : substr($image->CIMG_URL, 0, 25).'..' }}
+                                            <td> <img src="{{ $image->image_url }} " width="60px"> </td>
+                                            <td><a target="_blank" href="{{  $image->image_url }}">
+                                                    {{(strlen($image->image_url) < 25) ? $image->image_url : substr($image->image_url, 0, 25).'..' }}
                                                 </a></td>
                                             <td>
                                                 <div class=" row justify-content-center ">
