@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class BrandsController extends Controller
@@ -138,7 +139,8 @@ class BrandsController extends Controller
         }
         if ($updateRes) {
             if ($oldLogo != NULL && $logoPath != NULL)
-                $filesHandler->deleteFile($oldLogo);
+                $deleteRes = $filesHandler->deleteFile($oldLogo);
+                Log::debug($deleteRes , ["Delete Done in S3?"]);
         }
         return redirect($this->homeURL);
     }
