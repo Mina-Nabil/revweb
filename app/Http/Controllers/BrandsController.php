@@ -140,7 +140,7 @@ class BrandsController extends Controller
         if ($updateRes) {
             if ($oldLogo != NULL && $logoPath != NULL)
                 $deleteRes = $filesHandler->deleteFile($oldLogo);
-                Log::debug($deleteRes , ["Delete Done in S3?"]);
+                // Log::debug($deleteRes , ["Delete Done in S3?"]);
         }
         return redirect($this->homeURL);
     }
