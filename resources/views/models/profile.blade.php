@@ -613,12 +613,12 @@
                 <form class="form pt-3" method="post" action="{{ $updateImageInfoURL }}" enctype="multipart/form-data">
                     @csrf
                     <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
-                    <input type=hidden name=id id=imageID value="">
+                    <input type=hidden name=id id=imageIDModal value="">
 
                     <div class="form-group">
                         <label>Sort Value</label>
                         <div class="input-group mb-3">
-                            <input type="number" max=255 min=0 step="1" class="form-control" name=sort id=sortModal required>
+                            <input type="number" max=100 min=0 step="1" class="form-control" name=sort id=sortModal required>
                         </div>
                     </div>
 
