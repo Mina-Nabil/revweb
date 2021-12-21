@@ -492,7 +492,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-car"></i></span>
                                         </div>
-                                        <input type="number" class="form-control" name=dimn id=dimn placeholder="Car Dimensions" value="{{ (isset($car)) ? $car->CAR_DIMN : old('dimn')}}">
+                                        <input type="text" class="form-control" name=dimn id=dimn placeholder="Car Dimensions" value="{{ (isset($car)) ? $car->CAR_DIMN : old('dimn')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('dimn')}}</small>
                                 </div>
