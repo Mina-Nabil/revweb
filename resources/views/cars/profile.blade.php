@@ -8,13 +8,6 @@
     <div class="col-lg-4 col-xlg-3 col-md-5">
         <div class="card"> <img class="card-img" src="{{  (isset($car->model->MODL_IMGE)) ?  $car->model->image_url : asset('images/def-car.png')}}" alt="Card image">
         </div>
-        <div class="card">
-            @isset($car->model->MODL_BRCH)
-            <embed class="m-t-10" src="{{$car->model->pdf_url}}" width="100%" height="375px">
-            @else
-            <img class="card-img" src="{{  asset('images/def-car.png')}}" alt="Card image">
-            @endisset
-        </div>
     </div>
     <!-- Column -->
     <!-- Column -->
@@ -96,12 +89,12 @@
                         <hr>
                         <div class=row>
                             <div class="col-md-12 col-xs-12 b-r ">
-                                @if(isset($car->model->MODL_BRCH))
-                                <iframe style="border: 1px solid #777; width:100% " src="https://indd.adobe.com/embed/{{$car->model->MODL_BRCH}}?startpage=1&allowFullscreen=false" height="371px"
-                                    frameborder="0" allowfullscreen=""></iframe>
+                                @isset($car->model->MODL_BRCH)
+                                <embed class="m-t-10" src="{{$car->model->pdf_url}}" width="100%" height="375px">
                                 @else
-                                <p class="text-muted">Interactive Brochure Area</p>
-                                @endif
+                                <img class="card-img" src="{{  asset('images/def-car.png')}}" alt="Card image">
+                                <small>No PDF attached</small>
+                                @endisset
 
                             </div>
                         </div>
