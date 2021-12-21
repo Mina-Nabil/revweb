@@ -369,7 +369,7 @@
                                                 </div>
                                             </td>
                                         <tr>
-                                        @endforeach
+                                            @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -664,8 +664,9 @@
         $(".modal-body #blueModal").val(blue);
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
-        $(".modal-body #colorPhotoModal").attr("data-default-file", imgURL);
-        $(".modal-body #colorPhotoModal").dropify();
+        $(".modal-body #colorPhotoModal").dropify({
+            "defaultFile": imgURL
+        });
 
     }
 
@@ -677,7 +678,9 @@
         $(".modal-body #imageIDModal").val(id);
         $(".modal-body #sortModal").val(name);
         $(".modal-body #photoModal").attr("data-default-file", imgURL);
-        $(".modal-body #photoModal").dropify();
+        $(".modal-body #photoModal").dropify({
+            "defaultFile": imgURL
+        });
 
     }
 
