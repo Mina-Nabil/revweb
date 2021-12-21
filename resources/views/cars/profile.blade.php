@@ -10,7 +10,7 @@
         </div>
         <div class="card">
             @isset($car->model->MODL_BRCH)
-            <embed class="m-t-10" src="{{$model->pdf_url}}" width="100%" height="375px">
+            <embed class="m-t-10" src="{{$car->model->pdf_url}}" width="100%" height="375px">
             @else
             <img class="card-img" src="{{  asset('images/def-car.png')}}" alt="Card image">
             @endisset
