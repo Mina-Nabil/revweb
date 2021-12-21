@@ -160,7 +160,7 @@ class ModelsController extends Controller
         $filesHandler = new FilesHandler();
         $imageURL = NULL;
         if ($request->hasFile('photo')) {
-            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/colors/' . $request->COLR_NAME);
+            $imageURL = $filesHandler->uploadFile($request->photo, "models/" . $model->MODL_NAME . '/colors/' . $request->name);
         }
 
         if (!$model->colors()->create([
