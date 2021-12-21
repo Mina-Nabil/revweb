@@ -117,8 +117,8 @@
                             </a>
                         </div>
                         <hr>
-                        <h4 class="card-title">Add New Car Image</h4>
-                        <form class="form pt-3" method="post" action="{{ $imageFormURL }}" enctype="multipart/form-data">
+                        <h4 class="card-title">Add New Model Color</h4>
+                        <form class="form pt-3" method="post" action="{{ $colorFormURL }}" enctype="multipart/form-data">
                             @csrf
                             <input type=hidden name=modelID value="{{(isset($model)) ? $model->id : ''}}">
 
@@ -211,7 +211,7 @@
                                 <div class="input-group mb-3">
                                     <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('photo') }}" data-max-file-size="2M" />
                                 </div>
-                                <small class="text-muted">Optimum Resolution is 346 * 224</small>
+                                <small class="text-muted">Optimum Resolution is 148 * 100</small>
                             </div>
                             <button type="submit" class="btn btn-success mr-2">Submit</button>
                         </form>
@@ -583,7 +583,7 @@
                         <div class="input-group mb-3">
                             <input type="file" id="input-file-now-custom-1" name=photo class="dropify" id=colorPhotoModal data-max-file-size="2M" />
                         </div>
-                        <small class="text-muted">Optimum Resolution is 346 * 224</small>
+                        <small class="text-muted">Optimum Resolution is 148 * 100</small>
                     </div>
 
                     <div class="col-lg-3">

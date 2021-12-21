@@ -28,6 +28,7 @@ class ModelsController extends Controller
         $this->data['formTitle'] = "Edit Model(" . $this->data['model']->MODL_NAME . ")";
         $this->data['formURL'] = url("admin/models/update");
         $this->data['imageFormURL'] = url("admin/models/add/image");
+        $this->data['colorFormURL'] = url("admin/models/add/color");
         $this->data['updateColorInfoURL'] = url("admin/models/update/color");
         $this->data['updateImageInfoURL'] = url("admin/models/update/image");
         $this->data['delImageUrl'] = url("admin/models/image/delete/");
