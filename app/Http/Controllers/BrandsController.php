@@ -78,11 +78,11 @@ class BrandsController extends Controller
 
         $logoPath = null;
         if ($request->hasFile('logo')) {
-            $logoPath = $filesHandler->uploadFile($request->logo, 'images/brands/' . $request->name);
+            $logoPath = $filesHandler->uploadFile($request->logo, 'brands/logos/' . $request->name);
         }
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'images/brands/' . $request->name);
+            $imagePath = $filesHandler->uploadFile($request->image, 'brands/images/' . $request->name);
         }
         try {
             $brand = Brand::create($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath, $imagePath);
@@ -108,16 +108,20 @@ class BrandsController extends Controller
         $request->validate([
             "name" => ["required",  Rule::unique('brands', "BRND_NAME")->ignore($brand->BRND_NAME, "BRND_NAME"),],
             "id"        => "required",
-            "logo"      => "required_if:isActive,on",
+
         ]);
-
+        if ($brand->BRND_LOGO != NULL) {
+            $request->validate([
+                "logo"      => "required_if:isActive,on",
+            ]);
+        }
         if ($request->hasFile('logo')) {
-            $logoPath = $filesHandler->uploadFile($request->logo,  'images/brands/' . $brand->BRND_NAME, 'public');
+            $logoPath = $filesHandler->uploadFile($request->logo,  'brands/logos/' . $brand->BRND_NAME, 'public');
         }
 
-        if ($request->hasFile('image')) {
-            $imagePath = $filesHandler->uploadFile($request->image, 'images/brands/' . $brand->BRND_NAME);
-        }
+        // if ($request->hasFile('image')) {
+        //     $imagePath = $filesHandler->uploadFile($request->image, 'brands/images/' . $brand->BRND_NAME);
+        // }
         try {
 
             $brand->updateInfo($request->name, $request->arbcName, $request->isActive == 'on' ? 1 : 0, $logoPath ?? null, $imagePath ?? null);
