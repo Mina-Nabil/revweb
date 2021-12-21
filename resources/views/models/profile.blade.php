@@ -290,7 +290,7 @@
                                 @foreach($model->images as $image)
                                 <div style="display: none">
                                     <div id="imageSort{{$image->id}}">{{$image->MOIM_SORT}}</div>
-                                    <div id="imageURL{{$image->id}}">{{$image->MOIM_URL}}</div>
+                                    <div id="imageURL{{$image->id}}">{{$image->image_url}}</div>
                                 </div>
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
                                     <img class="img-fluid" src="{{ $image->image_url }} " style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
