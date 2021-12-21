@@ -277,11 +277,11 @@
 
                 <div class="tab-pane" id="images" role="tabpanel">
                     <div class="card-body">
-                        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                        <div id="carouselExampleIndicators3" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
                                 <?php $i=0; ?>
                                 @foreach($model->images as $image)
-                                <li data-target="#carouselExampleIndicators2" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
+                                <li data-target="#carouselExampleIndicators3" data-slide-to="{{$i}}" {{($i==0) ? 'class="active"' : '' }}></li>
                                 <?php $i++; ?>
                                 @endforeach
                             </ol>
@@ -298,11 +298,11 @@
                                 <?php $i++; ?>
                                 @endforeach
                             </div>
-                            <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev" style="background-color:#DCDCDC">
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators3" role="button" data-slide="prev" style="background-color:#DCDCDC">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next" style="background-color:#DCDCDC">
+                            <a class="carousel-control-next" href="#carouselExampleIndicators3" role="button" data-slide="next" style="background-color:#DCDCDC">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
