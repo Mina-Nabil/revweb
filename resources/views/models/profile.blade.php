@@ -665,7 +665,7 @@
         $(".modal-body #greenModal").val(green);
         $(".modal-body #alphaModal").val(alpha);
         console.log($(".modal-body .dropify"))
-        $(".modal-body .dropify")[0].dropify({
+        $(".modal-body .dropify").first().dropify({
             "defaultFile": imgURL
         });
 
