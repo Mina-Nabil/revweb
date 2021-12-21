@@ -34,7 +34,7 @@
                                 <br>
                                 <p class="text-muted">{{$car->model->MODL_ACTV ? 'Active' : "Hidden"}}</p>
                             </div>
-                            <div title="Place in offer tab in the home page" class="col-md-3 col-xs-6 b-r"> <strong>Offer</strong>
+                            {{-- <div title="Place in offer tab in the home page" class="col-md-3 col-xs-6 b-r"> <strong>Offer</strong>
                                 <br>
                                 <button id="offerLabel" class="label label-{{($car->CAR_OFFR) ? 'success' : 'danger'}}" onclick="toggleOffer()">{{($car->CAR_OFFR) ? 'In Offers' : 'Not in
                                     Offers'}}</button>
@@ -43,7 +43,7 @@
                                 <br>
                                 <button id="trendingLabel" class="label label-{{($car->CAR_TRND) ? 'success' : 'danger'}}" onclick="toggleTrending()">{{($car->CAR_TRND) ? 'Trending' : 'Not
                                     Trending'}}</button>
-                            </div>
+                            </div> --}}
                             <div class="col-md-3 col-xs-6 b-r"> <strong>Model Name</strong>
                                 <br>
                                 <p class="text-muted">{{$car->model->MODL_NAME}}</p>
@@ -68,14 +68,14 @@
                                 <br>
                                 <p class="text-muted">{{number_format($car->CAR_PRCE ?? 0,0)}}</p>
                             </div>
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>Discount</strong>
+                            {{-- <div class="col-md-3 col-xs-6 b-r"> <strong>Discount</strong>
                                 <br>
                                 <p class="text-muted">{{number_format($car->CAR_DISC ?? 0,0)}}</p>
-                            </div>
-                            <div class="col-md-3 col-xs-6"> <strong>Sort Value</strong>
+                            </div> --}}
+                            {{-- <div class="col-md-3 col-xs-6"> <strong>Sort Value</strong>
                                 <br>
                                 <p class="text-muted">{{$car->CAR_VLUE ?? ''}}</p>
-                            </div>
+                            </div> --}}
                             <div class="col-md-3 col-xs-6"> <strong>Added Date</strong>
                                 <br>
                                 <p class="text-muted">{{$car->created_at ?? ''}}</p>
