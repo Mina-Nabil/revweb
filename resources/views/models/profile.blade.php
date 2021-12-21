@@ -250,7 +250,7 @@
                                             <td>{{$color->COLR_NAME}}-{{$color->COLR_ARBC_NAME}}</td>
                                             <td>
                                                 @isset($color->COLR_IMGE)
-                                                <img src="{{ $color->color_url }} " width="60px">
+                                                <img src="{{ $color->color_url }} " height="100px">
                                                 @endisset
                                             </td>
                                             <td><a target="_blank" href="{{  $color->image_url }}">
@@ -353,7 +353,7 @@
                                         @foreach ($model->images as $image)
                                         <tr>
                                             <td id="imageValue{{$image->id}}">{{$image->MOIM_VLUE}}</td>
-                                            <td> <img src="{{ $image->image_url }} " width="60px"> </td>
+                                            <td> <img src="{{ $image->image_url }} " height="150px"> </td>
                                             <td><a target="_blank" href="{{ $image->image_url }}">
                                                     {{(strlen($image->MOIM_URL) < 25) ? $image->image_url : substr($image->image_url, 0, 25).'..' }}
                                                 </a></td>
