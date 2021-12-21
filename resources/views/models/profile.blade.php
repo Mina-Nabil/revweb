@@ -289,8 +289,7 @@
                                     <div id="imageURL{{$image->id}}">{{$image->MOIM_URL}}</div>
                                 </div>
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{ $image->image_url }} "
-                                        style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
+                                    <img class="img-fluid" src="{{ $image->image_url }} " style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
                                 @endforeach
@@ -549,28 +548,29 @@
                             <input type="text" class="form-control" placeholder="Example: FF650C" name=hex id=hexModal>
                         </div>
                     </div>
+                    <div class=row>
+                        <div class="col-4 form-group">
+                            <label>Red Value</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max=255 min=0 step="1" class="form-control" name=red id=redModal required>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label>Red Value</label>
-                        <div class="input-group mb-3">
-                            <input type="number" max=255 min=0 step="1" class="form-control" name=red id=redModal required>
+                        <div class="col-4 form-group">
+                            <label>Green Value</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" id=greenModal required>
+                            </div>
+                        </div>
+
+
+                        <div class="col-4 form-group">
+                            <label>Blue Value</label>
+                            <div class="input-group mb-3">
+                                <input type="number" max=255 min=0 step="1" class="form-control" name=blue id=blueModal required>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label>Blue Value</label>
-                        <div class="input-group mb-3">
-                            <input type="number" max=255 min=0 step="1" class="form-control" name=blue id=blueModal required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Green Value</label>
-                        <div class="input-group mb-3">
-                            <input type="number" max=256 min=0 step="1" class="form-control" name=green value="{{old('green')}}" id=greenModal required>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label>Alpha Value</label>
                         <div class="input-group mb-3">
