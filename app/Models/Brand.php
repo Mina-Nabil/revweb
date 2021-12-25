@@ -21,17 +21,18 @@ class Brand extends Model
         $newBrand->BRND_ARBC_NAME = $arbcName;
         $newBrand->BRND_LOGO = $logoPath;
         $newBrand->BRND_IMGE = $imagePath;
-        $newBrand->BRND_ACTV = $isActive ;
+        $newBrand->BRND_ACTV = $isActive;
         try {
             $newBrand->save();
             return $newBrand;
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
 
-    static function getActive(){
+    static function getActive()
+    {
         return self::where("BRND_ACTV", 1)->get();
     }
 
@@ -46,11 +47,11 @@ class Brand extends Model
         if ($imagePath != null) {
             $this->BRND_IMGE = $imagePath;
         }
-        $this->BRND_ACTV = $isActive ;
+        $this->BRND_ACTV = $isActive;
         try {
             return $this->save();
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -60,8 +61,9 @@ class Brand extends Model
         return (isset($this->attributes['BRND_LOGO'])) ? Storage::url($this->attributes['BRND_LOGO']) : null;
     }
 
-    function activeModels(){
-        return $this->models()->with("type", "colors", "images", "cars", "cars.images", "brand")->where("MODL_ACTV", 1)->get();
+    function activeModels()
+    {
+        return $this->models()->with("type", "colors", "images", "cars", "cars.images", "brand")->where(["MODL_ACTV", 1], ["CAR_ACTV", 1])->get();
     }
 
     function models()
@@ -85,7 +87,7 @@ class Brand extends Model
         try {
             $this->save();
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
