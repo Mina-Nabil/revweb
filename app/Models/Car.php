@@ -56,6 +56,10 @@ class Car extends Model
         return $this->image;
     }
 
+    public function getisOwnedAttribute(){
+
+    }
+
     public function getImageUrlAttribute()
     {
         if (isset($this->image)) return Storage::url($this->image);
