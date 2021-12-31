@@ -42,7 +42,7 @@ class Showroom extends Model
             DB::transaction(function () use ($carID, $colors) {
                 $catalogItem = $this->catalogItems()->updateOrCreate([
                     "SRCG_CAR_ID"       =>  $carID,
-                    "SRCG_CAR_ACTV"     =>  1,
+                    "SRCG_CAR_ACTV"       =>  1,
                 ]);
                 $catalogItem->details()->delete();
                 if ($catalogItem) {
