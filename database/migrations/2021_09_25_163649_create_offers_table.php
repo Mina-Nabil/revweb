@@ -37,7 +37,7 @@ class CreateOffersTable extends Migration
             $table->foreignId("OFFR_SHRM_ID")->constrained('showrooms');
             $table->foreignId("OFFR_BUYR_ID")->constrained('buyers');
             $table->foreignId("OFFR_CAR_ID")->constrained('cars');
-            $table->int("OFFR_CAN_LOAN"); //is loan avaliable?
+            $table->integer("OFFR_CAN_LOAN"); //is loan avaliable?
             $table->integer("OFFR_PRCE");
             $table->integer("OFFR_MIN_PYMT");
             $table->dateTime("OFFR_STRT_DATE");
