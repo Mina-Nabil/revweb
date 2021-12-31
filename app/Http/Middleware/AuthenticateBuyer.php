@@ -18,7 +18,7 @@ class AuthenticateBuyer
     public function handle($request, Closure $next)
     {
         if(!$request->user()->tokenCan(Buyer::ACCESS_TOKEN)){
-            AbstractApiController::sendResponse(false, "User unauthorized");
+            BaseApiController::sendResponse(false, "User unauthorized");
         }
         return $next($request);
     }

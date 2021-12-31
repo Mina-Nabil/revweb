@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
-class BuyersProfileApi extends AbstractApiController
+class BuyersProfileApi extends BaseApiController
 {
     function register(Request $request)
     {

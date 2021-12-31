@@ -7,7 +7,7 @@ use App\Models\Car;
 use App\Models\CarModel;
 use Illuminate\Http\Request;
 
-class ShowroomCatalogApiController extends AbstractApiController
+class ShowroomCatalogApiController extends BaseApiController
 {
 
     function getCatalog(Request $request)
@@ -32,22 +32,21 @@ class ShowroomCatalogApiController extends AbstractApiController
         parent::sendResponse(true, "Car Pool Retrieved Successfully", (object)["cars" => $showroom->getCarpool()]);
     }
 
-    function getShowroomBrands(Request $request)
-    {
-        $seller = $request->user();
-        $seller->load("showroom");
-        $showroom = $seller->showroom;
-        if ($showroom == NULL) {
-            parent::sendResponse(false, "Failed to load Showroom");
-        }
-        parent::sendResponse(true, "Brands Retrieved", (object)["brands" => $showroom->getAssociatedBrands()]);
-    }
+    // function getShowroomBrands(Request $request)
+    // {
+    //     $seller = $request->user();
+    //     $seller->load("showroom");
+    //     $showroom = $seller->showroom;
+    //     if ($showroom == NULL) {
+    //         parent::sendResponse(false, "Failed to load Showroom");
+    //     }
+    //     parent::sendResponse(true, "Brands Retrieved", (object)["brands" => $showroom->getAssociatedBrands()]);
+    // }
 
     function addCar(Request $request)
     {
         parent::validateRequest($request, [
-            "carID"         =>  "required|exists:cars,id",
-            "colors"        =>  "nullable|array",
+            "carIDs"         =>  "required|exists:cars,id|array"
         ], "Car addition failed");
 
         $seller = $request->user();
@@ -55,11 +54,10 @@ class ShowroomCatalogApiController extends AbstractApiController
         if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }
-        if ($showroom->addCarToCatalog($request->carID, $request->colors)) {
-            parent::sendResponse(true, "Car Adding Succeeded");
-        } else {
-            parent::sendResponse(false, "Car Adding Failed");
+        foreach ($request->carIDs as $carID) {
+            $showroom->addCarToCatalog($carID, $request->{'colors' . $carID});
         }
+        parent::sendResponse(true, "Car Adding Succeeded");
     }
 
     function deactivateCar(Request $request)

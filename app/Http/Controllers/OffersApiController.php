@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class OffersApiController extends Controller
+class OffersApiController extends BaseApiController
 {
     //
 }
