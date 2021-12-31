@@ -12,6 +12,7 @@ class CarModel extends Model
     protected $table = "models";
     public $timestamps = false;
     protected $appends = ['image_url', 'pdf_url'];
+    protected $with = ["brand"];
 
     public function brand()
     {
