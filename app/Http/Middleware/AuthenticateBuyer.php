@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\AbstractApiController;
+use App\Http\Controllers\BaseApiController;
 use App\Models\Buyer;
 use Closure;
 
