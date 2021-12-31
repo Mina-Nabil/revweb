@@ -206,6 +206,15 @@ class Seller extends Authenticatable
         return $this->belongsTo(Showroom::class, "SLLR_SHRM_ID");
     }
 
+    public function joinRequests()
+    {
+        return $this->hasMany(JoinRequest::class, "JNRQ_SLLR_ID");
+    }
+
+    public function showroomRequests(){
+        return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SLLR_ID", "JNRQ_SHRM_ID");
+    }
+
     ///Authentication attributes
     /**
      * Get the login username to be used by the controller.

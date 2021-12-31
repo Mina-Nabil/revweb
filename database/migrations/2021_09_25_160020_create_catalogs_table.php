@@ -13,11 +13,6 @@ class CreateCatalogsTable extends Migration
      */
     public function up()
     {
-        Schema::create("showrooms_brands", function (Blueprint $table){
-            $table->id();
-            $table->foreignId("SRBR_SHRM_ID")->constrained("showrooms");
-            $table->foreignId("SRBR_BRND_ID")->constrained("brands");
-        });
 
         Schema::create('showroom_catalog', function (Blueprint $table){
             $table->id();
@@ -46,6 +41,5 @@ class CreateCatalogsTable extends Migration
     {
         Schema::dropIfExists('showroom_catalog_details');
         Schema::dropIfExists('showroom_catalog');
-        Schema::dropIfExists('showrooms_brands');
     }
 }

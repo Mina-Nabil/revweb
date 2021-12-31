@@ -30,26 +30,6 @@ class Showroom extends Model
         return $this->catalogItems;
     }
 
-    /****
-     * Retrieves all the cars available for the showroom to add to his catalog of cars
-     * Using brands associated to his profile
-     */
-    function getCarpool()
-    {
-        $this->load("brands");
-        $brandIDs = $this->brands->pluck("id");
-        return Car::getCarsByBrandIDs($brandIDs);
-    }
-
-    /****
-     * Retrieves all brands associated to his profile
-     */
-    function getAssociatedBrands()
-    {
-        $this->load("brands");
-        return $this->brands;
-    }
-
     /***
      * Add Car to Showrooms Catalog
      * @param carID car ID to add to catalog
@@ -375,11 +355,6 @@ class Showroom extends Model
         return $this->hasMany(CatalogItem::class, "SRCG_SHRM_ID");
     }
 
-    public function brands()
-    {
-        return $this->belongsToMany(Brand::class, "showrooms_brands", "SRBR_SHRM_ID", "SRBR_BRND_ID");
-    }
-
     public function sellers()
     {
         return $this->hasMany(Seller::class, "SLLR_SHRM_ID");
@@ -397,7 +372,12 @@ class Showroom extends Model
 
     public function joinRequests()
     {
-        return $this->hasMany(Brand::class, "showrooms_brands", "SRBR_SHRM_ID", "SRBR_BRND_ID");
+        $this->hasMany(JoinRequest::class, "JNRQ_SHRM_ID");
+    }
+
+    public function requestingSellers()
+    {
+        return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
     }
 
     /****
