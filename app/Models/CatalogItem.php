@@ -22,7 +22,7 @@ class CatalogItem extends Model
         return $this->belongsToMany(ModelColor::class , CatalogItemDetails::class, "SRCD_SRCG_ID", "SRCD_COLR_ID");
     }
 
-    protected $fillable = ['SRCG_CAR_ID', 'SRCG_DEF_PRCE', 'SRCG_MAX_DAYS', "SRCG_DEF_ACTV", "SRCG_CAR_ACTV"];
+    protected $fillable = ['SRCG_CAR_ID', 'SRCG_DEF_PRCE', 'SRCG_MAX_DAYS', 'SRCG_MIN_PYMT', 'SRCG_CAR_ACTV'];
 
    
 }

@@ -21,8 +21,8 @@ class CreateCatalogsTable extends Migration
             $table->integer("SRCG_DEF_PRCE")->nullable(); //default offer price
             $table->integer("SRCG_MAX_DAYS")->default(7); //offer usual time
             $table->integer("SRCG_MIN_PYMT")->nullable(); //offer min downpayment
+            $table->integer("SRCG_CAR_ACTV")->default(1); //is the car still active
             // $table->integer("SRCG_DEF_ACTV")->default(0); //is default offer active
-            // $table->integer("SRCG_CAR_ACTV")->default(1); //is the car still active
         });
 
         Schema::create('showroom_catalog_details', function (Blueprint $table){
