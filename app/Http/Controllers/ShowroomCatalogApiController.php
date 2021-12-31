@@ -21,28 +21,6 @@ class ShowroomCatalogApiController extends BaseApiController
         parent::sendResponse(true, "Catalog", (object)["catalog" => $showroom->getCatalogCars()]);
     }
 
-    function getCatalogCarPool(Request $request)
-    {
-        $seller = $request->user();
-        $seller->load("showroom");
-        $showroom = $seller->showroom;
-        if ($showroom == NULL) {
-            parent::sendResponse(false, "Failed to load Showroom");
-        }
-        parent::sendResponse(true, "Car Pool Retrieved Successfully", (object)["cars" => $showroom->getCarpool()]);
-    }
-
-    // function getShowroomBrands(Request $request)
-    // {
-    //     $seller = $request->user();
-    //     $seller->load("showroom");
-    //     $showroom = $seller->showroom;
-    //     if ($showroom == NULL) {
-    //         parent::sendResponse(false, "Failed to load Showroom");
-    //     }
-    //     parent::sendResponse(true, "Brands Retrieved", (object)["brands" => $showroom->getAssociatedBrands()]);
-    // }
-
     function addCar(Request $request)
     {
         parent::validateRequest($request, [
@@ -88,11 +66,6 @@ class ShowroomCatalogApiController extends BaseApiController
         } else {
             parent::sendResponse(false, "Car Removal Failed");
         }
-    }
-
-    //Brands for each seller functions 
-    function getAvailableModels()
-    {
     }
 
     /**
