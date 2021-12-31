@@ -15,10 +15,12 @@ class CreateOffersTable extends Migration
     {
         Schema::create('offers_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("OFRQ_BUYR_ID")->constrained("buyers");
+            $table->foreignId("OFRQ_BUYR_ID")->constrained("buyers"); //buyer
             $table->foreignId("OFRQ_CAR_ID")->constrained("buyers");
             $table->date("OFRQ_DATE");
-            $table->enum("OFRQ_STTS", ["New", "Cancelled", "Done"]);
+            $table->enum("OFRQ_STTS", ["New", "RepliedTo", "Cancelled", "Done"]);
+            $table->enum("OFRQ_PRFD_PYMT", ["Cash", "Loan"]);
+            $table->string("OFRQ_CMNT")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,12 +37,14 @@ class CreateOffersTable extends Migration
             $table->foreignId("OFFR_SHRM_ID")->constrained('showrooms');
             $table->foreignId("OFFR_BUYR_ID")->constrained('buyers');
             $table->foreignId("OFFR_CAR_ID")->constrained('cars');
+            $table->int("OFFR_CAN_LOAN"); //is loan avaliable?
             $table->integer("OFFR_PRCE");
             $table->integer("OFFR_MIN_PYMT");
             $table->dateTime("OFFR_STRT_DATE");
             $table->date("OFFR_EXPR_DATE");
-            $table->text("OFFR_CMNT")->nullable();
-            $table->enum("OFFR_STTS", ["New", "Expired", "Accepted"])->nullable();
+            $table->text("OFFR_SLLR_CMNT")->nullable();
+            $table->enum("OFFR_STTS", ["New", "Expired", "Accepted", "Declined"])->nullable();
+            $table->text("OFFR_BUYR_CMNT")->nullable();
             $table->timestamps();
         });
 

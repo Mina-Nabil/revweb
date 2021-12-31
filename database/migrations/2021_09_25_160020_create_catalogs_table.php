@@ -24,9 +24,11 @@ class CreateCatalogsTable extends Migration
             $table->foreignId("SRCG_SHRM_ID")->constrained("showrooms");
             $table->foreignId("SRCG_CAR_ID")->constrained("cars");
             $table->integer("SRCG_DEF_PRCE")->nullable(); //default offer price
-            $table->integer("SRCG_MAX_DAYS")->nullable(); //default offer expiry
-            $table->integer("SRCG_DEF_ACTV")->default(0); //is default offer active
-            $table->integer("SRCG_CAR_ACTV")->default(1); //is the car still active
+            $table->date("SRCG_FROM_DATE")->nullable(); //offer starting date 
+            $table->date("SRCG_TO_DATE")->nullable(); //offer end date
+            $table->integer("SRCG_MIN_PYMT")->nullable(); //offer min downpayment
+            // $table->integer("SRCG_DEF_ACTV")->default(0); //is default offer active
+            // $table->integer("SRCG_CAR_ACTV")->default(1); //is the car still active
         });
 
         Schema::create('showroom_catalog_details', function (Blueprint $table){
