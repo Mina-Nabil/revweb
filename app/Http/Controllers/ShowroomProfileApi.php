@@ -10,7 +10,7 @@ use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Http\Request;
 
-class ShowroomProfileApi extends AbstractApiController
+class ShowroomProfileApi extends BaseApiController
 {
     function createShowroom(Request $request)
     {

@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class SellersProfileApi extends AbstractApiController
+class SellersProfileApi extends BaseApiController
 {
     function register(Request $request)
     {

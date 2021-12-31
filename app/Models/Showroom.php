@@ -67,14 +67,15 @@ class Showroom extends Model
                 $catalogItem->details()->delete();
                 if ($catalogItem) {
                     if ($colors == null) {
-                        $car = Car::with("model.colors")->findOrFail($carID);
-                        $colors = $car->model->colors->pluck('id');
-                    }
-                    foreach ($colors as $color) {
-                        $catalogItem->details()->create([
-                            "SRCD_COLR_ID" => $color
-                        ]);
-                    }
+                        //if colors is null add all .. comment for now
+                        // $car = Car::with("model.colors")->findOrFail($carID);
+                        // $colors = $car->model->colors->pluck('id');
+                    } else
+                        foreach ($colors as $color) {
+                            $catalogItem->details()->create([
+                                "SRCD_COLR_ID" => $color
+                            ]);
+                        }
                 }
             });
             return true;
