@@ -33,7 +33,7 @@ Route::get('/get/cars/{modelID}', "ShowroomCatalogApiController@getCarsByModel")
 Route::get('/get/colors/{modelID}', "ShowroomCatalogApiController@getColorsByModel");
 Route::get('/get/my/brands', "ShowroomCatalogApiController@getShowroomBrands");
 Route::get('/get/carpool', "ShowroomCatalogApiController@getCatalogCarPool");
-Route::post('/add/car', "ShowroomCatalogApiController@addCar");
+Route::post('/add/car', "ShowroomCatalogApiController@addCarsToCatalog");
 
 
 //profile functions
