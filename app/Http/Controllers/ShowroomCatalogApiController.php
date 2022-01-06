@@ -1,4 +1,5 @@
 <?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -21,13 +22,14 @@ class ShowroomCatalogApiController extends BaseApiController
         parent::sendResponse(true, "Catalog", (object)["catalog" => $showroom->getCatalogCars()]);
     }
 
-    function addCar(Request $request)
+    function addCarsToCatalog(Request $request)
     {
         parent::validateRequest($request, [
             "carIDs"         =>  "required|exists:cars,id|array"
         ], "Car addition failed");
 
         $seller = $request->user();
+        $seller->load("showroom");
         $showroom = $seller->showroom;
         if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
@@ -35,7 +37,7 @@ class ShowroomCatalogApiController extends BaseApiController
         foreach ($request->carIDs as $carID) {
             $showroom->addCarToCatalog($carID, $request->{'colors' . $carID});
         }
-        parent::sendResponse(true, "Car Adding Succeeded");
+        parent::sendResponse(true, "Car Adding Succeeded", (object)["catalog" => $showroom->getCatalogCars()]);
     }
 
     function deactivateCar(Request $request)
