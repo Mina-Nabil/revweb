@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CatalogItem extends Model
 {
     protected $table = "showroom_catalog";
-    protected $with = ["car", "colors", 'car.model', 'car.images'];
+    protected $with = ["car", "colors", 'car.model', 'car.model.images', 'car.images'];
     public $timestamps = false;
 
     public function car(){
