@@ -53,7 +53,7 @@ class AccessoriesController extends Controller
             "arbcName"      => "required",
         ]);
         try {
-            $accessory = new Accessories($request->name, $request->arbcName);
+            $accessory = Accessories::create($request->name, $request->arbcName);
         } catch (Exception $e) {
         }
 

@@ -11,12 +11,14 @@ class Accessories extends Model
     protected $table = "accessories";
     public $timestamps = false;
 
-    function create($name, $arabicName)
+    static function create($name, $arabicName)
     {
-        $this->ACSR_NAME = $name;
-        $this->ACSR_ARBC_NAME = $arabicName;
+        $newAccessory = new Accessories();
+        $newAccessory->ACSR_NAME = $name;
+        $newAccessory->ACSR_ARBC_NAME = $arabicName;
         try {
-            $this->save();
+            $newAccessory->save();
+            return $newAccessory;
         } catch (Exception $e) {
             Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
