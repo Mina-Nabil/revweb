@@ -24,7 +24,7 @@ Route::get('/cities', "ShowroomProfileApi@getCities");
 
 //catalog functions
 Route::get('/get/catalog', "ShowroomCatalogApiController@getCatalog");
-Route::post('/remove/car', "ShowroomCatalogApiController@removeCar");
+Route::delete('/remove/car', "ShowroomCatalogApiController@removeCar");
 Route::get('/remove/year', "ShowroomCatalogApiController@removeYear");
 Route::post('/set/brands', "ShowroomCatalogApiController@setBrands");
 Route::get('/get/all/brands', "ShowroomCatalogApiController@getAllBrands");

@@ -62,7 +62,8 @@ class ShowroomCatalogApiController extends BaseApiController
             "carID"         =>  "required|exists:cars,id",
         ], "Car not found");
         $seller = $request->user();
-        if ($seller->deleteCarFromCatalog($request->carID)) {
+        $seller->load('showroom');
+        if ($seller->showroom->deleteCarFromCatalog($request->carID)) {
             parent::sendResponse(true, "Car Removal Succeeded");
         } else {
             parent::sendResponse(false, "Car Removal Failed");
