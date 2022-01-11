@@ -69,10 +69,10 @@ class AccessoriesController extends Controller
 
         $request->validate([
             "name" => ["required",  Rule::unique('accessories', "ACSR_NAME")->ignore($accessory->ACSR_NAME, "ACSR_NAME"),],
-            "id"        => "required",
+            "arbcName"      => "required",
         ]);
         try {
-            $accessory->updateInfo($accessory->ACSR_NAME, $accessory->ACSR_ARBC_NAME);
+            $accessory->updateInfo($request->name, $request->arbcName);
         } catch (Exception $e) {
         }
         return redirect($this->homeURL);
