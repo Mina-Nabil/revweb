@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Showroom extends Model
 {
@@ -80,6 +81,7 @@ class Showroom extends Model
             });
             return true;
         } catch (Exception $e) {
+            Log::error($e);
             return false;
         }
     }
