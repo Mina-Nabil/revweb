@@ -11,7 +11,7 @@ class Car extends Model
     protected $table = "cars";
     public $timestamps = true;
     protected $appends = array('image', 'image_url');
-    // protected $with = ['model', 'model.type', 'images'];
+    protected $with = ['accessories'];
     protected $image;
 
     protected $casts = [
