@@ -73,7 +73,7 @@ class Showroom extends Model
     function deleteCarFromCatalog($carID)
     {
         if (!$this->isManager()) return false;
-        $catalogEntry = $this->where("SRCG_CAR_ID", $carID)->first();
+        $catalogEntry = $this->cars()->where("SRCG_CAR_ID", $carID)->first();
         try {
             DB::transaction(function () use ($catalogEntry) {
                 CatalogItemDetails::where("SRCD_SRCG_ID", $catalogEntry->id)->delete();
@@ -93,7 +93,7 @@ class Showroom extends Model
     function deactivateCarFromCatalog($carID)
     {
         if (!$this->isManager()) return false;
-        $catalogEntry = $this->cars()->where("SRCG_CAR_ID", $carID)->find();
+        $catalogEntry = $this->catalogItems()->where("SRCG_CAR_ID", $carID)->find();
         $catalogEntry->SRCG_CAR_ACTV = 0;
         return $catalogEntry->save();
     }
