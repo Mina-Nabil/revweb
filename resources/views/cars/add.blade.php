@@ -42,7 +42,8 @@
             document.getElementById("speed").value = json.CAR_TPSP;
             document.getElementById("height").value = json.CAR_HEIT;
             document.getElementById("tank").value = json.CAR_TRNK;
-            document.getElementById("rims").value = json.CAR_RIMS;
+            document.getElementById("rims").value = json.CAR_DIMN;
+            document.getElementById("dimn").value = json.CAR_RIMS;
             document.getElementById("seat").value = json.CAR_SEAT;
             } else {
                 Swal.fire({
@@ -152,7 +153,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon22"><i class="fas fa-database"></i></span>
                             </div>
-                            <input type="text" class="form-control" name=cc id=cc placeholder="Enter Engine CC Specs, Example: 1500 Turbo" value="{{ (isset($car)) ? $car->CAR_ENCC : old('cc')}}">
+                            <input type="text" class="form-control" name=cc id=cc placeholder="Enter Engine CC Specs, Example: 1500" value="{{ (isset($car)) ? $car->CAR_ENCC : old('cc')}}">
                         </div>
                         <small class="text-danger">{{$errors->first('cc')}}</small>
                     </div>
@@ -163,7 +164,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon22"><i class="fas fa-horse"></i></span>
                             </div>
-                            <input type="text" class="form-control" name=hpwr id=hpwr placeholder="Enter Horse Power in Hp@rpm, Example: 129@6000"
+                            <input type="number" class="form-control" name=hpwr id=hpwr placeholder="Enter Horse Power in Hp@rpm, Example: 129"
                                 value="{{ (isset($car)) ? $car->CAR_HPWR : old('hpwr')}}">
                         </div>
                         <small class="text-danger">{{$errors->first('hpwr')}}</small>
@@ -225,6 +226,18 @@
                         </div>
                         <small class="text-danger">{{$errors->first('height')}}</small>
                     </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Dimensions</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon22"><i class="fas fa-car"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name=dimn id=dimn placeholder="Car Dimensions" value="{{ (isset($car)) ? $car->CAR_DIMN : old('dimn')}}">
+                        </div>
+                        <small class="text-danger">{{$errors->first('dimn')}}</small>
+                    </div>
+
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Rims Measure</label>
