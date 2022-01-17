@@ -60,7 +60,7 @@
 </head>
 
 <body class="skin-default fixed-layout" @if ($errors!==NULL && count($errors->all())>0) onload=" showSwalErrorsAlert('Error', {{json_encode($errors->all())}})" @endif>
-    
+
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -214,17 +214,19 @@
                 <!-- ============================================================== -->
                 <div class="row page-titles">
                     <div class="col-md-5 align-self-center">
-                        <h4 class="text-themecolor" style="font-family: 'Oregano' ; font-size:33px">{{env('APP_NAME')}} Dashboard</h4>
+                        <a href="/">
+                            <h4 class="text-themecolor" style="font-family: 'Oregano' ; font-size:33px">{{env('APP_NAME')}} Dashboard</h4>
+                        </a>
                     </div>
                     <div class="col-md-7 align-self-center text-right">
                         <div class="d-flex justify-content-end align-items-center">
-                            <a style="font-family: 'Oswald'" href="{{url('admin/cars/add')}}" class="btn btn-primary d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Add Car</a>
-                            <a style="font-family: 'Oswald'" href="{{url('admin/models/add')}}" class="btn btn-primary d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Add Model</a>
-                            <a style="font-family: 'Oswald'" href="{{url('admin/cars/show')}}" class="btn btn-primary d-none d-lg-block m-l-15"><i class="fas fa-info-circle"></i> Check Cars
+                            <a style="font-family: 'Oswald'" href="{{url('admin/cars/add')}}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Add Car</a>
+                            <a style="font-family: 'Oswald'" href="{{url('admin/models/add')}}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Add Model</a>
+                            <a style="font-family: 'Oswald'" href="{{url('admin/cars/show')}}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fas fa-info-circle"></i> Check Cars
                             </a>
-                            <a style="font-family: 'Oswald'" href="{{url('admin/models/show')}}" class="btn btn-primary d-none d-lg-block m-l-15"><i class="fas fa-info-circle"></i> Check Models
+                            <a style="font-family: 'Oswald'" href="{{url('admin/models/show')}}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fas fa-info-circle"></i> Check Models
                             </a>
-                            <a style="font-family: 'Oswald'" target="_blank" href="{{url('')}}" class="btn btn-primary d-none d-lg-block m-l-15"><i class="fas fa-globe"></i> Check Website
+                            <a style="font-family: 'Oswald'" target="_blank" href="{{url('')}}" class="btn btn-info d-none d-lg-block m-l-15"><i class="fas fa-globe"></i> Check Website
                             </a>
                         </div>
                     </div>
