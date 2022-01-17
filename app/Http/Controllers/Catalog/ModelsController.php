@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Catalog;
 
+use App\Http\Controllers\Controller;
 use App\Models\Brand;
-use App\Models\Car;
-use App\Models\CarImage;
 use App\Models\CarModel;
 use App\Models\CarType;
 use App\Models\ModelColor;
 use App\Models\ModelImage;
 use App\Services\FilesHandler;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 
 class ModelsController extends Controller
 {

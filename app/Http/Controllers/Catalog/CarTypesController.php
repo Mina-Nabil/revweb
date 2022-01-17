@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Catalog;
 
+use App\Http\Controllers\Controller;
 use App\Models\CarType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

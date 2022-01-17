@@ -15,27 +15,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Showroom Management routes
-Route::get('/showroom', "ShowroomProfileApi@getShowroom");
-Route::get('/get/banking', "ShowroomProfileApi@getBankInfo");
-Route::post('/set/banking', "ShowroomProfileApi@setBankInfo");
-Route::delete('/delete/banking', "ShowroomProfileApi@deleteBankInfo");
-Route::post('/create/showroom', "ShowroomProfileApi@createShowroom");
-Route::get('/cities', "ShowroomProfileApi@getCities");
+Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");
+Route::get('/get/banking', "Api\ShowroomProfileApi@getBankInfo");
+Route::post('/set/banking', "Api\ShowroomProfileApi@setBankInfo");
+Route::delete('/delete/banking', "Api\ShowroomProfileApi@deleteBankInfo");
+Route::post('/create/showroom', "Api\ShowroomProfileApi@createShowroom");
+Route::get('/cities', "Api\ShowroomProfileApi@getCities");
 
 //catalog functions
-Route::get('/get/catalog', "ShowroomCatalogApiController@getCatalog");
-Route::delete('/remove/car', "ShowroomCatalogApiController@removeCar");
-Route::get('/remove/year', "ShowroomCatalogApiController@removeYear");
-Route::post('/set/brands', "ShowroomCatalogApiController@setBrands");
-Route::get('/get/all/brands', "ShowroomCatalogApiController@getAllBrands");
-Route::get('/get/models/{brandID}', "ShowroomCatalogApiController@getModelsByBrand");
-Route::get('/get/cars/{modelID}', "ShowroomCatalogApiController@getCarsByModel");
-Route::get('/get/colors/{modelID}', "ShowroomCatalogApiController@getColorsByModel");
-Route::get('/get/my/brands', "ShowroomCatalogApiController@getShowroomBrands");
-Route::get('/get/carpool', "ShowroomCatalogApiController@getCatalogCarPool");
-Route::post('/add/car', "ShowroomCatalogApiController@addCarsToCatalog");
+Route::get('/get/catalog', "Api\ShowroomCatalogApiController@getCatalog");
+Route::delete('/remove/car', "Api\ShowroomCatalogApiController@removeCar");
+Route::get('/remove/year', "Api\ShowroomCatalogApiController@removeYear");
+Route::post('/set/brands', "Api\ShowroomCatalogApiController@setBrands");
+Route::get('/get/all/brands', "Api\ShowroomCatalogApiController@getAllBrands");
+Route::get('/get/models/{brandID}', "Api\ShowroomCatalogApiController@getModelsByBrand");
+Route::get('/get/cars/{modelID}', "Api\ShowroomCatalogApiController@getCarsByModel");
+Route::get('/get/colors/{modelID}', "Api\ShowroomCatalogApiController@getColorsByModel");
+Route::get('/get/my/brands', "Api\ShowroomCatalogApiController@getShowroomBrands");
+Route::get('/get/carpool', "Api\ShowroomCatalogApiController@getCatalogCarPool");
+Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
 
 
 //profile functions
-Route::get('/user', "SellersProfileApi@getUser");
-Route::post('/update', "SellersProfileApi@updateSellerData");
+Route::get('/user', "Api\SellersProfileApi@getUser");
+Route::post('/update', "Api\SellersProfileApi@updateSellerData");

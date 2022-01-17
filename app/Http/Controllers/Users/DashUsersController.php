@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\Controller;
 use App\Models\DashType;
 use App\Models\DashUser;
 use Illuminate\Http\Request;

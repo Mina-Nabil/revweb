@@ -17,7 +17,7 @@ class CreateBuyersTable extends Migration
             $table->id();
             $table->string("BUYR_NAME");
             $table->string("BUYR_MAIL")->unique();
-            $table->string("BUYR_MOB1");
+            $table->string("BUYR_MOB1")->unique();
             $table->date("BUYR_BDAY");
             $table->string("BUYR_PASS");
             $table->enum("BUYR_GNDR", ["Male", "Female", "Prefer not to Say"]);
