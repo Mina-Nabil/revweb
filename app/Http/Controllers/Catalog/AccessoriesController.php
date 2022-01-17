@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Catalog;
 
+use App\Http\Controllers\Controller;
 use App\Models\Accessories;
 use Exception;
 use Illuminate\Http\Request;

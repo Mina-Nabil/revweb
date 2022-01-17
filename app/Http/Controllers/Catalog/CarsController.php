@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Catalog;
 
+use App\Http\Controllers\Controller;
 use App\Models\Accessories;
 use App\Models\Car;
-use App\Models\CarAccessory;
 use App\Models\CarImage;
 use App\Models\CarModel;
 use App\Services\FilesHandler;

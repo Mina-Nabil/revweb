@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/user', "BuyersProfileApi@getUser");
+Route::get('/user', "Api\BuyersProfileApi@getUser");
