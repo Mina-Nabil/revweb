@@ -18,8 +18,8 @@ class DashUsersController extends Controller
         $this->data['title'] = "Dashboard Users";
         $this->data['subTitle'] = "Manage All Dashboard Users";
         $this->data['cols'] = ['Username', 'Fullname', 'Type', 'Edit'];
-        $this->data['atts'] = ['DASH_USNM', 'DASH_FLNM', ['foreign' => ['dash_types', 'DHTP_NAME']], ['edit' => ['url' => 'dash/users/edit/', 'att' => 'id']]];
-        $this->data['homeURL'] = 'dash/users/all';
+        $this->data['atts'] = ['DASH_USNM', 'DASH_FLNM', ['foreign' => ['rel' => 'dash_types', 'att' => 'DHTP_NAME']], ['edit' => ['url' => 'admin/dash/users/edit/', 'att' => 'id']]];
+        $this->data['homeURL'] = 'admin/dash/users/all';
     }
 
     public function index()
@@ -28,7 +28,7 @@ class DashUsersController extends Controller
         $this->initDataArr();
         $this->data['formTitle'] = "Add Admins";
         $this->data['isPassNeeded'] = true;
-        $this->data['formURL'] = "dash/users/insert";
+        $this->data['formURL'] = "admin/dash/users/insert";
         $this->data['isCancel'] = false;
         return view("auth.dashusers", $this->data);
     }
@@ -39,7 +39,7 @@ class DashUsersController extends Controller
         $this->data['user'] = DashUser::findOrFail($id);
         $this->data['formTitle'] = "Manage Admin(" . $this->data['user']->DASH_USNM . ')';
         $this->data['isPassNeeded'] = false;
-        $this->data['formURL'] = "dash/users/update";
+        $this->data['formURL'] = "admin/dash/users/update";
         $this->data['isCancel'] = true;
         return view("auth.dashusers", $this->data);
     }
@@ -66,37 +66,38 @@ class DashUsersController extends Controller
 
         $dashUser->save();
 
-        return redirect("dash/users/all");
+        return redirect("admin/dash/users/all");
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
 
         $request->validate([
             'id' => 'required',
             'name' => 'required',
             'fullname' => "required",
             'type' => 'required'
-            ]);
-            
+        ]);
+
         $dashUser = DashUser::findOrFail($request->id);
-       
+
         $dashUser->DASH_USNM = $request->name;
         $dashUser->DASH_FLNM = $request->fullname;
         $dashUser->DASH_TYPE_ID = $request->type;
 
-        if(isset($request->password)  && strcmp(trim($request->password), '') != 0){
+        if (isset($request->password)  && strcmp(trim($request->password), '') != 0) {
             $dashUser->DASH_PASS = bcrypt($request->password);
         }
 
         if ($request->hasFile('photo')) {
             $dashUser->DASH_IMGE = $request->photo->store('images/users', 'public');
-            if (file_exists($request->oldPath)){
+            if (file_exists($request->oldPath)) {
                 unlink($request->oldPath);
             }
         }
 
         $dashUser->save();
 
-        return redirect("dash/users/all");
+        return redirect("admin/dash/users/all");
     }
 }
