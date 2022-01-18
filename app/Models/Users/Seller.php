@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class Seller extends Authenticatable
 {
@@ -87,11 +88,13 @@ class Seller extends Authenticatable
         }
     }
 
-    function getCarsSoldPrice(){
+    function getCarsSoldPrice()
+    {
         return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->sum('OFFR_PRCE');
     }
 
-    function getCarsSoldCount(){
+    function getCarsSoldCount()
+    {
         return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->count();
     }
 
@@ -220,18 +223,20 @@ class Seller extends Authenticatable
         $joinRequest = $this->joinRequests()->where("join_requests.id", $requestID)->first();
         if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SHOWROOM)
             return $joinRequest->acceptRequest();
-        else 
+        else
             return false;
     }
 
-    function submitJoinShowroomRequest($showroomID){
+    function submitJoinShowroomRequest($showroomID)
+    {
         return $this->joinRequests()->updateOrCreate([
             "JNRQ_SHRM_ID"  =>  $showroomID,
             "JNRQ_STTS"     =>  JoinRequest::REQ_BY_SELLER
         ]);
     }
 
-    function deleteJoinShowroomRequest($requestID){
+    function deleteJoinShowroomRequest($requestID)
+    {
         return $this->joinRequests()->where("join_requests.id", $requestID)->delete();
     }
 
@@ -249,6 +254,12 @@ class Seller extends Authenticatable
         else return false;
     }
 
+    //Accessors
+    public function getImageUrlAttribute()
+    {
+        return (isset($this->SLLR_IMGE)) ? Storage::url($this->SLLR_IMGE) : null;
+    }
+
     ////relation
     public function showroom()
     {
@@ -260,9 +271,9 @@ class Seller extends Authenticatable
         return $this->hasMany(JoinRequest::class, "JNRQ_SLLR_ID");
     }
 
-    public function offers(){
+    public function offers()
+    {
         return $this->hasMany(Offer::class, "OFFR_SLLR_ID");
-
     }
     ///Authentication attributes
     /**

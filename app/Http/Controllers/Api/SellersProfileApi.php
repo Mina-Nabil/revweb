@@ -21,7 +21,7 @@ class SellersProfileApi extends BaseApiController
             "email"         => "required|unique:sellers,SLLR_MAIL",
             "password"      => "required|min:6",
             "mobNumber1"    => "required|unique:sellers,SLLR_MOB1",
-            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
+            "displayImage"  =>  "nullable|image|between:0,10000", //10 MB max
 
         ], "Seller Registration Failed");
         $filesHandler = new FilesHandler();

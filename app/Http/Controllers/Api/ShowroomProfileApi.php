@@ -23,7 +23,7 @@ class ShowroomProfileApi extends BaseApiController
             "mobNumber1"    => "required",
             "address"    => "required",
             "cityID"    => "required|exists:cities,id",
-            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
+            "displayImage"  =>  "nullable|image|between:0,10000", //10 MB max
         ], "Showroom Creation Failed");
 
         $filesHandler = new FilesHandler();
