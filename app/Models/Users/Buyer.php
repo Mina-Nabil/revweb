@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;

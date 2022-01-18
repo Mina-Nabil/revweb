@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cars;
 
 use App\Services\FilesHandler;
 use Exception;

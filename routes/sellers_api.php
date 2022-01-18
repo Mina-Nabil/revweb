@@ -21,6 +21,11 @@ Route::post('/set/banking', "Api\ShowroomProfileApi@setBankInfo");
 Route::delete('/delete/banking', "Api\ShowroomProfileApi@deleteBankInfo");
 Route::post('/create/showroom', "Api\ShowroomProfileApi@createShowroom");
 Route::get('/cities', "Api\ShowroomProfileApi@getCities");
+Route::post('/search/sellers', "Api\ShowroomProfileApi@searchSellers");
+Route::get('/get/invitations', "Api\ShowroomProfileApi@getJoinRequests");
+Route::post('/invite/seller', "Api\ShowroomProfileApi@inviteSellerToShowroom");
+Route::delete('/delete/request', "Api\ShowroomProfileApi@deleteSellerInvitation");
+Route::post('/accept/seller', "Api\ShowroomProfileApi@acceptJoinRequest");
 
 //catalog functions
 Route::get('/get/catalog', "Api\ShowroomCatalogApiController@getCatalog");
@@ -39,3 +44,9 @@ Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
 //profile functions
 Route::get('/user', "Api\SellersProfileApi@getUser");
 Route::post('/update', "Api\SellersProfileApi@updateSellerData");
+Route::post('/search/showrooms', "Api\SellersProfileApi@searchShowrooms");
+Route::get('/get/joinrequests', "Api\SellersProfileApi@getJoinRequests");
+Route::post('/submit/join/request', "Api\SellersProfileApi@submitShowroomJoinRequest");
+Route::post('/accept/invitation', "Api\SellersProfileApi@acceptShowroomInvitation");
+Route::get('/leave/showroom', "Api\SellersProfileApi@leaveShowroom");
+Route::delete('/delete/showroom', "Api\SellersProfileApi@deleteShowroom");

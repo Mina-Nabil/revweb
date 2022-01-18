@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Brand;
-use App\Models\Car;
-use App\Models\CarModel;
+use App\Models\Cars\Brand;
+use App\Models\Cars\Car;
+use App\Models\Cars\CarModel;
 use Illuminate\Http\Request;
 
 class ShowroomCatalogApiController extends BaseApiController

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cars;
 
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
@@ -56,8 +56,8 @@ class Car extends Model
         return $this->image;
     }
 
-    public function getisOwnedAttribute(){
-
+    public function getisOwnedAttribute()
+    {
     }
 
     public function getImageUrlAttribute()
@@ -76,12 +76,12 @@ class Car extends Model
 
     public function model()
     {
-        return $this->belongsTo('App\Models\CarModel', 'CAR_MODL_ID');
+        return $this->belongsTo(CarModel::class, 'CAR_MODL_ID');
     }
 
     public function accessories()
     {
-        return $this->belongsToMany('App\Models\Accessories', "accessories_cars", "ACCR_CAR_ID", "ACCR_ACSR_ID")
+        return $this->belongsToMany(Accessories::class, "accessories_cars", "ACCR_CAR_ID", "ACCR_ACSR_ID")
             ->withPivot('ACCR_VLUE');
     }
 
@@ -110,7 +110,7 @@ class Car extends Model
 
     public function images()
     {
-        return $this->hasMany('App\Models\CarImage', 'CIMG_CAR_ID');
+        return $this->hasMany(CarImage::class, 'CIMG_CAR_ID');
     }
 
     public function getFullAccessoriesArray()

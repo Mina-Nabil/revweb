@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
+use App\Models\Cars\Brand;
+use App\Models\Cars\CatalogItem;
+use App\Models\Cars\CatalogItemDetails;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +24,8 @@ class Showroom extends Model
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s';
+
+    use SoftDeletes;
 
     /***
      * Retrieves all the cars & colors the showroom is selling
@@ -231,6 +237,33 @@ class Showroom extends Model
         return $this->save();
     }
 
+    function inviteSellerToShowroom($sellerID)
+    {
+        try {
+            $this->joinRequests()->create([
+                "JNRQ_SLLR_ID"  =>  $sellerID,
+                "JNRQ_STTS"     =>  JoinRequest::REQ_BY_SHOWROOM
+            ]);
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    function deleteJoinShowroomRequest($requestID)
+    {
+        return $this->joinRequests()->where("join_requests.id", $requestID)->delete();
+    }
+
+    function acceptJoinRequest($requestID)
+    {
+        $joinRequest = $this->joinRequests()->where("join_requests.id", $requestID)->first();
+        if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SELLER)
+            return $joinRequest->acceptRequest();
+        else 
+            return false;
+    }
+
     function toggleRecordVerificationStatus($status = true)
     {
         if ($status)
@@ -335,6 +368,28 @@ class Showroom extends Model
         }
     }
 
+    function deleteShowroom()
+    {
+        try {
+            DB::transaction(function () {
+                $this->joinRequests()->delete();
+                $this->bankInfo()->delete();
+                foreach ($this->sellers as $seller) {
+                    $seller->unsetShowroom();
+                }
+                foreach ($this->catalogItems as $item) {
+                    foreach ($item->details as $color) {
+                        $color->delete();
+                    }
+                    $item->delete();
+                }
+            });
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     ////Accessors
     public function getCreatedAtAttribute($date)
     {
@@ -344,6 +399,32 @@ class Showroom extends Model
     public function getUpdatedAtAttribute($date)
     {
         return Carbon::createFromDate($date)->format("Y-m-d H:i:s");
+    }
+
+    /**
+     * 
+     * @return array managersIDs including the owner
+     */
+    public function getManagers()
+    {
+        $ret = [];
+        $ret[0] = $this->SHRM_OWNR_ID;
+        $adminSellers = $this->sellers()->where("SLLR_CAN_MNGR", 1)->get();
+        $i = 1;
+        foreach ($adminSellers as $admin) {
+            $ret[$i++] = $admin->id;
+        }
+        return $ret;
+    }
+
+    /**
+     * Checks if the seller is associated with the showroom
+     * @param sellerID seller id 
+     * @return bool true if the seller is associated with the showroom
+     */
+    public function hasSeller(int $sellerID)
+    {
+        return ($this->sellers()->where("sellers.id", $sellerID)->get()->count() > 0);
     }
 
     ///relations
@@ -374,12 +455,7 @@ class Showroom extends Model
 
     public function joinRequests()
     {
-        $this->hasMany(JoinRequest::class, "JNRQ_SHRM_ID");
-    }
-
-    public function requestingSellers()
-    {
-        return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
+        return $this->hasMany(JoinRequest::class, "JNRQ_SHRM_ID");
     }
 
     /****
@@ -389,7 +465,7 @@ class Showroom extends Model
     public function isOwner()
     {
         $seller = Auth::user();
-        return (is_a($seller, "App\Models\Seller") && $this->SHRM_OWNR_ID == $seller->id);
+        return (is_a($seller, Seller::class) && $this->SHRM_OWNR_ID == $seller->id);
     }
 
     /****
@@ -399,6 +475,6 @@ class Showroom extends Model
     public function isManager()
     {
         $seller = Auth::user();
-        return $this->isOwner() || is_a($seller, "Seller") && $this->id == $seller->SLLR_SHRM_ID;
+        return $this->isOwner() || is_a($seller, Seller::class) && $this->id == $seller->SLLR_SHRM_ID;
     }
 }

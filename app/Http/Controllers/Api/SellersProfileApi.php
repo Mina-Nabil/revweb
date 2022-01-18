@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Seller;
+use App\Models\Users\JoinRequest;
+use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
 use App\Services\FilesHandler;
+use App\Services\PushNotificationsHandler;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -47,7 +50,7 @@ class SellersProfileApi extends BaseApiController
     {
         $seller = $request->user();
         $seller->load("showroom");
-        parent::sendResponse(true, "User Retrieved Successfully", (object)["user" => $request->user()]);
+        parent::sendResponse(true, "User Retrieved Successfully", (object)["user" => $seller]);
     }
 
     function login(Request $request)
@@ -107,9 +110,102 @@ class SellersProfileApi extends BaseApiController
         }
     }
 
+    function acceptShowroomInvitation(Request $request)
+    {
+        parent::validateRequest($request, [
+            "joinRequestID" => "required|exists:join_requests,id"
+        ]);
+        $seller = $request->user();
+        $ret = $seller->acceptJoinInvitation($request->joinRequestID);
+        if ($ret) {
+            parent::sendResponse(true, "Request Accepted", null, false);
+            $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
+            $joinRequest->load('showroom');
+            $joinRequest->showroom->getManagers();
+            $pushNotificationService = new PushNotificationsHandler();
+            $pushNotificationService->sendPushNotification("Invitation Accepted", $seller->SLLR_NAME . " has joined your Team!", [$joinRequest->showroom->getManagers()], 'path/to/team_page');
+        } else
+            parent::sendResponse(false, "Operation Failed");
+    }
+
+    function searchShowrooms(Request $request)
+    {
+        parent::validateRequest($request, [
+            "searchText" => "required|string"
+        ]);
+        if (is_string($request->searchText) && strlen($request->searchText) > 2) {
+            $res = Showroom::where("SHRM_NAME", "LIKE", "%" . $request->searchText . "%")->get();
+            parent::sendResponse(true, "Sellers Retrieved", (object) ["sellers" =>  $res]);
+        } else {
+            parent::sendResponse(true, "Sellers Retrieved", []);
+        }
+    }
+
+    function getJoinRequests(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load("joinRequests");
+        parent::sendResponse(true, "Requests Retrieved Successfully", (object)["requests" => $seller->joinRequests]);
+    }
+
+    function submitShowroomJoinRequest(Request $request)
+    {
+        parent::validateRequest($request, [
+            "showroomID" => "required|exists:showrooms,id"
+        ]);
+        $seller = $request->user();
+        $showroom = Showroom::findOrFail($request->showroomID);
+        $seller->load('showroom');
+        if (!isset($seller->showroom) && !$showroom->hasSeller($seller->id)) {
+            $ret = $seller->submitJoinShowroomRequest($request->showroomID);
+            if ($ret) {
+                parent::sendResponse(true, "Request Submitted", (object)["newRequest" => $ret]);
+                $showroom =  Showroom::findOrFail($request->showroomID);
+                $pushNotificationService = new PushNotificationsHandler();
+                $pushNotificationService->sendPushNotification("New Join Request", $seller->SLLR_NAME . " want to join your showroom!", [$showroom->getManagers()], 'path/to/join_requests_page');
+            } else {
+                parent::sendResponse(false, "Request Failed");
+            }
+        } else {
+            parent::sendResponse(false, "Request Inapplicable");
+        }
+    }
+
+    function leaveShowroom(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load("showroom");
+        if (isset($seller->showroom) && !$seller->showroom->isOwner()) {
+            $ret = $seller->unsetShowroom();
+            if ($ret) {
+                parent::sendResponse(true, "Left Showroom");
+            } else {
+                parent::sendResponse(false, "Request Failed");
+            }
+        } else {
+            parent::sendResponse(false, "Request Invalid");
+        }
+    }
+
+    function deleteShowroom(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load("showroom");
+        if (isset($seller->showroom) && $seller->showroom->isOwner()) {
+            $ret = $seller->showroom->deleteShowroom();
+            if ($ret) {
+                parent::sendResponse(true, "Showroom Deleted");
+            } else {
+                parent::sendResponse(false, "Request Failed");
+            }
+        } else {
+            parent::sendResponse(false, "Request Invalid");
+        }
+    }
+
     function isEmailTaken(Request $request)
     {
-        $request->validate([
+        $request->validateRequest([
             "email" => "required"
         ]);
         $taken = Seller::isEmailTaken($request->email);
@@ -118,7 +214,7 @@ class SellersProfileApi extends BaseApiController
 
     function isPhoneTaken(Request $request)
     {
-        $request->validate([
+        $request->validateRequest([
             "phone" => "required"
         ]);
         $taken = Seller::isPhoneTaken($request->phone);

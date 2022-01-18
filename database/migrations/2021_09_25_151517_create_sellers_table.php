@@ -24,6 +24,7 @@ class CreateSellersTable extends Migration
             $table->integer("SLLR_MOB1_VRFD")->default(0);
             $table->string("SLLR_MOB2")->nullable();
             $table->integer("SLLR_MOB2_VRFD")->default(0);
+            $table->string("SLLR_PUSH_ID")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

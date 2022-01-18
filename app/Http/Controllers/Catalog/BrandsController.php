@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
+use App\Models\Cars\Brand;
 use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class BrandsController extends Controller

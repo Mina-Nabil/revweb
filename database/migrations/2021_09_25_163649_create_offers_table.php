@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Offers\Offer;
+use App\Models\Offers\OfferRequest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,15 +20,15 @@ class CreateOffersTable extends Migration
             $table->foreignId("OFRQ_BUYR_ID")->constrained("buyers"); //buyer
             $table->foreignId("OFRQ_CAR_ID")->constrained("cars");
             $table->date("OFRQ_DATE");
-            $table->enum("OFRQ_STTS", ["New", "RepliedTo", "Cancelled", "Done"]);
-            $table->enum("OFRQ_PRFD_PYMT", ["Cash", "Loan"]);
+            $table->enum("OFRQ_STTS", OfferRequest::STATES);
+            $table->enum("OFRQ_PRFD_PYMT", OfferRequest::PYMT_STATES);
             $table->string("OFRQ_CMNT")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
         Schema::create('offers_requests_colors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("OFRC_OFRQ_ID")->constrained("buyers");
+            $table->foreignId("OFRC_OFRQ_ID")->constrained("offers_requests");
             $table->foreignId("OFRC_COLR_ID")->constrained("model_colors");
             $table->integer("OFRC_PRTY")->default(0);
             $table->softDeletes();
@@ -45,7 +47,7 @@ class CreateOffersTable extends Migration
             $table->dateTime("OFFR_STRT_DATE");
             $table->date("OFFR_EXPR_DATE");
             $table->text("OFFR_SLLR_CMNT")->nullable();
-            $table->enum("OFFR_STTS", ["New", "Expired", "Accepted", "Declined"])->nullable();
+            $table->enum("OFFR_STTS", Offer::STATES)->nullable();
             $table->text("OFFR_BUYR_CMNT")->nullable();
             $table->timestamps();
         });

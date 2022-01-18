@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::post('/submit/request', "Api\OffersApiController@submitOfferRequest");
 Route::get('/user', "Api\BuyersProfileApi@getUser");
