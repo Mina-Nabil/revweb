@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\DashUser;
+use App\Models\Users\DashUser;
 use Closure;
 
 class AuthenticateAdmin

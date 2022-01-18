@@ -80,15 +80,15 @@ return [
     'providers' => [
         'sellers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Seller::class,
+            'model' => App\Models\Users\Seller::class,
         ],
         'buyers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Buyer::class,
+            'model' => App\Models\Users\Buyer::class,
         ],
         'dash_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\DashUser::class,
+            'model' => App\Models\Users\DashUser::class,
         ],
 
         // 'users' => [

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Models\DashType;
-use App\Models\DashUser;
+use App\Models\Users\DashType;
+use App\Models\Users\DashUser;
 use Illuminate\Http\Request;
 
 class DashUsersController extends Controller

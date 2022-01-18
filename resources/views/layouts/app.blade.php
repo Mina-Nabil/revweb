@@ -165,6 +165,21 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
 
+                        <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fas fa-file-contract"></i><span class="hide-menu">Offers</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('admin/requests/show')}}">Requests</a></li>
+                                <li><a href="{{url('admin/offers/show')}}">Offers</a></li>
+                            </ul>
+                        </li>
+
+                        <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fas fa-users"></i><span class="hide-menu">Stakeholders</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('admin/showrooms/show')}}">Showrooms</a></li>
+                                <li><a href="{{url('admin/sellers/show')}}">Sellers</a></li>
+                                <li><a href="{{url('admin/buyers/show')}}">Buyers</a></li>
+                            </ul>
+                        </li>
+
                         <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fas fa-car"></i><span class="hide-menu">Cars</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{url('admin/cars/show')}}">Show All</a></li>

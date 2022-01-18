@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cars;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class CarAccessory extends Model
     public $timestamps = false;
 
     function car(){
-        return $this->belongsTo('App\Models\Car', 'ACCR_CAR_ID');
+        return $this->belongsTo(Car::class, 'ACCR_CAR_ID');
     }
 
     function accessory(){
-        return $this->belongsTo('App\Models\Accessories', 'ACCR_ACSR_ID');
+        return $this->belongsTo(Accessories::class, 'ACCR_ACSR_ID');
     }
 
     function unlink(){

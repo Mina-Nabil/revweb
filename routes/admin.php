@@ -4,10 +4,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-//buyers routes
-
 
 //offer routes
+Route::get('offers/show', 'Offers\OffersController@home');
+Route::get('offers/show/{id}', 'Offers\OffersController@details');
+Route::get('requests/show', 'Offers\RequestsController@home');
+Route::get('requests/show/{id}', 'Offers\RequestsController@details');
+
+//users routes
+Route::get('buyers/show', 'Users\BuyersController@home');
+Route::get('buyers/show/{id}', 'Users\BuyersController@details');
+Route::get('sellers/show', 'Users\SellersController@home');
+Route::get('sellers/show/{id}', 'Users\SellersController@details');
+Route::get('showrooms/show', 'Users\ShowroomsController@home');
+Route::get('showrooms/show/{id}', 'Users\ShowroomsController@details');
 
 
 //cars routes

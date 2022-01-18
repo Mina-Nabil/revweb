@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -33,6 +32,6 @@ class DashUser extends Authenticatable
     }
 
     public function dash_types(){
-        return $this->hasOne( "App\Models\DashType" , 'id', 'DASH_TYPE_ID');
+        return $this->hasOne( DashType::class , 'id', 'DASH_TYPE_ID');
     }
 }

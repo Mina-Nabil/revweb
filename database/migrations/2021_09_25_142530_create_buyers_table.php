@@ -30,6 +30,7 @@ class CreateBuyersTable extends Migration
             $table->string("BUYR_IMGE")->nullable();
             $table->string("BUYR_NTID")->nullable();
             $table->string("BUYR_FBAC")->nullable(); //fb account
+            $table->string("BUYR_PUSH_ID")->nullable();
             $table->string("BUYR_NTID_FRNT")->nullable();
             $table->string("BUYR_NTID_BACK")->nullable();
             $table->enum("BUYR_NTID_STTS", ["Undelivered", "Submitted", "Rejected", "Valid"])->default("Undelivered");

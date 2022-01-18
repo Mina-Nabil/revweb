@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
+use App\Models\Offers\Offer;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
 
 class Seller extends Authenticatable
 {
@@ -86,6 +85,14 @@ class Seller extends Authenticatable
         } else {
             return -1; //incorrect email
         }
+    }
+
+    function getCarsSoldPrice(){
+        return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->sum('OFFR_PRCE');
+    }
+
+    function getCarsSoldCount(){
+        return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->count();
     }
 
     function initiateEmailVerfication()
@@ -176,6 +183,16 @@ class Seller extends Authenticatable
         }
     }
 
+    function setAsManager($showroomID)
+    {
+        $this->SLLR_CAN_MNGR = 1;
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
     function setShowroom($showroomID)
     {
         $this->SLLR_SHRM_ID = $showroomID;
@@ -184,6 +201,38 @@ class Seller extends Authenticatable
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    function unsetShowroom()
+    {
+        $this->SLLR_SHRM_ID = NULL;
+        $this->SLLR_CAN_MNGR = 0;
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+
+    function acceptJoinInvitation($requestID)
+    {
+        $joinRequest = $this->joinRequests()->where("join_requests.id", $requestID)->first();
+        if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SHOWROOM)
+            return $joinRequest->acceptRequest();
+        else 
+            return false;
+    }
+
+    function submitJoinShowroomRequest($showroomID){
+        return $this->joinRequests()->updateOrCreate([
+            "JNRQ_SHRM_ID"  =>  $showroomID,
+            "JNRQ_STTS"     =>  JoinRequest::REQ_BY_SELLER
+        ]);
+    }
+
+    function deleteJoinShowroomRequest($requestID){
+        return $this->joinRequests()->where("join_requests.id", $requestID)->delete();
     }
 
     public static function isEmailTaken($email)
@@ -211,10 +260,10 @@ class Seller extends Authenticatable
         return $this->hasMany(JoinRequest::class, "JNRQ_SLLR_ID");
     }
 
-    public function showroomRequests(){
-        return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SLLR_ID", "JNRQ_SHRM_ID");
-    }
+    public function offers(){
+        return $this->hasMany(Offer::class, "OFFR_SLLR_ID");
 
+    }
     ///Authentication attributes
     /**
      * Get the login username to be used by the controller.

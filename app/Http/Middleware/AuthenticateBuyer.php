@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\BaseApiController;
-use App\Models\Buyer;
+use App\Http\Controllers\Api\BaseApiController;
+use App\Models\Users\Buyer;
 use Closure;
 
 class AuthenticateBuyer

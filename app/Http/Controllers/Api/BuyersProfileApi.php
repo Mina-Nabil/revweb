@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Buyer;
+use App\Models\Users\Buyer;
 use App\Services\FilesHandler;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class BuyersProfileApi extends BaseApiController
@@ -20,8 +19,8 @@ class BuyersProfileApi extends BaseApiController
         if (parent::validateRequest($request, [
             "name"          => "required",
             "email"         => "required|unique:buyers,BUYR_MAIL",
-            "mobNumber1"    => "required|unique:buyers,BUYR_MOB1|size,11",
-            "mobNumber1"    => "required|unique:buyers,BUYR_MOB2",
+            "mobNumber1"    => "required|unique:buyers,BUYR_MOB1|size:11",
+            "mobNumber2"    => "nullable|unique:buyers,BUYR_MOB2",
             "password"      => "required|size:8",
             "deviceName"    => "required",
             "mobNumber2"    => "nullable|size:11",

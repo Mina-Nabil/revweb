@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\City;
-use App\Models\Country;
-use App\Models\Showroom;
+use App\Models\Cars\Country;
+use App\Models\Users\JoinRequest;
+use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
 use App\Rules\Iban;
 use App\Services\FilesHandler;
+use App\Services\PushNotificationsHandler;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ShowroomProfileApi extends BaseApiController
 {
     function createShowroom(Request $request)
     {
         parent::validateRequest($request, [
-            "name"          => "required",
+            "name"          => "required|unique:showrooms,SHRM_NAME",
             "email"         => "required|email",
             "mobNumber1"    => "required",
             "address"    => "required",
@@ -57,6 +60,99 @@ class ShowroomProfileApi extends BaseApiController
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
     }
 
+    function searchSellers(Request $request)
+    {
+        parent::validateRequest($request, [
+            "searchText" => "required|string"
+        ]);
+        if (is_string($request->searchText) && strlen($request->searchText) > 2) {
+            $res = Seller::where("SLLR_NAME", "LIKE", "%" . $request->searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $request->searchText . "%")
+                ->orWhere("SLLR_MOB1", "LIKE", "%" . $request->searchText . "%")
+                ->orWhere("SLLR_MOB2", "LIKE", "%" . $request->searchText . "%")->get();
+            parent::sendResponse(true, "Sellers Retrieved", (object) ["sellers" =>  $res]);
+        } else {
+            parent::sendResponse(true, "Sellers Retrieved", []);
+        }
+    }
+
+    function getJoinRequests(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        if(isset($seller->showroom) && $seller->showroom->isManager()){
+            $seller->showroom->load('joinRequests');
+            parent::sendResponse(true, "Requests Retrieved", (object) ["requests" =>  $seller->showroom->joinRequests]);
+        } else {
+            parent::sendResponse(false, "Unauthorized");
+        }
+    }
+
+    function acceptJoinRequest(Request $request)
+    {
+        parent::validateRequest($request, [
+            "joinRequestID" => "required|exists:join_requests,id"
+        ]);
+        $seller = $request->user();
+        $seller->load('showroom');
+        if ($seller->showroom->isManager()) {
+            $ret = $seller->showroom->acceptJoinRequest($request->joinRequestID);
+            if ($ret) {
+                parent::sendResponse(true, "Request Accepted", null, false);
+                $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
+                $pushNotificationService = new PushNotificationsHandler();
+                $pushNotificationService->sendPushNotification("Join Request Accepted", $seller->showroom->SHRM_NAME . " accepted you to join the showroom Sales Team!", [$joinRequest->JNRQ_SLLR_ID], 'path/to/join_requests_page');
+            } else
+                parent::sendResponse(false, "Operation Failed");
+        } else {
+            parent::sendResponse(false, "Unauthorized");
+        }
+    }
+
+    function inviteSellerToShowroom(Request $request)
+    {
+        parent::validateRequest($request, [
+            "sellerID" => "required|exists:sellers,id"
+        ]);
+        $seller = $request->user();
+        $seller->load('showroom');
+        if (!isset($seller->showroom)) {
+            parent::sendResponse(false, "Unauthorized");
+        }
+        if ($seller->showroom->hasSeller($request->sellerID)) {
+            parent::sendResponse(false, "Inapplicable");
+        }
+        $ret = $seller->showroom->inviteSellerToShowroom($request->sellerID);
+        if ($ret) {
+            parent::sendResponse(true, "Request Submitted", null, false);
+            $invitedSeller = Seller::findOrFail($request->sellerID);
+            $pushNotificationService = new PushNotificationsHandler();
+            $pushNotificationService->sendPushNotification("New Showroom Invitation", $seller->showroom->SHRM_NAME . " invites you to join the showroom Sales Team!", [$invitedSeller->id], 'path/to/join_requests_page');
+        } else {
+            parent::sendResponse(false, "Unauthorized");
+        }
+    }
+
+    function deleteSellerInvitation(Request $request)
+    {
+        parent::validate($request, [
+            "joinRequestID" => "required|exists:join_requests,id"
+        ]);
+        $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
+        $seller = Auth::user();
+        $showroomToJoin = Showroom::findOrFail($joinRequest->JNRQ_SHRM_ID);
+        if ($seller->id == $joinRequest->JNRQ_SLLR_ID || $showroomToJoin->isManager()) {
+            $ret = $showroomToJoin->deleteJoinShowroomRequest($request->joinRequestID);
+            if ($ret) {
+                parent::sendResponse(true, "deleted");
+            } else {
+                parent::sendResponse(false, "Failed");
+            }
+        } else {
+            parent::sendResponse(false, "Unauthorized");
+        }
+    }
+
+    //showroom info
     function getBankInfo(Request $request)
     {
         $seller = $request->user();

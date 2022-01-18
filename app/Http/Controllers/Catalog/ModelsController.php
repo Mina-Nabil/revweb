@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
-use App\Models\CarModel;
-use App\Models\CarType;
-use App\Models\ModelColor;
-use App\Models\ModelImage;
+use App\Models\Cars\Brand;
+use App\Models\Cars\CarModel;
+use App\Models\Cars\CarType;
+use App\Models\Cars\ModelColor;
+use App\Models\Cars\ModelImage;
 use App\Services\FilesHandler;
 use Illuminate\Http\Request;
 

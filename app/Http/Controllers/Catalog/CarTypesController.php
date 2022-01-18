@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Models\CarType;
+use App\Models\Cars\CarType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

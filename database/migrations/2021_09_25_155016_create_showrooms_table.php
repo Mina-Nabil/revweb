@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Users\JoinRequest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ class CreateShowroomsTable extends Migration
             $table->id();
             $table->foreignId("SHRM_OWNR_ID")->constrained("sellers");
             $table->foreignId("SHRM_CITY_ID")->constrained("cities");
-            $table->string("SHRM_NAME");
+            $table->string("SHRM_NAME")->unique();
             $table->string("SHRM_MAIL");
             $table->string("SHRM_ADRS");
             $table->string("SHRM_MOB1");
@@ -37,6 +38,7 @@ class CreateShowroomsTable extends Migration
             $table->double("SHRM_OFRS_SENT")->default(0);
             $table->double("SHRM_OFRS_ACPT")->default(0); //offers accepted by buyers
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table('sellers', function (Blueprint $table){
@@ -45,11 +47,11 @@ class CreateShowroomsTable extends Migration
         });
 
         //handling join requests between showrooms and sellers
-        Schema::create('join_request', function (Blueprint $table){
+        Schema::create('join_requests', function (Blueprint $table){
             $table->id();
             $table->foreignId("JNRQ_SLLR_ID")->constrained("sellers");
             $table->foreignId("JNRQ_SHRM_ID")->constrained("showrooms"); 
-            $table->enum("JNRQ_STTS", ["Seller Requested", "Showroom Requested", "Joined"]);
+            $table->enum("JNRQ_STTS", JoinRequest::STATES);
             $table->timestamps();
         });
 
@@ -62,7 +64,7 @@ class CreateShowroomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('join_request');
+        Schema::dropIfExists('join_requests');
         Schema::table('sellers', function (Blueprint $table){
             $table->dropForeign(["SLLR_SHRM_ID"]);
             $table->dropColumn("SLLR_SHRM_ID"); 

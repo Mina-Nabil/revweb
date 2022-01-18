@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cars;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -16,17 +16,17 @@ class CarModel extends Model
 
     public function brand()
     {
-        return $this->belongsTo('App\Models\Brand', 'MODL_BRND_ID');
+        return $this->belongsTo(Brand::class, 'MODL_BRND_ID');
     }
 
     public function type()
     {
-        return $this->belongsTo('App\Models\CarType', 'MODL_TYPE_ID');
+        return $this->belongsTo(CarType::class, 'MODL_TYPE_ID');
     }
 
     public function cars()
     {
-        return $this->hasMany('App\Models\Car', 'CAR_MODL_ID');
+        return $this->hasMany(Car::class, 'CAR_MODL_ID');
     }
 
     public function colors()
