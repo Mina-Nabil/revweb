@@ -72,12 +72,12 @@ class Brand extends Model
 
     function models()
     {
-        return $this->hasMany('App\Models\CarModel', 'MODL_BRND_ID');
+        return $this->hasMany(CarModel::class, 'MODL_BRND_ID');
     }
 
     function cars()
     {
-        return $this->hasManyThrough('App\Models\Car', 'App\Models\CarModel', 'MODL_BRND_ID', 'CAR_MODL_ID');
+        return $this->hasManyThrough(Car::class, CarModel::class, 'MODL_BRND_ID', 'CAR_MODL_ID');
     }
 
     function toggle()
