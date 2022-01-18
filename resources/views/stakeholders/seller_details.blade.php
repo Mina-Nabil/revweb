@@ -45,21 +45,25 @@
     <!-- Column -->
     <div class="col-lg-8 col-xlg-9 col-md-7">
         <div class="row">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Total Cars Sold</h5>
-                    <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
-                        <span class="display-5 text-success"><i class=" ti-money"></i></span>
-                        <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldCount())}}</a>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Cars Sold</h5>
+                        <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                            <span class="display-5 text-success"><i class=" ti-money"></i></span>
+                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldCount())}}</a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Cars Sold Price</h5>
-                    <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
-                        <span class="display-5 text-success"><i class=" ti-book"></i></span>
-                        <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldPrice(),2)}}</a>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Cars Sold Price</h5>
+                        <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                            <span class="display-5 text-success"><i class=" ti-book"></i></span>
+                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldPrice(),2)}}</a>
+                        </div>
                     </div>
                 </div>
             </div>
