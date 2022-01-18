@@ -6,6 +6,9 @@
 <div class="row">
     <!-- Column -->
     <div class="col-lg-4 col-xlg-3 col-md-5">
+        <div class="card"> <img class="card-img" src="{{  (isset($seller->SLLR_IMGE)) ? $seller->getImageUrlAttribute() : asset('images/def-car.png')}}" alt="Card image">
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <small class="text-muted">Seller Name </small>
@@ -37,28 +40,30 @@
                 <h6>{{$seller->offers_count}}</h6>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Total Cars Sold</h5>
-                <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
-                    <span class="display-5 text-success"><i class=" ti-money"></i></span>
-                    <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldCount())}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Cars Sold Price</h5>
-                <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
-                    <span class="display-5 text-success"><i class=" ti-book"></i></span>
-                    <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldPrice(),2)}}</a>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- Column -->
     <!-- Column -->
     <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Cars Sold</h5>
+                    <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                        <span class="display-5 text-success"><i class=" ti-money"></i></span>
+                        <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldCount())}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Cars Sold Price</h5>
+                    <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                        <span class="display-5 text-success"><i class=" ti-book"></i></span>
+                        <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldPrice(),2)}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="card">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs profile-tab" role="tablist">
