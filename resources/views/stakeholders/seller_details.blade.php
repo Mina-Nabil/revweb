@@ -6,7 +6,7 @@
 <div class="row">
     <!-- Column -->
     <div class="col-lg-4 col-xlg-3 col-md-5">
-        <div class="card"> <img class="card-img" src="{{  (isset($seller->SLLR_IMGE)) ? $seller->getImageUrlAttribute() : asset('images/def-car.png')}}" alt="Card image">
+        <div class="card"> <img class="card-img" src="{{  (isset($seller->SLLR_IMGE)) ? $seller->image_url : asset('images/def-car.png')}}" alt="Card image">
         </div>
 
         <div class="card">
@@ -51,7 +51,7 @@
                         <h5 class="card-title">Total Cars Sold</h5>
                         <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
                             <span class="display-5 text-success"><i class=" ti-money"></i></span>
-                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldCount())}}</a>
+                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->cars_sold_count)}}</a>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         <h5 class="card-title">Cars Sold Price</h5>
                         <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
                             <span class="display-5 text-success"><i class=" ti-book"></i></span>
-                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->getCarsSoldPrice(),2)}}</a>
+                            <a href="javscript:void(0)" class="link display-5 ml-auto">{{number_format($seller->cars_sold_price,2)}}</a>
                         </div>
                     </div>
                 </div>

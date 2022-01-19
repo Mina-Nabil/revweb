@@ -19,6 +19,7 @@ class Seller extends Authenticatable
     //table is Sellers
     const ACCESS_TOKEN = "access_sellers_api";
     protected $table = "sellers";
+    protected $appends = array('cars_sold_price', 'cars_sold_count', 'image_url');
     public $timestamps = true;
 
     ///profile functions
