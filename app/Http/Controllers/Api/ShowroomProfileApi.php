@@ -60,6 +60,20 @@ class ShowroomProfileApi extends BaseApiController
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
     }
 
+    function getTeam(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        if (is_null($seller->showroom)) {
+            if ($seller->showroom == NULL)  parent::sendResponse(false, "No Showroom Found");
+        } else {
+            $seller->showroom->load('sellers');
+            parent::sendResponse(true, "Team Loaded Successfully", (object)[
+                "team" => $seller->showroom->sellers
+            ]);
+        }
+    }
+
     function searchSellers(Request $request)
     {
         parent::validateRequest($request, [
@@ -79,7 +93,7 @@ class ShowroomProfileApi extends BaseApiController
     {
         $seller = $request->user();
         $seller->load('showroom');
-        if(isset($seller->showroom) && $seller->showroom->isManager()){
+        if (isset($seller->showroom) && $seller->showroom->isManager()) {
             $seller->showroom->load('joinRequests');
             parent::sendResponse(true, "Requests Retrieved", (object) ["requests" =>  $seller->showroom->joinRequests]);
         } else {
