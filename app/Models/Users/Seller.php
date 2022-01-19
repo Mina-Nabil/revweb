@@ -88,12 +88,12 @@ class Seller extends Authenticatable
         }
     }
 
-    function getCarsSoldPrice()
+    function getCarsSoldPriceAttribute()
     {
         return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->sum('OFFR_PRCE');
     }
 
-    function getCarsSoldCount()
+    function getCarsSoldCountAttribute()
     {
         return $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY)->get('OFFR_PRCE')->count();
     }
