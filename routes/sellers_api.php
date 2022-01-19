@@ -21,6 +21,7 @@ Route::post('/set/banking', "Api\ShowroomProfileApi@setBankInfo");
 Route::delete('/delete/banking', "Api\ShowroomProfileApi@deleteBankInfo");
 Route::post('/create/showroom', "Api\ShowroomProfileApi@createShowroom");
 Route::get('/cities', "Api\ShowroomProfileApi@getCities");
+Route::get('get/team', "Api\ShowroomProfileApi@getTeam");
 Route::post('/search/sellers', "Api\ShowroomProfileApi@searchSellers");
 Route::get('/get/invitations', "Api\ShowroomProfileApi@getJoinRequests");
 Route::post('/invite/seller', "Api\ShowroomProfileApi@inviteSellerToShowroom");
