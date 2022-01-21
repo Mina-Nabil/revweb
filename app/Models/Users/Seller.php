@@ -69,12 +69,18 @@ class Seller extends Authenticatable
         return $this->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken;
     }
 
-    static function searchText($searchText)
-    {   
+    static function searchText($searchText, $showroomID = null)
+    {
         $searchText = strtolower($searchText);
-        return self::where("SLLR_NAME", "LIKE", "%" . $searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $searchText . "%")
+        $query = self::where("SLLR_NAME", "LIKE", "%" . $searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $searchText . "%")
             ->orWhere("SLLR_MOB1", "LIKE", "%" . $searchText . "%")
-            ->orWhere("SLLR_MOB2", "LIKE", "%" . $searchText . "%")->get();
+            ->orWhere("SLLR_MOB2", "LIKE", "%" . $searchText . "%");
+        if ($showroomID != null)
+            $query = $query->rightJoin("join_requests", function ($join) use ($showroomID) {
+                $join->on("JNRQ_SLLR_ID", "=", "sellers.id");
+                $join->on("JNRQ_SHRM_ID", "=", $showroomID);
+            });
+        return $query->get();
     }
 
     //Authentication Stuff
