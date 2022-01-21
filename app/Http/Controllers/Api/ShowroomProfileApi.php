@@ -89,13 +89,13 @@ class ShowroomProfileApi extends BaseApiController
         }
     }
 
-    function getJoinRequests(Request $request)
+    function getJoinRequestsAndInvitations(Request $request)
     {
         $seller = $request->user();
         $seller->load('showroom');
         if (isset($seller->showroom) && $seller->showroom->isManager()) {
             $seller->showroom->load('joinRequests');
-            parent::sendResponse(true, "Requests Retrieved", (object) ["requests" =>  $seller->showroom->joinRequests]);
+            parent::sendResponse(true, "Requests Retrieved", (object) ["requests" =>  $seller->showroom->joinRequesters]);
         } else {
             parent::sendResponse(false, "Unauthorized");
         }
