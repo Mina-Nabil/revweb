@@ -85,7 +85,7 @@ class ShowroomProfileApi extends BaseApiController
                 ->orWhere("SLLR_MOB2", "LIKE", "%" . $request->searchText . "%")->get();
             parent::sendResponse(true, "Sellers Retrieved", (object) ["sellers" =>  $res]);
         } else {
-            parent::sendResponse(true, "Sellers Retrieved", []);
+            parent::sendResponse(true, "Search String too short - min length is 3", (object) ["sellers" =>  []]);
         }
     }
 
