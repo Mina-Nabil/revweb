@@ -23,7 +23,7 @@ Route::post('/create/showroom', "Api\ShowroomProfileApi@createShowroom");
 Route::get('/cities', "Api\ShowroomProfileApi@getCities");
 Route::get('get/team', "Api\ShowroomProfileApi@getTeam");
 Route::post('/search/sellers', "Api\ShowroomProfileApi@searchSellers");
-Route::get('/get/invitations', "Api\ShowroomProfileApi@getJoinRequests");
+Route::get('/get/invitations', "Api\ShowroomProfileApi@getJoinRequestsAndInvitations");
 Route::post('/invite/seller', "Api\ShowroomProfileApi@inviteSellerToShowroom");
 Route::delete('/delete/request', "Api\ShowroomProfileApi@deleteSellerInvitation");
 Route::post('/accept/seller', "Api\ShowroomProfileApi@acceptJoinRequest");

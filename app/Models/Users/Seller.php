@@ -283,6 +283,11 @@ class Seller extends Authenticatable
         return $this->hasMany(JoinRequest::class, "JNRQ_SLLR_ID");
     }
 
+    public function joinRequestShowrooms()
+    {
+        return $this->hasManyThrough(Showroom::class, JoinRequest::class, "JNRQ_SLLR_ID", "JNRQ_SHRM_ID");
+    }
+
     public function offers()
     {
         return $this->hasMany(Offer::class, "OFFR_SLLR_ID");
