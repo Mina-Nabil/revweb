@@ -285,7 +285,7 @@ class Seller extends Authenticatable
 
     public function joinRequestShowrooms()
     {
-        return $this->hasManyThrough(Showroom::class, JoinRequest::class, "JNRQ_SLLR_ID", "JNRQ_SHRM_ID");
+        return $this->belongsToMany(Showroom::class, JoinRequest::class, "JNRQ_SLLR_ID", "JNRQ_SHRM_ID");
     }
 
     public function offers()
