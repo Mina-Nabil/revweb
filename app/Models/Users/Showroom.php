@@ -224,8 +224,6 @@ class Showroom extends Model
         }
     }
 
-
-    //profile functions
     function toggleActiveStatus(bool $isActive)
     {
         $user = Auth::user();
@@ -248,6 +246,11 @@ class Showroom extends Model
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    static function searchShowrooms($searchText){
+        $searchText = strtolower($searchText);
+        return self::where("SHRM_NAME", "LIKE", "%" . $searchText . "%")->get();
     }
 
     function deleteJoinShowroomRequest($requestID)
