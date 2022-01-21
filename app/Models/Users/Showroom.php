@@ -463,7 +463,7 @@ class Showroom extends Model
 
     public function joinRequesters()
     {
-        return $this->hasManyThrough(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
+        return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
     }
 
     /****
