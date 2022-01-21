@@ -80,9 +80,7 @@ class ShowroomProfileApi extends BaseApiController
             "searchText" => "required|string"
         ]);
         if (is_string($request->searchText) && strlen($request->searchText) > 2) {
-            $res = Seller::where("SLLR_NAME", "LIKE", "%" . $request->searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $request->searchText . "%")
-                ->orWhere("SLLR_MOB1", "LIKE", "%" . $request->searchText . "%")
-                ->orWhere("SLLR_MOB2", "LIKE", "%" . $request->searchText . "%")->get();
+            $res = Seller::searchText($request->searchText);
             parent::sendResponse(true, "Sellers Retrieved", (object) ["sellers" =>  $res]);
         } else {
             parent::sendResponse(true, "Search String too short - min length is 3", (object) ["sellers" =>  []]);

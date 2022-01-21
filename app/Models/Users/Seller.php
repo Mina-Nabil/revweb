@@ -69,6 +69,14 @@ class Seller extends Authenticatable
         return $this->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken;
     }
 
+    static function searchText($searchText)
+    {   
+        $searchText = strtolower($searchText);
+        return self::where("SLLR_NAME", "LIKE", "%" . $searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $searchText . "%")
+            ->orWhere("SLLR_MOB1", "LIKE", "%" . $searchText . "%")
+            ->orWhere("SLLR_MOB2", "LIKE", "%" . $searchText . "%")->get();
+    }
+
     //Authentication Stuff
     static function login($emailOrMob, $password, $deviceName)
     {
