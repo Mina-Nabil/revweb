@@ -46,7 +46,7 @@ Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
 Route::get('/user', "Api\SellersProfileApi@getUser");
 Route::post('/update', "Api\SellersProfileApi@updateSellerData");
 Route::post('/search/showrooms', "Api\SellersProfileApi@searchShowrooms");
-Route::get('/get/joinrequests', "Api\SellersProfileApi@getJoinRequests");
+Route::get('/get/joinrequests', "Api\SellersProfileApi@getJoinRequestsAndInvitations");
 Route::post('/submit/join/request', "Api\SellersProfileApi@submitShowroomJoinRequest");
 Route::post('/accept/invitation', "Api\SellersProfileApi@acceptShowroomInvitation");
 Route::get('/leave/showroom', "Api\SellersProfileApi@leaveShowroom");
