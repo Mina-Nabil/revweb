@@ -248,6 +248,12 @@ class Showroom extends Model
         }
     }
 
+
+    public function joinRequestersQuery()
+    {
+        return $this->joinRequesters()->select("sellers.*", "join_requests.JNRQ_STTS")->get();
+    }
+
     static function searchShowrooms($searchText){
         $searchText = strtolower($searchText);
         return self::where("SHRM_NAME", "LIKE", "%" . $searchText . "%")->get();
