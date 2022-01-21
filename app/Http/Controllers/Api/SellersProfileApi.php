@@ -205,7 +205,7 @@ class SellersProfileApi extends BaseApiController
 
     function isEmailTaken(Request $request)
     {
-        $request->validateRequest([
+        parent::validateRequest($request, [
             "email" => "required"
         ]);
         $taken = Seller::isEmailTaken($request->email);
@@ -214,7 +214,7 @@ class SellersProfileApi extends BaseApiController
 
     function isPhoneTaken(Request $request)
     {
-        $request->validateRequest([
+        parent::validateRequest($request, [
             "phone" => "required"
         ]);
         $taken = Seller::isPhoneTaken($request->phone);
