@@ -76,7 +76,7 @@ class Seller extends Authenticatable
             ->orWhere("SLLR_MOB1", "LIKE", "%" . $searchText . "%")
             ->orWhere("SLLR_MOB2", "LIKE", "%" . $searchText . "%");
         if ($showroomID != null)
-            $query = $query->rightJoin("join_requests", "JNRQ_SLLR_ID", "=", "sellers.id")->where("JNRQ_SHRM_ID", $showroomID);
+            $query = $query->leftJoin("join_requests", "JNRQ_SLLR_ID", "=", "sellers.id")->where("JNRQ_SHRM_ID", $showroomID);
         return $query->get();
     }
 
