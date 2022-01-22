@@ -72,7 +72,7 @@ class Seller extends Authenticatable
     static function searchText($searchText, $showroomID = null)
     {
         $searchText = strtolower($searchText);
-        $query = self::where("SLLR_NAME", "LIKE", "%" . $searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $searchText . "%")
+        $query = self::with("showroom")->where("SLLR_NAME", "LIKE", "%" . $searchText . "%")->orWhere("SLLR_MAIL", "LIKE", "%" . $searchText . "%")
             ->orWhere("SLLR_MOB1", "LIKE", "%" . $searchText . "%")
             ->orWhere("SLLR_MOB2", "LIKE", "%" . $searchText . "%");
         if ($showroomID != null)
