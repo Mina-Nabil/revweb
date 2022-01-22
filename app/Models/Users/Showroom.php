@@ -238,7 +238,7 @@ class Showroom extends Model
     function inviteSellerToShowroom($sellerID)
     {
         try {
-            $this->joinRequests()->create([
+            $this->joinRequests()->updateOrCreate([
                 "JNRQ_SLLR_ID"  =>  $sellerID,
                 "JNRQ_STTS"     =>  JoinRequest::REQ_BY_SHOWROOM
             ]);
