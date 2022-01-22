@@ -149,13 +149,15 @@ class ShowroomProfileApi extends BaseApiController
     function deleteSellerInvitation(Request $request)
     {
         parent::validate($request, [
-            "joinRequestID" => "required|exists:join_requests,id"
+            "showroomID" => "required|exists:showrooms,id",
+            "sellerID" => "required|exists:sellers,id",
         ]);
-        $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
-        $seller = Auth::user();
-        $showroomToJoin = Showroom::findOrFail($joinRequest->JNRQ_SHRM_ID);
-        if ($seller->id == $joinRequest->JNRQ_SLLR_ID || $showroomToJoin->isManager()) {
-            $ret = $showroomToJoin->deleteJoinShowroomRequest($request->joinRequestID);
+        $joinRequest = JoinRequest::findBySellerAndShowroomRequests($request->sellerID, $request->showroomID);
+        $sessionSeller = Auth::user();
+        $joinRequestSellerID = $request->sellerID;
+        $joinRequestShowroom = Showroom::findOrFail($request->showroomID);
+        if ($sessionSeller->id == $joinRequestSellerID || $joinRequestShowroom->isManager()) {
+            $ret = $joinRequestShowroom->deleteJoinShowroomRequest($joinRequest->id);
             if ($ret) {
                 parent::sendResponse(true, "deleted");
             } else {
