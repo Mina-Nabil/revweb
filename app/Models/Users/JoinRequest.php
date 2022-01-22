@@ -34,7 +34,7 @@ class JoinRequest extends Model
      */
     static public function findBySellerAndShowroomRequests($sellerID, $showroomID)
     {
-        return self::where(["JNRQ_SHRM_ID", "=", $showroomID], ["JNRQ_SLLR_ID", "=", $sellerID])->first();
+        return self::where([["JNRQ_SHRM_ID", "=", $showroomID], ["JNRQ_SLLR_ID", "=", $sellerID]])->first();
     }
 
     public function acceptRequest()
