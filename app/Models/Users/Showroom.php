@@ -23,6 +23,7 @@ class Showroom extends Model
         'created_at',
         'updated_at'
     ];
+    protected $appends = array('image_url');
 
     protected $dateFormat = 'Y-m-d H:i:s';
 
