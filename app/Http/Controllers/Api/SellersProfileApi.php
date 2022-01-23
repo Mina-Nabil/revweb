@@ -113,10 +113,10 @@ class SellersProfileApi extends BaseApiController
     function acceptShowroomInvitation(Request $request)
     {
         parent::validateRequest($request, [
-            "showroomID" => "required|exists:showrooms,id"
+            "joinRequestID" => "required|exists:join_requests,id"
         ]);
         $seller = $request->user();
-        $ret = $seller->acceptJoinInvitation($request->showroomID);
+        $ret = $seller->acceptJoinInvitation($request->joinRequestID);
         if ($ret) {
             parent::sendResponse(true, "Request Accepted", null, false);
             $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
