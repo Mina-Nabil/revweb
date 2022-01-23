@@ -21,7 +21,7 @@ class BaseApiController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            self::sendResponse(false, $validationErrorMessage, ['errors' => $validator->errors()]);
+            self::sendResponse(false, $validationErrorMessage, ['errors' => $validator->errors(), true, 422]);
         } else return true;
     }
 
@@ -35,9 +35,9 @@ class BaseApiController extends Controller
      * @param mixed|null $body object to return as json 
      * @param bool $die kills the request if true
      */
-    public static function sendResponse($apiCallStatus, $message, $body = null, $die = true)
+    public static function sendResponse($apiCallStatus, $message, $body = null, $die = true, $status = 200)
     {
-        response(json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE))->withHeaders(['Content-Type' => 'application/json'])->send();
+        response(json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE), $status)->withHeaders(['Content-Type' => 'application/json'])->send();
         if ($die)
             die;
     }
