@@ -434,6 +434,10 @@ class Showroom extends Model
         }
         return $ret;
     }
+    public function getAvailableJoinRequests()
+    {
+        return $this->joinRequests()->where("JNRQ_STTS", "!=", JoinRequest::ACCEPTED)->get();
+    }
 
     /**
      * Checks if the seller is associated with the showroom
