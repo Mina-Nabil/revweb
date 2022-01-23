@@ -19,6 +19,7 @@ class JoinRequest extends Model
     ];
 
     protected $fillable = ["JNRQ_SHRM_ID", "JNRQ_SLLR_ID", "JNRQ_STTS"];
+    protected $with = ["seller", "showroom"];
 
     public function seller()
     {

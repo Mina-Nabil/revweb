@@ -144,8 +144,8 @@ class SellersProfileApi extends BaseApiController
     function getJoinRequestsAndInvitations(Request $request)
     {
         $seller = $request->user();
-        $seller->load("joinRequestShowrooms");
-        parent::sendResponse(true, "Requests Retrieved Successfully", (object)["showrooms" => $seller->joinRequestShowrooms]);
+        $seller->load("joinRequests");
+        parent::sendResponse(true, "Requests Retrieved Successfully", (object)["showrooms" => $seller->joinRequests]);
     }
 
     function submitShowroomJoinRequest(Request $request)
