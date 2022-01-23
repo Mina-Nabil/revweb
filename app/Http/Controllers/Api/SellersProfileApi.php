@@ -27,7 +27,7 @@ class SellersProfileApi extends BaseApiController
         $filesHandler = new FilesHandler();
         $displayImageFilePath = null;
         if ($request->hasFile("displayImage")) {
-            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/ids//');
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos//');
         }
         $newSeller = null;
         $error = null;
