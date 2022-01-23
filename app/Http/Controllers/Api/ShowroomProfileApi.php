@@ -136,6 +136,7 @@ class ShowroomProfileApi extends BaseApiController
             parent::sendResponse(false, "Inapplicable");
         }
         $ret = $seller->showroom->inviteSellerToShowroom($request->sellerID);
+        $ret->load("seller");
         if ($ret) {
             parent::sendResponse(true, "Request Submitted", (object)["request" => $ret], false);
             $invitedSeller = Seller::findOrFail($request->sellerID);
