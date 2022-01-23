@@ -273,9 +273,9 @@ class Showroom extends Model
         return $this->joinRequests()->where("join_requests.id", $requestID)->delete();
     }
 
-    function acceptJoinRequest($sellerID)
+    function acceptJoinRequest($joinRequest)
     {
-        $joinRequest = $this->joinRequests()->where("join_requests.JNRQ_SLLR_ID", $sellerID)->first();
+        $joinRequest = JoinRequest::findOrFail($joinRequest);
         if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SELLER)
             return $joinRequest->acceptRequest();
         else

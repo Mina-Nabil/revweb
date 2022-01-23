@@ -227,9 +227,9 @@ class Seller extends Authenticatable
     }
 
 
-    function acceptJoinInvitation($showroomID)
+    function acceptJoinInvitation($joinRequestID)
     {
-        $joinRequest = $this->joinRequests()->where("join_requests.JNRQ_SHRM_ID", $showroomID)->first();
+        $joinRequest =JoinRequest::findOrFail($joinRequestID);
         if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SHOWROOM)
             return $joinRequest->acceptRequest();
         else
