@@ -159,7 +159,7 @@ class SellersProfileApi extends BaseApiController
         if (!isset($seller->showroom) && !$showroom->hasSeller($seller->id)) {
             $ret = $seller->submitJoinShowroomRequest($request->showroomID);
             if ($ret) {
-                parent::sendResponse(true, "Request Submitted", (object)["request" => $ret->fresh()]);
+                parent::sendResponse(true, "Request Submitted", (object)["request" => $ret]);
                 $showroom =  Showroom::findOrFail($request->showroomID);
                 $pushNotificationService = new PushNotificationsHandler();
                 $pushNotificationService->sendPushNotification("New Join Request", $seller->SLLR_NAME . " want to join your showroom!", [$showroom->getManagers()], 'path/to/join_requests_page');
