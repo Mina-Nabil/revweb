@@ -137,7 +137,7 @@ class ShowroomProfileApi extends BaseApiController
         }
         $ret = $seller->showroom->inviteSellerToShowroom($request->sellerID);
         if ($ret) {
-            parent::sendResponse(true, "Request Submitted", null, false);
+            parent::sendResponse(true, "Request Submitted", (object)["request" => $ret], false);
             $invitedSeller = Seller::findOrFail($request->sellerID);
             $pushNotificationService = new PushNotificationsHandler();
             $pushNotificationService->sendPushNotification("New Showroom Invitation", $seller->showroom->SHRM_NAME . " invites you to join the showroom Sales Team!", [$invitedSeller->id], 'path/to/join_requests_page');
