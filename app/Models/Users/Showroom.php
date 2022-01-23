@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Showroom extends Model
 {
@@ -235,8 +236,9 @@ class Showroom extends Model
         return $this->save();
     }
 
-    static function searchText(string $searchText){
-        $searchText=strtolower($searchText);
+    static function searchText(string $searchText)
+    {
+        $searchText = strtolower($searchText);
         return self::with("owner")->where("SHRM_NAME", "LIKE", "%" . $searchText . "%")->get();
     }
 
@@ -259,7 +261,8 @@ class Showroom extends Model
         return $this->joinRequesters()->select("sellers.*", "join_requests.JNRQ_STTS")->get();
     }
 
-    static function searchShowrooms($searchText){
+    static function searchShowrooms($searchText)
+    {
         $searchText = strtolower($searchText);
         return self::where("SHRM_NAME", "LIKE", "%" . $searchText . "%")->get();
     }
@@ -274,7 +277,7 @@ class Showroom extends Model
         $joinRequest = $this->joinRequests()->where("join_requests.JNRQ_SLLR_ID", $sellerID)->first();
         if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SELLER)
             return $joinRequest->acceptRequest();
-        else 
+        else
             return false;
     }
 
@@ -439,6 +442,12 @@ class Showroom extends Model
     public function hasSeller(int $sellerID)
     {
         return ($this->sellers()->where("sellers.id", $sellerID)->get()->count() > 0);
+    }
+
+    //Accessors
+    public function getImageUrlAttribute()
+    {
+        return (isset($this->SHRM_IMGE)) ? Storage::url($this->SHRM_IMGE) : null;
     }
 
     ///relations
