@@ -24,7 +24,7 @@ class Showroom extends Model
         'updated_at'
     ];
     protected $appends = array('image_url');
-
+    protected $with = ["owner"];
     protected $dateFormat = 'Y-m-d H:i:s';
 
     use SoftDeletes;

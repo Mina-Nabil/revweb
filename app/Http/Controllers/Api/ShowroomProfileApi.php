@@ -30,7 +30,7 @@ class ShowroomProfileApi extends BaseApiController
         $displayImageFilePath = null;
         $seller = $request->user();
         if ($request->hasFile("displayImage")) {
-            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "showrooms/" . $request->email . '/ids//');
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "showrooms/" . $request->email . '/photos//');
         }
 
         $newShowroom = null;
