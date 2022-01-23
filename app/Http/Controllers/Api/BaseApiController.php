@@ -21,7 +21,7 @@ class BaseApiController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            self::sendResponse(false, $validationErrorMessage, ['errors' => $validator->errors(), true, 422]);
+            self::sendResponse(false, $validationErrorMessage, ['errors' => $validator->errors()], true, 422);
         } else return true;
     }
 
