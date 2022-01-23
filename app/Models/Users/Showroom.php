@@ -235,6 +235,11 @@ class Showroom extends Model
         return $this->save();
     }
 
+    static function searchText(string $searchText){
+        $searchText=strtolower($searchText);
+        return self::with("owner")->where("SHRM_NAME", "LIKE", "%" . $searchText . "%")->get();
+    }
+
     function inviteSellerToShowroom($sellerID)
     {
         try {
@@ -455,6 +460,11 @@ class Showroom extends Model
     public function city()
     {
         return $this->belongsTo(City::class, "SHRM_CITY_ID");
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(Seller::class, "SHRM_OWNR_ID");
     }
 
     public function bankInfo()
