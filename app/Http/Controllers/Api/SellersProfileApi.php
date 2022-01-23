@@ -158,6 +158,7 @@ class SellersProfileApi extends BaseApiController
         $seller->load('showroom');
         if (!isset($seller->showroom) && !$showroom->hasSeller($seller->id)) {
             $ret = $seller->submitJoinShowroomRequest($request->showroomID);
+            $ret->load("showroom");
             if ($ret) {
                 parent::sendResponse(true, "Request Submitted", (object)["request" => $ret]);
                 $showroom =  Showroom::findOrFail($request->showroomID);
