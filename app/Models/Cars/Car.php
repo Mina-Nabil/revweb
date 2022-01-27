@@ -80,7 +80,8 @@ class Car extends Model
     }
 
     public function colors(){
-        return $this->belongsToMany(ModelColor::class, CarModel::class, "MODL_COLR_ID", "CAR_MODL_ID");
+        // car - models - hasMany colors
+        return $this->hasManyThrough(ModelColor::class, CarModel::class, "id", null,"CAR_MODL_ID");
     }
 
     public function accessories()
