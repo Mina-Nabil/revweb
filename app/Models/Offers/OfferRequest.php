@@ -50,12 +50,11 @@ class OfferRequest extends Model
         $newOffer->OFRQ_CMNT = $comment;
 
         $car = Car::with("colors")->findOrFail($carID);
-        dd($car->colors->pluck('id')->toArray());
         try {
             DB::transaction(function () use ($newOffer, $car, $colors) {
                 $newOffer->save();
                 $i = 0;
-                $colorsIDs = $car->colors->pluck('id');
+                $colorsIDs = $car->colors->pluck('id')->toArray();
                 foreach ($colors as $color) {
                     if (in_array($color, $colorsIDs)) {
                         $newOffer->colors()->create([
