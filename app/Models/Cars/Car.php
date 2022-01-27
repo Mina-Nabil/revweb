@@ -80,7 +80,7 @@ class Car extends Model
     }
 
     public function colors(){
-        // car - models - hasMany colors
+        // belongsTo-hasMany Combination!
         return $this->belongsToMany(ModelColor::class, CarModel::class, "id", "id", "CAR_MODL_ID", "COLR_MODL_ID");
     }
 
