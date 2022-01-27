@@ -6,6 +6,7 @@ use App\Models\Cars\Brand;
 use App\Models\Cars\Car;
 use App\Models\Cars\CatalogItem;
 use App\Models\Cars\CatalogItemDetails;
+use App\Models\Offers\OfferRequest;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Carbon\Carbon;
@@ -438,10 +439,8 @@ class Showroom extends Model
 
     public function getAvailableOfferRequests(){
      
-      
+      return OfferRequest::getAvailableOffers($this->id);
        
-
-
     }
 
     public function getAvailableJoinRequests()

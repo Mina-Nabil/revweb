@@ -30,15 +30,15 @@ class OffersApiController extends BaseApiController
         }
     }
 
-    function getShowroomCompatibleOfferRequests(Request $request){
+    function getShowroomCompatibleOfferRequests(Request $request)
+    {
         $seller = $request->user();
         $seller->load('showroom');
         $showroom = $seller->showroom;
-        if($showroom!=null){
-            
+        if ($showroom != null) {
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getAvailableOfferRequests()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
     }
-
 }
