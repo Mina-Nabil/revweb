@@ -79,6 +79,10 @@ class Car extends Model
         return $this->belongsTo(CarModel::class, 'CAR_MODL_ID');
     }
 
+    public function colors(){
+        return $this->hasManyThrough(ModelColor::class, CarModel::class, "CAR_MODL_ID", "COLR_MODL_ID");
+    }
+
     public function accessories()
     {
         return $this->belongsToMany(Accessories::class, "accessories_cars", "ACCR_CAR_ID", "ACCR_ACSR_ID")

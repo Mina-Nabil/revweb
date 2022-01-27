@@ -30,12 +30,13 @@ class BaseApiController extends Controller
      * echo generic json message and body if found then Dies
      * 
      * 
-     * @param bool $status Passed or failed
+     * @param bool $apiCallStatus Passed or failed
      * @param string $message message received by client
      * @param mixed|null $body object to return as json 
      * @param bool $die kills the request if true
+     * @param int $status response status code
      */
-    public static function sendResponse($apiCallStatus, $message, $body = null, $die = true, $status = 200)
+    public static function sendResponse(bool $apiCallStatus, string $message, $body = null, $die = true, $status = 200)
     {
         response(json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE), $status)->withHeaders(['Content-Type' => 'application/json'])->send();
         if ($die)

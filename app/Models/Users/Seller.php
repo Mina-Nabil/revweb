@@ -77,6 +77,30 @@ class Seller extends Authenticatable
         return $query->get();
     }
 
+    /**
+     * 
+     * returns an array of sellers who can sell the mentioned car
+     * @param array $colorIDs array of model color ID (integers) 
+     * @return Collection
+     */
+    static function getCarSellers($carID, $colorIDs = [])
+    {
+        $query = self::join("showrooms", "SLLR_SHRM_ID", '=', "showrooms.id")
+            ->join("showroom_catalog", "showrooms.id", '=', 'SRCG_SHRM_ID')
+            ->where("showroom_catalog.SRCG_CAR_ID", '=', $carID)
+            ->select("sellers.id");
+        if ($colorIDs != null && count($colorIDs) > 0) {
+            $query = $query->join(
+                "showroom_catalog_details",
+                function ($join) use ($colorIDs) {
+                    $join->on("SRCD_SRCG_ID", '=', 'showroom_catalog.id')
+                        ->whereIn("SRCD_COLR_ID", $colorIDs)->orWhere("SRCG_ALL_COLR", '=', 1);
+                }
+            );
+        }
+        return $query->get();
+    }
+
     //Authentication Stuff
     static function login($emailOrMob, $password, $deviceName)
     {
@@ -229,7 +253,7 @@ class Seller extends Authenticatable
 
     function acceptJoinInvitation($joinRequestID)
     {
-        $joinRequest =JoinRequest::findOrFail($joinRequestID);
+        $joinRequest = JoinRequest::findOrFail($joinRequestID);
         if ($joinRequest->JNRQ_STTS == JoinRequest::REQ_BY_SHOWROOM)
             return $joinRequest->acceptRequest();
         else
