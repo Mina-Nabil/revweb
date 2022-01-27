@@ -437,16 +437,8 @@ class Showroom extends Model
     }
 
     public function getAvailableOfferRequests(){
-        /*
-        showroom - catalog_item - car - offer requests
-
-        */
-       $query = $this->catalogItems()->join("showroom_catalog_details", "showroom_catalog.id", "=", "SRCD_SRCG_ID")
-                        ->join("offers_requests", "SRCG_CAR_ID", "=", "OFRQ_CAR_ID")
-                        ->join("buyers", "OFRQ_BUYR_ID", "=", "buyers.id")
-                        ->join("cars", "OFRQ_CAR_ID", "=", "cars.id")
-                        ->join("")
-                        ->get();
+     
+      
        
 
 
