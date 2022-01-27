@@ -80,13 +80,13 @@ class OfferRequest extends Model
         showroom - catalog_item - car - offer requests
 
         */
-        $query = self::join("offers_requests_colors as offerDetails", "offer_requests.id", "=", "OFRC_OFRQ_ID")
+        $query = self::join("offers_requests_colors as offerDetails", "offers_requests.id", "=", "OFRC_OFRQ_ID")
         ->join("showroom_catalog",  function($join) use ($showroomID){
             $join->on("OFRQ_CAR_ID", '=', 'SRCG_CAR_ID');
             $join->where("SRCG_SHRM_ID", "=", $showroomID);
-        })->join("showroom_catalog_details as catDetails1", function($join){
+        })->join("showroom_catalog_details", function($join){
             $join->on("SRCD_SRCG_ID", "=", "showroom_catalog.id");
-            $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT catDetails1.SRCD_COLR_ID from catDetails1 )");
+            $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT SRCD_COLR_ID from showroom_catalog_details )");
         });
         
         dd($query->toSql());
