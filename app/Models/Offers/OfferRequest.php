@@ -87,7 +87,7 @@ class OfferRequest extends Model
         })->join("showroom_catalog_details", function($join){
             $join->on("SRCD_SRCG_ID", "=", "showroom_catalog.id");
             $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT SRCD_COLR_ID from showroom_catalog_details )");
-        });
+        })->groupBy("offers_requests.id");
         
         return $query->get();   
     }
