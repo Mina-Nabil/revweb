@@ -89,9 +89,6 @@ class OfferRequest extends Model
             $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT SRCD_COLR_ID from showroom_catalog_details )");
         });
         
-        dd($query->toSql());
-        
-        
         return $query->get();   
     }
 
