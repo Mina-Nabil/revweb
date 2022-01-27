@@ -50,7 +50,7 @@ class OfferRequest extends Model
         $newOffer->OFRQ_CMNT = $comment;
 
         $car = Car::with("colors", "model", "model.colors")->findOrFail($carID);
-        dd( $car,  $car->colors, "\n\nFrom Models: \n\n", $car->model->colors);
+        dd( $car->model, $car->colors, "\n\nFrom Models: \n\n", $car->model->colors);
         try {
             DB::transaction(function () use ($newOffer, $car, $colors) {
                 $newOffer->save();
