@@ -49,8 +49,8 @@ class OfferRequest extends Model
         $newOffer->OFRQ_PRFD_PYMT = $paymentMethod;
         $newOffer->OFRQ_CMNT = $comment;
 
-        $car = Car::with("colors")->findOrFail($carID);
-        dd($car->colors);
+        $car = Car::with("colors", "model", "model.colors")->findOrFail($carID);
+        dd(array_diff($car->colors->toArray(), $car->model->colors->toArray(), ));
         try {
             DB::transaction(function () use ($newOffer, $car, $colors) {
                 $newOffer->save();
