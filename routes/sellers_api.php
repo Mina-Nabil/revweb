@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Offer routes
-Route::get('/get/offer_requests', "Api\OfferApiController@getShowroomCompatibleOfferRequests");
+Route::get('/offerrequests', "Api\OffersApiController@getShowroomCompatibleOfferRequests");
 
 //Showroom Management routes
 Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");
