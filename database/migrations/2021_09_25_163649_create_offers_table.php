@@ -49,6 +49,7 @@ class CreateOffersTable extends Migration
             $table->text("OFFR_SLLR_CMNT")->nullable();
             $table->enum("OFFR_STTS", Offer::STATES)->nullable();
             $table->text("OFFR_BUYR_CMNT")->nullable();
+            $table->dateTime("OFFR_RSPN_DATE")->nullable();
             $table->timestamps();
         });
 

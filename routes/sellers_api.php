@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 //Offer routes
 Route::get('/offerrequests', "Api\OffersApiController@getShowroomCompatibleOfferRequests");
+Route::get('/offers/pending', "Api\OffersApiController@getShowroomPendingOffers");
+Route::get('/offers/approved', "Api\OffersApiController@getShowroomApprovedOffers");
+Route::get('/offers/expired', "Api\OffersApiController@getShowroomExpiredOffers");
 
 //Showroom Management routes
 Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");

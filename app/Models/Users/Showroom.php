@@ -6,6 +6,7 @@ use App\Models\Cars\Brand;
 use App\Models\Cars\Car;
 use App\Models\Cars\CatalogItem;
 use App\Models\Cars\CatalogItemDetails;
+use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
@@ -437,10 +438,37 @@ class Showroom extends Model
         return $ret;
     }
 
-    public function getAvailableOfferRequests(){
-     
-      return OfferRequest::getAvailableOffers($this->id);
-       
+    public function getAvailableOfferRequests()
+    {
+
+        return OfferRequest::getAvailableOffers($this->id);
+    }
+
+    /**
+     * 
+     * @return Collection of all new offers 
+     */
+    public function getPendingOffers()
+    {
+        return $this->offers()->where("OFFR_STTS", Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", "<", date("Y-m-d"))->get();
+    }
+
+    /**
+     * 
+     * @return Collection of offers with a response (Accepted or Declines) for the last month
+     */
+    public function getApprovedOffers()
+    {
+        return $this->offers()->whereIn("OFFR_STTS", [Offer::ACCEPTED_KEY, Offer::DECLINED_KEY])->whereDate("created_at", ">", (new Carbon())->subMonth())->get();
+    }
+
+    /**
+     * 
+     * @return Collection of expired offers for the last month
+     */
+    public function getExpiredOffers()
+    {
+        return $this->offers()->whereIn("OFFR_STTS", [Offer::NEW_KEY, Offer::EXPIRED_KEY])->whereDate("OFFR_EXPR_DATE", ">", date("Y-m-d"))->whereDate("created_at", ">", (new Carbon())->subMonth())->get();
     }
 
     public function getAvailableJoinRequests()
@@ -503,6 +531,11 @@ class Showroom extends Model
     public function joinRequesters()
     {
         return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
+    }
+
+    public function offers()
+    {
+        return $this->hasMany(Offer::class, "OFFR_SHRM_ID");
     }
 
     /****
