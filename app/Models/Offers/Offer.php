@@ -23,9 +23,22 @@ class Offer extends Model
     ];
 
     protected $table = "offers";
-
+    protected $with = ["showroom", "seller", "buyer", "car", "colors"];
     public $timestamps = true;
 
+    //actions
+    public function acceptOffer($comment=null){
+        $this->OFFR_STTS=self::ACCEPTED_KEY;
+        $this->OFFR_RSPN_DATE=date("Y-m-d H:i:s");
+        $this->OFFR_BUYR_CMNT=$comment;
+        return $this->save();
+    }
+    public function declineOffer($comment=null){
+        $this->OFFR_STTS=self::DECLINED_KEY;
+        $this->OFFR_RSPN_DATE=date("Y-m-d H:i:s");
+        $this->OFFR_BUYR_CMNT=$comment;
+        return $this->save();
+    }
 
     //relations
     public function colors()

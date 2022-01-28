@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cars\Car;
 use App\Models\Offers\OfferRequest;
 use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
 use App\Services\PushNotificationsHandler;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,42 @@ class OffersApiController extends BaseApiController
         $showroom = $seller->showroom;
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getAvailableOfferRequests()]);
+        } else {
+            parent::sendResponse(false, "Unautherized", null, true, 403);
+        }
+    }
+
+    function getShowroomPendingOffers(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        $showroom = $seller->showroom;
+        if ($showroom != null) {
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getPendingOffers()]);
+        } else {
+            parent::sendResponse(false, "Unautherized", null, true, 403);
+        }
+    }
+
+    function getShowroomApprovedOffers(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        $showroom = $seller->showroom;
+        if ($showroom != null) {
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getApprovedOffers()]);
+        } else {
+            parent::sendResponse(false, "Unautherized", null, true, 403);
+        }
+    }
+
+    function getShowroomExpiredOffers(Request $request)
+    {
+        $seller = $request->user();
+        $seller->load('showroom');
+        $showroom = $seller->showroom;
+        if ($showroom != null) {
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getExpiredOffers()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
