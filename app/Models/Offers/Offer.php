@@ -23,7 +23,7 @@ class Offer extends Model
     ];
 
     protected $table = "offers";
-    protected $with = ["showroom", "seller", "buyer", "car", "colors"];
+    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model"];
     public $timestamps = true;
 
     //actions
