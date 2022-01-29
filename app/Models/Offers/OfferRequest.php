@@ -77,7 +77,7 @@ class OfferRequest extends Model
      */
     public static function getAvailableOffers($showroomID)
     {
-        DB::enableQueryLog();
+
         $query = self::selectRaw("DISTINCT offers_requests.id, offers_requests.*")->join("offers_requests_colors as offerDetails", "offers_requests.id", "=", "OFRC_OFRQ_ID")
             ->join("showroom_catalog as catalog1",  function ($join) use ($showroomID) {
                 $join->on("OFRQ_CAR_ID", '=', 'SRCG_CAR_ID');
@@ -85,8 +85,8 @@ class OfferRequest extends Model
             })->join("showroom_catalog_details", function ($join) use ($showroomID) {
                 $join->on("SRCD_SRCG_ID", "=", "catalog1.id");
                 $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT SRCD_COLR_ID from showroom_catalog_details where SRCD_SRCG_ID = catalog1.id and catalog1.SRCG_SHRM_ID = {$showroomID} )");
-            })->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->whereDate("created_at", ">",(new Carbon("now"))->subWeekdays(14) )->get();
-            dd(DB::getQueryLog());
+            })->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->whereDate("created_at", ">", (new Carbon("now"))->subWeekdays(14));
+
         return $query->get();
     }
 
