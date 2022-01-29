@@ -37,7 +37,7 @@ class OffersApiController extends BaseApiController
         $seller->load('showroom');
         $showroom = $seller->showroom;
         if ($showroom != null) {
-            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getAvailableOfferRequests()]);
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getAvailableOfferRequests()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
@@ -49,7 +49,7 @@ class OffersApiController extends BaseApiController
         $seller->load('showroom');
         $showroom = $seller->showroom;
         if ($showroom != null) {
-            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getPendingOffers()]);
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getPendingOffers()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
@@ -61,7 +61,7 @@ class OffersApiController extends BaseApiController
         $seller->load('showroom');
         $showroom = $seller->showroom;
         if ($showroom != null) {
-            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getApprovedOffers()]);
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getApprovedOffers()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
@@ -73,7 +73,7 @@ class OffersApiController extends BaseApiController
         $seller->load('showroom');
         $showroom = $seller->showroom;
         if ($showroom != null) {
-            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getExpiredOffers()]);
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getExpiredOffers()]);
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
