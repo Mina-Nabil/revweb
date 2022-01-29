@@ -27,7 +27,7 @@ class SellersProfileApi extends BaseApiController
         $filesHandler = new FilesHandler();
         $displayImageFilePath = null;
         if ($request->hasFile("displayImage")) {
-            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos//');
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos');
         }
         $newSeller = null;
         $error = null;
@@ -80,7 +80,7 @@ class SellersProfileApi extends BaseApiController
         $seller = $request->user();
         $filesHandler = new FilesHandler();
         if ($request->hasFile("displayImage")) {
-            $displayImageFilePath = $filesHandler->uploadFile($request->sellerIDFront, "sellers/" . $seller->SLLR_MAIL . '/ids//');
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $seller->SLLR_MAIL . '/ids');
         }
         if ($displayImageFilePath && $seller->setImage($displayImageFilePath)) {
             parent::sendResponse(true, "Image Added Successfully");

@@ -30,7 +30,7 @@ class ShowroomProfileApi extends BaseApiController
         $displayImageFilePath = null;
         $seller = $request->user();
         if ($request->hasFile("displayImage")) {
-            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "showrooms/" . $request->email . '/photos//');
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "showrooms/" . $request->name . '/photos');
         }
 
         $newShowroom = null;
@@ -231,10 +231,10 @@ class ShowroomProfileApi extends BaseApiController
         }
         $filesHandler = new FilesHandler();
         if ($request->hasFile("showroomIDFront")) {
-            $showroomRecordImgFront = $filesHandler->uploadFile($request->showroomIDFront, "showrooms/" . $showroom->SHRM_MAIL . '/ids//');
+            $showroomRecordImgFront = $filesHandler->uploadFile($request->showroomIDFront, "showrooms/" . $showroom->SHRM_MAIL . '/ids');
         }
         if ($request->hasFile("showroomIDBack")) {
-            $showroomRecordImgBack = $filesHandler->uploadFile($request->showroomIDBack, "showrooms/" . $showroom->SHRM_MAIL . '/ids//');
+            $showroomRecordImgBack = $filesHandler->uploadFile($request->showroomIDBack, "showrooms/" . $showroom->SHRM_MAIL . '/ids');
         }
         if ($showroomRecordImgFront != null && $showroomRecordImgBack != null && $showroom->addShowroomRecord($request->record, $showroomRecordImgFront, $showroomRecordImgBack)) {
             parent::sendResponse(true, "Adding Commercial Record Succeeded, Pending Confirmation");
