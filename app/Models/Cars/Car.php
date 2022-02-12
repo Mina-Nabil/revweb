@@ -10,7 +10,7 @@ class Car extends Model
 {
     protected $table = "cars";
     public $timestamps = true;
-    protected $appends = array('image', 'image_url');
+    protected $appends = array('image', 'image_url', "name");
     protected $with = ['accessories'];
     protected $image;
 
@@ -54,6 +54,11 @@ class Car extends Model
             $this->image = $this->model->MODL_IMGE ?? null;
         }
         return $this->image;
+    }
+
+    public function getNameAttribute(){
+        $this->loadMissing(["model", "model.brand"]);
+        return $this->model->brand->BRND_NAME . " " . $this->model->MODL_NAME . " " . $this->CAR_CATG . " " . $this->model->MODL_YEAR;
     }
 
     public function getisOwnedAttribute()

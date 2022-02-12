@@ -9,6 +9,7 @@ class OfferColor extends Model
     protected $table = "offer_colors";
     public $timestamps = false;
     protected $with = ["model_color"];
+    protected $fillable = ["OFCL_COLR_ID"];
 
     public function model_color()
     {
