@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cars\Car;
+use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Services\PushNotificationsHandler;
+use DateTime;
 use Illuminate\Http\Request;
 
 class OffersApiController extends BaseApiController
@@ -31,6 +33,7 @@ class OffersApiController extends BaseApiController
             $pushService->sendPushNotification("Offer Submitted", "New offer submitted for " . $offerRequest->car->name ,[$offerRequest->buyer->id], "route/to/offer");
         } else {
             parent::sendResponse(false, "Can't create offer");
+        }
     }
 
     function submitOfferRequest(Request $request)
