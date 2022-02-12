@@ -4,10 +4,12 @@ namespace App\Models\Offers;
 
 use App\Models\Cars\Car;
 use App\Models\Users\Buyer;
+use App\Models\Users\Seller;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -36,7 +38,7 @@ class OfferRequest extends Model
     ];
 
     protected $table = "offers_requests";
-    protected $with = ["colors", "buyer", "car", "car.model"];
+    protected $with = ["colors", "buyer", "car", "car.model", "offers"];
     public $timestamps = true;
 
     public static function createRequest(int $buyerID, int $carID, string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = [])
@@ -71,6 +73,17 @@ class OfferRequest extends Model
             throw $e;
         }
     }
+
+    /**
+     * Sets request as replied to if it is not
+     */
+    public function setAsRepliedTo()
+    {
+        $this->OFRQ_STTS = self::REPLIED_KEY;
+        $this->save();
+    }
+
+
     /**
      * @param $showroomID offer requests available for the mentioned showroom
      * @return Collection of Offer requests
@@ -88,6 +101,18 @@ class OfferRequest extends Model
             })->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->whereDate("created_at", ">", (new Carbon("now"))->subWeekdays(14));
 
         return $query->get();
+    }
+
+    public function offers()
+    {
+        $user = Auth::user();
+        $rel= $this->hasMany(Offer::class, "OFFR_OFRQ_ID");
+        if(is_a($user, Seller::class)){
+            $user->loadMissing("showroom");
+            if($user->showroom != null)
+            $rel = $rel->where("offers.OFFR_SHRM_ID", $user->showroom->id);
+        }
+        return $rel;
     }
 
     public function colors()
