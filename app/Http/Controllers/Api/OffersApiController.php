@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 class OffersApiController extends BaseApiController
 {
 
-    function submitNewOffer(Request $request){
+    function submitNewOffer(Request $request)
+    {
         parent::validate($request, [
             "requestID" =>  "required:offers_requests,id",
             "price"     =>  "required|numeric",
@@ -28,9 +29,9 @@ class OffersApiController extends BaseApiController
         $seller = $request->user();
         $newOffer = Offer::createOffer($offerRequest, $seller, $request->isLoan, $request->price, $request->downPayment, new DateTime($request->startDate), new DateTime($request->expiryDate), $request->colors, $request->comment);
         if ($newOffer != null) {
-            parent::sendResponse(true, "Offers Request Created", $newOffer, false);
+            parent::sendResponse(true, "Offers Request Created", (object)["offer" => $newOffer], false);
             $pushService = new PushNotificationsHandler();
-            $pushService->sendPushNotification("Offer Submitted", "New offer submitted for " . $offerRequest->car->name ,[$offerRequest->buyer->id], "route/to/offer");
+            $pushService->sendPushNotification("Offer Submitted", "New offer submitted for " . $offerRequest->car->name, [$offerRequest->buyer->id], "route/to/offer");
         } else {
             parent::sendResponse(false, "Can't create offer");
         }
@@ -38,7 +39,7 @@ class OffersApiController extends BaseApiController
 
     function submitOfferRequest(Request $request)
     {
-         parent::validate($request,[
+        parent::validate($request, [
             "carID"     => "required:cars,id",
             "colors"    => "nullable|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
