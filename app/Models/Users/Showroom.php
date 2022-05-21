@@ -450,7 +450,7 @@ class Showroom extends Model
      */
     public function getPendingOffers()
     {
-        return $this->offers()->where("OFFR_STTS", Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", "<", date("Y-m-d"))->get();
+        return $this->offers()->where("OFFR_STTS", Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", ">=", date("Y-m-d"))->get();
     }
 
     /**
