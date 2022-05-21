@@ -10,12 +10,14 @@ use App\Models\Users\Showroom;
 use App\Services\PushNotificationsHandler;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OffersApiController extends BaseApiController
 {
 
     function submitNewOffer(Request $request)
     {
+        Log::debug($request->all());
         parent::validate($request, [
             "requestID" =>  "required:offers_requests,id",
             "price"     =>  "required|numeric",
