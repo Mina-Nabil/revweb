@@ -83,7 +83,7 @@ class Offer extends Model
     //relations
     public function colors()
     {
-        return $this->hasMany(OfferColor::class, "OFFR_OFRQ_ID");
+        return $this->hasMany(OfferColor::class, "OFCL_OFFR_ID");
     }
     public function request()
     {
