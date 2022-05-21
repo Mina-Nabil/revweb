@@ -52,7 +52,7 @@ class Offer extends Model
                 $newOffer->save();
                 foreach ($colors as $color) {
                     $newOffer->colors()->create([
-                        "OFCL_OFFR_ID" => $color
+                        "OFCL_COLR_ID" => $color
                     ]);
                 }
                 $request->setAsRepliedTo();
