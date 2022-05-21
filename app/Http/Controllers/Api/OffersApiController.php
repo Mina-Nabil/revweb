@@ -19,7 +19,7 @@ class OffersApiController extends BaseApiController
         parent::validate($request, [
             "requestID" =>  "required:offers_requests,id",
             "price"     =>  "required|numeric",
-            "isLoan"    =>  "required",
+            "isLoan"    =>  "required|numeric",
             "downPayment"   =>  "required",
             "startDate"     =>  "required|date",
             "expiryDate"    =>  "required|date",
