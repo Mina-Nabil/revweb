@@ -92,7 +92,7 @@ class Showroom extends Model
             });
             return true;
         } catch (Exception $e) {
-            Log::error($e);
+            report($e);
             return false;
         }
     }

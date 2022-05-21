@@ -58,7 +58,6 @@ class Offer extends Model
                 $request->setAsRepliedTo();
             });
         } catch (Exception $e) {
-            Log::error("Offer creation failed");
             report($e);
         }
         return $newOffer->fresh();

@@ -69,8 +69,7 @@ class OfferRequest extends Model
             });
             return $newOffer;
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            throw $e;
+            report($e);
         }
     }
 
