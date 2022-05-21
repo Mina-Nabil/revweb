@@ -62,6 +62,7 @@ class OffersApiController extends BaseApiController
     {
         $seller = $request->user();
         $seller->load('showroom');
+        /** @var Showroom */
         $showroom = $seller->showroom;
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getAvailableOfferRequests()]);
@@ -74,6 +75,7 @@ class OffersApiController extends BaseApiController
     {
         $seller = $request->user();
         $seller->load('showroom');
+        /** @var Showroom */
         $showroom = $seller->showroom;
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getPendingOffers()]);
