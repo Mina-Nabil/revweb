@@ -2,6 +2,7 @@
 
 namespace App\Models\Offers;
 
+use App\Models\Cars\ModelColor;
 use Illuminate\Database\Eloquent\Model;
 
 class OfferColor extends Model
