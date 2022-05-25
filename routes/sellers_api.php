@@ -14,12 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Customers routes
+Route::get('/customers', "Api\CustomersApiController@getCustomers");
+
 //Offer routes
 Route::post('/submit/offer', 'Api\OffersApiController@submitNewOffer');
 Route::get('/offerrequests', "Api\OffersApiController@getShowroomCompatibleOfferRequests");
 Route::get('/offers/pending', "Api\OffersApiController@getShowroomPendingOffers");
 Route::get('/offers/approved', "Api\OffersApiController@getShowroomApprovedOffers");
 Route::get('/offers/expired', "Api\OffersApiController@getShowroomExpiredOffers");
+Route::post('/extend/offer', 'Api\OffersApiController@extendOffer');
+Route::post('/extend/offers', 'Api\OffersApiController@extendAllPendingOffers');
+Route::post('/submit/offer', 'Api\OffersApiController@cancelOffer');
 
 //Showroom Management routes
 Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");

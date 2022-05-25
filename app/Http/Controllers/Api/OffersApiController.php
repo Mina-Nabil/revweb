@@ -8,6 +8,7 @@ use App\Models\Offers\OfferRequest;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Services\PushNotificationsHandler;
+use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -106,5 +107,53 @@ class OffersApiController extends BaseApiController
         } else {
             parent::sendResponse(false, "Unautherized", null, true, 403);
         }
+    }
+
+    function extendOffer(Request $request)
+    {
+        $request->validate([
+            "offerID"   =>  "required"
+        ]);
+        /** @var Offer */
+        $offer = Offer::findOrFail($request->offerID);
+        if ($offer->extendOffer(new DateInterval('P2D'))) //add two days
+        {
+            parent::sendResponse(true, "Offer Extended", (object)["offer" =>  $offer->refresh()]);
+        } else      parent::sendResponse(false, "Offer Extension failed");
+    }
+
+    function extendAllPendingOffers(Request $request)
+    {
+
+        $seller = $request->user();
+        $seller->load('showroom');
+        /** @var Showroom */
+        $showroom = $seller->showroom;
+        if ($showroom != null) {
+            /** @var Offer[] */
+            $offers = $showroom->getPendingOffers();
+            $range = new DateInterval('P2D');
+            foreach($offers as $offer){
+                $offer->extendOffer($range);
+            }
+            parent::sendResponse(true, "Offers Extension succeeded");
+        } else {
+            parent::sendResponse(false, "Unautherized", null, true, 403);
+        }
+    }
+
+
+    function cancelOffer(Request $request)
+    {
+        $request->validate([
+            "offerID"   =>  "required",
+            "comment"   =>  "nullable"
+        ]);
+        /** @var Offer */
+        $offer = Offer::findOrFail($request->offerID);
+        if ($offer->cancelOffer($request->comment)) //add two days
+        {
+            parent::sendResponse(true, "Offer Cancelled", (object)["offer" =>  $offer->refresh()]);
+        } else      parent::sendResponse(false, "Offer Cancellation failed");
     }
 }

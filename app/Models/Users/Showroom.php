@@ -538,6 +538,11 @@ class Showroom extends Model
         return $this->hasMany(Offer::class, "OFFR_SHRM_ID");
     }
 
+    public function buyers()
+    {
+        return $this->hasManyThrough(Buyer::class,  Offer::class,  "OFFR_SHRM_ID", "OFFR_BUYR_ID");
+    }
+
     /****
      * Checks wether the requester is the owner
      * @return bool
