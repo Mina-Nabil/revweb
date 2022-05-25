@@ -538,7 +538,7 @@ class Showroom extends Model
         return $this->hasMany(Offer::class, "OFFR_SHRM_ID");
     }
 
-    public function buyers()
+    public function getBuyers()
     {
         return Buyer::join('offers', 'OFFR_BUYR_ID', '=', 'buyers.id')
             ->join('showrooms', 'OFFR_SHRM_ID', '=', 'showrooms.id')
