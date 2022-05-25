@@ -540,7 +540,9 @@ class Showroom extends Model
 
     public function buyers()
     {
-        return $this->hasManyThrough(Buyer::class,  Offer::class,  "OFFR_SHRM_ID", "OFFR_BUYR_ID");
+        return Buyer::join('offers', 'OFFR_BUYR_ID', '=', 'buyers.id')
+            ->join('showrooms', 'OFFR_SHRM_ID', '=', 'showrooms.id')
+            ->where('showrooms.id', $this->id)->get();
     }
 
     /****
