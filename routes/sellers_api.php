@@ -25,7 +25,7 @@ Route::get('/offers/approved', "Api\OffersApiController@getShowroomApprovedOffer
 Route::get('/offers/expired', "Api\OffersApiController@getShowroomExpiredOffers");
 Route::post('/extend/offer', 'Api\OffersApiController@extendOffer');
 Route::post('/extend/offers', 'Api\OffersApiController@extendAllPendingOffers');
-Route::post('/submit/offer', 'Api\OffersApiController@cancelOffer');
+Route::post('/cancel/offer', 'Api\OffersApiController@cancelOffer');
 
 //Showroom Management routes
 Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");
