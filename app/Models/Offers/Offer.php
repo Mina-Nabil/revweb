@@ -6,16 +6,19 @@ use App\Models\Cars\Car;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
+use DateInterval;
 use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 
 class Offer extends Model
 {
     public const ACCEPTED_KEY = "Accepted";
     public const EXPIRED_KEY = "Expired";
+    public const CANCELLED_KEY = "Cancelled";
     public const NEW_KEY = "New";
     public const DECLINED_KEY = "Declined";
 
@@ -24,6 +27,7 @@ class Offer extends Model
         1 => self::ACCEPTED_KEY,
         2 => self::EXPIRED_KEY,
         3 => self::DECLINED_KEY,
+        4 => self::CANCELLED_KEY,
     ];
 
     protected $table = "offers";
@@ -77,6 +81,25 @@ class Offer extends Model
         $this->OFFR_STTS = self::DECLINED_KEY;
         $this->OFFR_RSPN_DATE = date("Y-m-d H:i:s");
         $this->OFFR_BUYR_CMNT = $comment;
+        return $this->save();
+    }
+
+    public function cancelOffer($comment = null): bool
+    {
+        if (is_a(Auth::user(), Seller::class)) {
+            $this->OFFR_STTS = self::CANCELLED_KEY;
+            $this->OFFR_RSPN_DATE = date("Y-m-d H:i:s");
+            if ($comment != null) {
+                $this->OFFR_SLLR_CMNT .= "\nCancellation Comment: \n" . $comment;
+            }
+            return $this->save();
+        } else return false;
+    }
+
+    public function extendOffer(DateInterval $time_range): bool
+    {
+        $currentExpiry = new DateTime($this->OFFR_EXPR_DATE);
+        $currentExpiry->add($time_range);
         return $this->save();
     }
 
