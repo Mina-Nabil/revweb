@@ -100,6 +100,7 @@ class Offer extends Model
     {
         $currentExpiry = new DateTime($this->OFFR_EXPR_DATE);
         $currentExpiry->add($time_range);
+        $this->OFFR_EXPR_DATE = $currentExpiry->format('Y-m-d H:i:s');
         return $this->save();
     }
 
