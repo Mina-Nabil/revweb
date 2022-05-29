@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Users\Showroom;
 use Illuminate\Http\Request;
 
 class CustomersApiController extends BaseApiController
@@ -9,15 +10,16 @@ class CustomersApiController extends BaseApiController
     public function getCustomers(Request $request)
     {
         $seller = $request->user();
-        $seller->load('showroom');
+        $seller->loadMissing('showroom');
         /** @var Showroom */
         $showroom = $seller->showroom;
+        $showroom->loadMissing();
         if ($showroom != null) {
             parent::sendResponse(true, "Buyers Retrieved", (object)[
                 "buyers"    =>  $showroom->getBuyers()
             ]);
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 }
