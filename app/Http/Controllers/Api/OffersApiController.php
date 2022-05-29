@@ -68,7 +68,7 @@ class OffersApiController extends BaseApiController
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $showroom->getAvailableOfferRequests()]);
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
@@ -81,7 +81,7 @@ class OffersApiController extends BaseApiController
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getPendingOffers()]);
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
@@ -93,7 +93,7 @@ class OffersApiController extends BaseApiController
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getApprovedOffers()]);
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
@@ -105,7 +105,7 @@ class OffersApiController extends BaseApiController
         if ($showroom != null) {
             parent::sendResponse(true, "Offer Requests retrieved", (object)["offers" => $showroom->getExpiredOffers()]);
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
@@ -138,7 +138,7 @@ class OffersApiController extends BaseApiController
             }
             parent::sendResponse(true, "Offers Extension succeeded");
         } else {
-            parent::sendResponse(false, "Unautherized", null, true, 403);
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
