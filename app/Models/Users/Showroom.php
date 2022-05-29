@@ -542,7 +542,8 @@ class Showroom extends Model
     {
         return Buyer::join('offers', 'OFFR_BUYR_ID', '=', 'buyers.id')
             ->join('showrooms', 'OFFR_SHRM_ID', '=', 'showrooms.id')
-            ->select('offers.*', 'showrooms.*', 'buyers.*')
+            ->join('cars', 'OFFR_CAR_ID', '=', 'cars.id')
+            ->select('offers.*', 'showrooms.*', 'cars.*', 'buyers.*')
             ->where('showrooms.id', $this->id)->get();
     }
 
