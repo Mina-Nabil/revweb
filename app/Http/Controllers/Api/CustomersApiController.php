@@ -13,9 +13,10 @@ class CustomersApiController extends BaseApiController
         $seller->loadMissing('showroom');
         /** @var Showroom */
         $showroom = $seller->showroom;
+        $buyersOffers = $showroom->offers()->with('buyer', 'car');
         if ($showroom != null) {
             parent::sendResponse(true, "Buyers Retrieved", (object)[
-                "buyers"    =>  $showroom->getBuyers()
+                "buyers"    =>  $buyersOffers
             ]);
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
