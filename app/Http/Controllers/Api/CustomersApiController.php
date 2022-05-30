@@ -16,7 +16,7 @@ class CustomersApiController extends BaseApiController
         $buyersOffers = $showroom->offers()->with('buyer', 'car')->get();
         if ($showroom != null) {
             parent::sendResponse(true, "Buyers Retrieved", (object)[
-                "buyers"    =>  $buyersOffers
+                "soldOffers"    =>  $buyersOffers
             ]);
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
