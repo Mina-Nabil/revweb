@@ -2,9 +2,12 @@
 
 namespace App\Models\Users;
 
+use App\Models\Offers\Offer;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Exception;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
@@ -198,6 +201,10 @@ class Buyer extends Authenticatable
     function ownedCars()
     {
         return $this->belongsToMany(Car::class, "owned_cars", "OWND_BUYR_ID", "OWND_CAR_ID");
+    }
+
+    public function offers():HasMany{
+        return $this->hasMany(Offer::class, "");
     }
 
 
