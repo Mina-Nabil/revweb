@@ -60,7 +60,7 @@ class Buyer extends Authenticatable
             $passwordStatus = Hash::check($password, $buyer->BUYR_PASS);
             if ($passwordStatus) {
                 return [
-                    "seller" => $buyer,
+                    "buyer" => $buyer,
                     "apiKey" => $buyer->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken
                 ];
             } else {
