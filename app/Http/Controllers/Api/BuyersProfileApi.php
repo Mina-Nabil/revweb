@@ -21,7 +21,7 @@ class BuyersProfileApi extends BaseApiController
             "email"         => "required|unique:buyers,BUYR_MAIL",
             "mobNumber1"    => "required|unique:buyers,BUYR_MOB1|size:11",
             "mobNumber2"    => "nullable|unique:buyers,BUYR_MOB2",
-            "password"      => "required|size:8",
+            "password"      => "required|min:8",
             "deviceName"    => "required",
             "mobNumber2"    => "nullable|size:11",
             "gender"        => ['required', Rule::in(["Male", "Female", "Prefer not to Say"])],
