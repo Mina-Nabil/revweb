@@ -19,7 +19,7 @@ class Buyer extends Authenticatable
     use HasApiTokens, SoftDeletes;
 
     //table is Buyers
-    const ACCESS_TOKEN = "access_buyers_api" ;
+    const ACCESS_TOKEN = "access_buyers_api";
     protected $table = "buyers";
     public $timestamps = true;
 
@@ -45,7 +45,7 @@ class Buyer extends Authenticatable
             $newbuyer->save();
             return $newbuyer;
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -59,7 +59,10 @@ class Buyer extends Authenticatable
         if ($buyer != null) {
             $passwordStatus = Hash::check($password, $buyer->BUYR_PASS);
             if ($passwordStatus) {
-                return $buyer->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken;
+                return [
+                    "seller" => $buyer,
+                    "apiKey" => $buyer->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken
+                ];
             } else {
                 return -2; //Incorrect Password
             }
@@ -68,7 +71,8 @@ class Buyer extends Authenticatable
         }
     }
 
-    function getApiToken($deviceName){
+    function getApiToken($deviceName)
+    {
         return $this->createToken($deviceName, [self::ACCESS_TOKEN])->plainTextToken;
     }
 
@@ -109,10 +113,10 @@ class Buyer extends Authenticatable
 
         if ($emailHandler->confirmEmailVerfication($this->BUYR_MAIL, $emailCode)) {
             $this->BUYR_MAIL_VRFD = 1;
-            try{
+            try {
                 $this->save();
             } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class] );
+                Log::alert($e->getMessage(), ["DB" => self::class]);
                 throw $e;
             }
             return true;
@@ -129,7 +133,7 @@ class Buyer extends Authenticatable
             try {
                 $this->save();
             } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class] );
+                Log::alert($e->getMessage(), ["DB" => self::class]);
                 throw $e;
             }
         } else {
@@ -145,7 +149,7 @@ class Buyer extends Authenticatable
             try {
                 $this->save();
             } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class] );
+                Log::alert($e->getMessage(), ["DB" => self::class]);
                 throw $e;
             }
         } else {
@@ -162,7 +166,7 @@ class Buyer extends Authenticatable
         try {
             return $this->save();
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -175,7 +179,7 @@ class Buyer extends Authenticatable
         try {
             $this->save();
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -186,7 +190,7 @@ class Buyer extends Authenticatable
         try {
             $this->save();
         } catch (Exception $e) {
-            Log::alert($e->getMessage(), ["DB" => self::class] );
+            Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
     }
@@ -203,7 +207,8 @@ class Buyer extends Authenticatable
         return $this->belongsToMany(Car::class, "owned_cars", "OWND_BUYR_ID", "OWND_CAR_ID");
     }
 
-    public function offers():HasMany{
+    public function offers(): HasMany
+    {
         return $this->hasMany(Offer::class, "");
     }
 
