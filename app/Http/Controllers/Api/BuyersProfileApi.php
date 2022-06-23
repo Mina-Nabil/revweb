@@ -75,10 +75,12 @@ class BuyersProfileApi extends BaseApiController
             $loginResponse = Buyer::login($request->identifier, $request->password, $request->deviceName);
             if ($loginResponse == -1) { //Incorrect Email/Mobile Number
                 parent::sendResponse(false, "Email/Mobile Number can't be found");
+                die;
             } else if ($loginResponse == -2) {
                 parent::sendResponse(false, "Incorrect Password");
-            } else if (is_string($loginResponse)) {
-                parent::sendResponse(true, "Login Succeeded", ["apiKey" => $loginResponse]);
+                die;
+            } else if (is_array($loginResponse)) {
+                parent::sendResponse(true, "Login Succeeded", $loginResponse);
             }
         }
     }
