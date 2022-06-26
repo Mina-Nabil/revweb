@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cars\Car;
 use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
+use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Services\PushNotificationsHandler;
@@ -56,6 +57,18 @@ class OffersApiController extends BaseApiController
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
             $pushService->sendPushNotification("New Offer Request", $car->model->brand->BRND_NAME . " " . $car->model->MODL_NAME . " request submitted", $sellersSellingCar->pluck('id'), "route/to/offer");
         } else {
+        }
+    }
+
+    function getBuyerOffers(Request $request)
+    {
+        /** @var Buyer */
+        $buyer = $request->user();
+        if ($buyer != null) {
+            $buyer->load('offer_requests');
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $buyer->getActiveRequests()]);
+        } else {
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
     }
 
@@ -133,7 +146,7 @@ class OffersApiController extends BaseApiController
             /** @var Offer[] */
             $offers = $showroom->getPendingOffers();
             $range = new DateInterval('P2D');
-            foreach($offers as $offer){
+            foreach ($offers as $offer) {
                 $offer->extendOffer($range);
             }
             parent::sendResponse(true, "Offers Extension succeeded");

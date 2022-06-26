@@ -3,6 +3,7 @@
 namespace App\Models\Users;
 
 use App\Models\Offers\Offer;
+use App\Models\Offers\OfferRequest;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Exception;
@@ -195,6 +196,10 @@ class Buyer extends Authenticatable
         }
     }
 
+    function getActiveRequests(){
+        return $this->offer_requests()->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->get();
+    }
+
 
     //relations
     function favCars()
@@ -205,6 +210,11 @@ class Buyer extends Authenticatable
     function ownedCars()
     {
         return $this->belongsToMany(Car::class, "owned_cars", "OWND_BUYR_ID", "OWND_CAR_ID");
+    }
+
+    public function offer_requests(): HasMany
+    {
+        return $this->hasMany(OfferRequest::class, "OFRQ_BUYR_ID");
     }
 
     public function offers(): HasMany
