@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\BuyersDataApi;
+use App\Http\Controllers\Api\BuyersProfileApi;
+use App\Http\Controllers\Api\OffersApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/submit/request', "Api\OffersApiController@submitOfferRequest");
-Route::get('/user', "Api\BuyersProfileApi@getUser");
+Route::get('/get/models/{brandID}',  [BuyersDataApi::class, 'models']);
+Route::get('/brands', [BuyersDataApi::class, 'brands']);
+Route::get('/offers/active', [OffersApiController::class, 'getBuyerOffers']);
+Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
+Route::get('/user', [BuyersProfileApi::class, 'getUser']);
