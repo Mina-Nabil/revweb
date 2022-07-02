@@ -56,8 +56,8 @@ class SellersProfileApi extends BaseApiController
 
         if (parent::validateRequest($request, [
             "name"          => "required",
-            "mobNumber1"    => "required|unique:sellers,BUYR_MOB1," . $user->id . ",|size:11",
-            "mobNumber2"    => "nullable|unique:sellers,BUYR_MOB2," . $user->id,
+            "mobNumber1"    => "required|unique:sellers,SLLR_MOB1," . $user->id . ",|size:11",
+            "mobNumber2"    => "nullable|unique:sellers,SLLR_MOB1," . $user->id,
             // "password"      => "required|min:8",
             // "deviceName"    => "required",
             // "nationalID"    =>  "nullable|numeric",
