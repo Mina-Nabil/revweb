@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/models/{brandID}',  [BuyersDataApi::class, 'models']);
 Route::get('/brands', [BuyersDataApi::class, 'brands']);
-Route::get('/offers/requests', [OffersApiController::class, 'getBuyerOffers']);
+Route::get('/offers/requests', [OffersApiController::class, 'getBuyerRequests']);
+Route::get('/offers', [OffersApiController::class, 'getBuyerOffers']);
 Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
