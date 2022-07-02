@@ -23,3 +23,4 @@ Route::get('/offers/requests', [OffersApiController::class, 'getBuyerRequests'])
 Route::get('/offers', [OffersApiController::class, 'getBuyerOffers']);
 Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
+Route::post('/user', [BuyersProfileApi::class, 'editUser']);

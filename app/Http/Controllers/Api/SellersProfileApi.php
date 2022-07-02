@@ -7,8 +7,10 @@ use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Services\FilesHandler;
 use App\Services\PushNotificationsHandler;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class SellersProfileApi extends BaseApiController
@@ -44,6 +46,40 @@ class SellersProfileApi extends BaseApiController
             $filesHandler->deleteFile($displayImageFilePath);
         }
         parent::sendResponse(true, "Registration Succeeded!", (object)["seller" => $newSeller, "token" => $newSeller->getApiToken($request->deviceName)]);
+    }
+
+
+    function editUser(Request $request)
+    {
+        /** @var Seller */
+        $user = Auth::user();
+
+        if (parent::validateRequest($request, [
+            "name"          => "required",
+            "mobNumber1"    => "required|unique:sellers,BUYR_MOB1," . $user->id . ",|size:11",
+            "mobNumber2"    => "nullable|unique:sellers,BUYR_MOB2," . $user->id,
+            // "password"      => "required|min:8",
+            // "deviceName"    => "required",
+            // "nationalID"    =>  "nullable|numeric",
+            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
+            // "nationalIDFront"  =>  "nullable|image|size:10000", //10 MB max
+            // "nationalIDBack"  =>  "nullable|image|size:10000", //10 MB max
+
+        ])) {
+            $filesHandler = new FilesHandler();
+            $displayImageFilePath = null;
+
+            if ($request->hasFile("displayImage")) {
+                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos');
+            }
+            $res = $user->updateInfo($request->name, $request->mobNumber1, $request->mobNumber2, $displayImageFilePath);
+            if (!$res) {
+                parent::sendResponse(false, "Registration Failed");
+                $filesHandler->deleteFile($displayImageFilePath);
+            } else {
+                parent::sendResponse(true, "Registration Succeeded!", ["seller" => $user]);
+            }
+        }
     }
 
     function getUser(Request $request)

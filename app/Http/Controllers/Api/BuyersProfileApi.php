@@ -7,6 +7,7 @@ use App\Services\FilesHandler;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class BuyersProfileApi extends BaseApiController
@@ -88,6 +89,45 @@ class BuyersProfileApi extends BaseApiController
     function getUser(Request $request)
     {
         parent::sendResponse(true, "Current User Retrieved", $request->user());
+    }
+
+    function editUser(Request $request)
+    {
+        /** @var Buyer */
+        $user = Auth::user();
+        $maxBday = new DateTime("now");
+        date_sub($maxBday, date_interval_create_from_date_string('15 year'));
+
+        if (parent::validateRequest($request, [
+            "naame"          => "required",
+            "mobNumber1"    => "required|unique:buyers,BUYR_MOB1," . $user->id . ",|size:11",
+            "mobNumber2"    => "nullable|unique:buyers,BUYR_MOB2," . $user->id,
+            // "password"      => "required|min:8",
+            // "deviceName"    => "required",
+            "gender"        => ['required', Rule::in(["Male", "Female", "Prefer not to Say"])],
+            "bday"          => "required|date|after:1930-01-01|before:" . $maxBday->format('Y-01-01'),
+            // "nationalID"    =>  "nullable|numeric",
+            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
+            // "nationalIDFront"  =>  "nullable|image|size:10000", //10 MB max
+            // "nationalIDBack"  =>  "nullable|image|size:10000", //10 MB max
+
+        ])) {
+            $filesHandler = new FilesHandler();
+            $displayImageFilePath = null;
+
+            if ($request->hasFile("displayImage")) {
+                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "buyers/" . $user->BUYR_MAIL . '/ids//');
+            }
+
+            $res = $user->updateInfo($request->name, $request->mobNumber1, $request->bday, $request->gender, $request->mobNumber2, $displayImageFilePath);
+
+            if (!$res) {
+                parent::sendResponse(false, "Registration Failed");
+                $filesHandler->deleteFile($displayImageFilePath);
+            } else {
+                parent::sendResponse(true, "Registration Succeeded!", ["buyer" => $user]);
+            }
+        }
     }
 
     function addImage()
