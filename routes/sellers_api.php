@@ -57,7 +57,7 @@ Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
 
 //profile functions
 Route::get('/user', "Api\SellersProfileApi@getUser");
-Route::post('/update', "Api\SellersProfileApi@updateSellerData");
+Route::post('/user', "Api\SellersProfileApi@editUser");
 Route::post('/search/showrooms', "Api\SellersProfileApi@searchShowrooms");
 Route::get('/get/joinrequests', "Api\SellersProfileApi@getJoinRequestsAndInvitations");
 Route::post('/submit/join/request', "Api\SellersProfileApi@submitShowroomJoinRequest");

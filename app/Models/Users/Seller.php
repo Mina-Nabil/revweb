@@ -41,26 +41,22 @@ class Seller extends Authenticatable
         }
     }
 
-    function updateInfo($name, $email, $mobileNumber1, $password = null, $mobileNumber2 = null)
+    function updateInfo($name, $mobileNumber1, $mobileNumber2 = null,  $accountImagePath = null) : bool
     {
         $this->SLLR_NAME = $name;
-        if ($this->SLLR_MAIL != $email) {
-            $this->SLLR_MAIL = $email;
-            $this->SLLR_MAIL_VRFD = 0;
-        }
         if ($this->SLLR_MOB1 != $mobileNumber1) {
             $this->SLLR_MOB1 = $mobileNumber1;
             $this->SLLR_MOB1_VRFD = 0;
         }
-        if ($password != null)
-            $this->SLLR_PASS = Hash::make($password);
         $this->SLLR_MOB2 = $mobileNumber2;
-
+        if ($accountImagePath != null) {
+            $this->SLLR_IMGE = $accountImagePath;
+        }
         try {
-            $this->save();
-            return $this;
+            return $this->save();
         } catch (Exception $e) {
-            throw $e;
+            report($e);
+            return false;
         }
     }
 
