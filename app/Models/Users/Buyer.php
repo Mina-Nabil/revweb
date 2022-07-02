@@ -196,7 +196,14 @@ class Buyer extends Authenticatable
         }
     }
 
-    function getActiveRequests(){
+    function getActiveOffers()
+    {
+        $offers = $this->offers()->where('OFFR_STTS', Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", "=>", date('Y-m-d'))->get();
+        return $offers;
+    }
+
+    function getActiveRequests()
+    {
         return $this->offer_requests()->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->get();
     }
 
@@ -217,9 +224,9 @@ class Buyer extends Authenticatable
         return $this->hasMany(OfferRequest::class, "OFRQ_BUYR_ID");
     }
 
-    public function offers(): HasMany
+    public function offers(): HasManyThrough
     {
-        return $this->hasMany(Offer::class, "");
+        return $this->hasManyThrough(Offer::class, OfferRequest::class, "OFRQ_BUYR_ID", "OFFR_OFRQ_ID");
     }
 
 

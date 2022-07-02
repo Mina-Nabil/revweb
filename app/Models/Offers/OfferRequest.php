@@ -104,6 +104,7 @@ class OfferRequest extends Model
 
     public function offers()
     {
+        /** @var Seller */
         $user = Auth::user();
         $rel= $this->hasMany(Offer::class, "OFFR_OFRQ_ID");
         if(is_a($user, Seller::class)){
