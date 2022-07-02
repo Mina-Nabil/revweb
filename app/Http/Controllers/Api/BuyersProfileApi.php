@@ -99,7 +99,7 @@ class BuyersProfileApi extends BaseApiController
         date_sub($maxBday, date_interval_create_from_date_string('15 year'));
 
         if (parent::validateRequest($request, [
-            "naame"          => "required",
+            "name"          => "required",
             "mobNumber1"    => "required|unique:buyers,BUYR_MOB1," . $user->id . ",|size:11",
             "mobNumber2"    => "nullable|unique:buyers,BUYR_MOB2," . $user->id,
             // "password"      => "required|min:8",
