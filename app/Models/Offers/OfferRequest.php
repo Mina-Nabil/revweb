@@ -84,7 +84,7 @@ class OfferRequest extends Model
             $that = $this;
             DB::transaction(function () use ($that, $car, $colors) {
                 $that->save();
-                $that->colors()->associate([]);
+                $that->colors()->delete();
                 $i = 0;
                 $colorsIDs = $car->colors->pluck('id')->toArray();
                 foreach ($colors as $color) {
