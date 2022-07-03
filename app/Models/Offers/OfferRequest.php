@@ -76,10 +76,24 @@ class OfferRequest extends Model
     /**
      * Sets request as replied to if it is not
      */
-    public function setAsRepliedTo()
+    public function setAsRepliedTo(): bool
     {
         $this->OFRQ_STTS = self::REPLIED_KEY;
-        $this->save();
+        return $this->save();
+    }
+
+    /**
+     * Sets request as cancelled
+     */
+    public function setAsCancelled(): bool
+    {
+        $this->OFRQ_STTS = self::CANCELLED_KEY;
+        return $this->save();
+    }
+
+    public function owned_by(Buyer $buyer): bool
+    {
+        return $this->OFRQ_BUYR_ID == $buyer->id;
     }
 
 
@@ -106,11 +120,11 @@ class OfferRequest extends Model
     {
         /** @var Seller */
         $user = Auth::user();
-        $rel= $this->hasMany(Offer::class, "OFFR_OFRQ_ID");
-        if(is_a($user, Seller::class)){
+        $rel = $this->hasMany(Offer::class, "OFFR_OFRQ_ID");
+        if (is_a($user, Seller::class)) {
             $user->loadMissing("showroom");
-            if($user->showroom != null)
-            $rel = $rel->where("offers.OFFR_SHRM_ID", $user->showroom->id);
+            if ($user->showroom != null)
+                $rel = $rel->where("offers.OFFR_SHRM_ID", $user->showroom->id);
         }
         return $rel;
     }
