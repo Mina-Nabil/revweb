@@ -70,11 +70,11 @@ class OffersApiController extends BaseApiController
         /** @var Buyer */
         $buyer = $request->user();
         /** @var OfferRequest */
-        $request = OfferRequest::findOrFail($req_id);
-        if ($request->owned_by($buyer)) {
-            $res =  $request->updateRequest($request->pymtType, $request->comment, $request->colors);
+        $offer_req = OfferRequest::findOrFail($req_id);
+        if ($offer_req->owned_by($buyer)) {
+            $res =  $offer_req->updateRequest($request->pymtType, $request->comment, $request->colors);
             if ($res) {
-                parent::sendResponse(true, "Offers Request Updated", $request->fresh(), false);
+                parent::sendResponse(true, "Offers Request Updated", $offer_req->fresh(), false);
             } else {
                 parent::sendResponse(false, "Offers Request Update Failed");
             }
