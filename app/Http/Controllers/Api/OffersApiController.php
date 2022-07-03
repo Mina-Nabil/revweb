@@ -61,6 +61,28 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function editOfferRequest($req_id, Request $request)
+    {
+        parent::validate($request, [
+            "colors"    => "nullable|array",
+            "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
+        ]);
+        /** @var Buyer */
+        $buyer = $request->user();
+        /** @var OfferRequest */
+        $request = OfferRequest::findOrFail($req_id);
+        if ($request->owned_by($buyer)) {
+            $res =  $request->updateRequest($request->pymtType, $request->comment, $request->colors);
+            if ($res) {
+                parent::sendResponse(true, "Offers Request Updated", $request->fresh(), false);
+            } else {
+                parent::sendResponse(false, "Offers Request Update Failed");
+            }
+        } else {
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
+        }
+    }
+
     function getBuyerRequests(Request $request)
     {
         /** @var Buyer */
@@ -78,7 +100,6 @@ class OffersApiController extends BaseApiController
         /** @var Buyer */
         $buyer = $request->user();
         if ($buyer != null) {
-      
             parent::sendResponse(true, "Offers retrieved", (object)["offers" => $buyer->getActiveoffers()]);
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
@@ -91,7 +112,7 @@ class OffersApiController extends BaseApiController
         $request = OfferRequest::findOrFail($request_id);
         /** @var Buyer */
         $buyer = Auth::user();
-        if($request->owned_by($buyer)){
+        if ($request->owned_by($buyer)) {
             parent::sendResponse($request->setAsCancelled(), "N/A");
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);

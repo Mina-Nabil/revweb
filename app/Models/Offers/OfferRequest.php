@@ -73,6 +73,36 @@ class OfferRequest extends Model
         }
     }
 
+    public function updateRequest(string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = []): bool
+    {
+
+        $this->OFRQ_PRFD_PYMT = $paymentMethod;
+        $this->OFRQ_CMNT = $comment;
+
+        $car = Car::with("colors")->findOrFail($this->OFRQ_CAR_ID);
+        try {
+            $that = $this;
+            DB::transaction(function () use ($that, $car, $colors) {
+                $that->save();
+                $that->colors()->associate([]);
+                $i = 0;
+                $colorsIDs = $car->colors->pluck('id')->toArray();
+                foreach ($colors as $color) {
+                    if (in_array($color, $colorsIDs)) {
+                        $that->colors()->create([
+                            "OFRC_COLR_ID" => $color,
+                            "OFRC_PRTY" => $i++ * 100
+                        ]);
+                    }
+                }
+            });
+            return true;
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
     /**
      * Sets request as replied to if it is not
      */
