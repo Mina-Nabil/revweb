@@ -22,5 +22,7 @@ Route::get('/brands', [BuyersDataApi::class, 'brands']);
 Route::get('/offers/requests', [OffersApiController::class, 'getBuyerRequests']);
 Route::get('/offers', [OffersApiController::class, 'getBuyerOffers']);
 Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
+Route::post('/edit/request', [OffersApiController::class, 'editOfferRequest']);
+Route::put('/cancel/request/{id}', [OffersApiController::class, 'cancelRequest']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
 Route::post('/user', [BuyersProfileApi::class, 'editUser']);

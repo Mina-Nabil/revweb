@@ -12,6 +12,7 @@ use App\Services\PushNotificationsHandler;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class OffersApiController extends BaseApiController
@@ -79,6 +80,19 @@ class OffersApiController extends BaseApiController
         if ($buyer != null) {
       
             parent::sendResponse(true, "Offers retrieved", (object)["offers" => $buyer->getActiveoffers()]);
+        } else {
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
+        }
+    }
+
+    function cancelRequest($request_id)
+    {
+        /** @var OfferRequest */
+        $request = OfferRequest::findOrFail($request_id);
+        /** @var Buyer */
+        $buyer = Auth::user();
+        if($request->owned_by($buyer)){
+            parent::sendResponse($request->setAsCancelled(), "N/A");
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
         }
