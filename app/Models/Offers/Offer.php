@@ -31,7 +31,7 @@ class Offer extends Model
     ];
 
     protected $table = "offers";
-    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model"];
+    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors"];
     public $timestamps = true;
 
     static function createOffer(OfferRequest $request, Seller $seller, $isLoan, $price, $downpayment, DateTime $startDate, DateTime $endDate, array $colors, $comment = null)
