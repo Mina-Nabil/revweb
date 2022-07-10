@@ -28,9 +28,9 @@ class BuyersProfileApi extends BaseApiController
             "gender"        => ['required', Rule::in(["Male", "Female", "Prefer not to Say"])],
             "bday"          => "required|date|after:1930-01-01|before:" . $maxBday->format('Y-01-01'),
             "nationalID"    =>  "nullable|numeric",
-            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
-            "nationalIDFront"  =>  "nullable|image|size:10000", //10 MB max
-            "nationalIDBack"  =>  "nullable|image|size:10000", //10 MB max
+            "displayImage"  =>  "nullable|image|max:10000", //10 MB max
+            "nationalIDFront"  =>  "nullable|image|max:10000", //10 MB max
+            "nationalIDBack"  =>  "nullable|image|max:10000", //10 MB max
 
         ])) {
             $filesHandler = new FilesHandler();
@@ -107,7 +107,7 @@ class BuyersProfileApi extends BaseApiController
             "gender"        => ['required', Rule::in(["Male", "Female", "Prefer not to Say"])],
             "bday"          => "required|date|after:1930-01-01|before:" . $maxBday->format('Y-01-01'),
             // "nationalID"    =>  "nullable|numeric",
-            "displayImage"  =>  "nullable|image|size:10000", //10 MB max
+            "displayImage"  =>  "nullable|image|max:10000", //10 MB max
             // "nationalIDFront"  =>  "nullable|image|size:10000", //10 MB max
             // "nationalIDBack"  =>  "nullable|image|size:10000", //10 MB max
 
