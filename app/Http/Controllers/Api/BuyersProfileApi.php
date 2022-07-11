@@ -38,13 +38,13 @@ class BuyersProfileApi extends BaseApiController
             $nationalIDFrontFilePath = null;
             $nationalIDBackFilePath = null;
             if ($request->hasFile("displayImage")) {
-                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "buyers/" . $request->email . '/ids//');
+                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "buyers/" . $request->email . '/ids');
             }
             if ($request->hasFile("nationalIDFront")) {
-                $nationalIDFrontFilePath = $filesHandler->uploadFile($request->nationalIDFront, "buyers/" . $request->email . '/ids//');
+                $nationalIDFrontFilePath = $filesHandler->uploadFile($request->nationalIDFront, "buyers/" . $request->email . '/ids');
             }
             if ($request->hasFile("nationalIDBack")) {
-                $nationalIDBackFilePath = $filesHandler->uploadFile($request->nationalIDBack, "buyers/" . $request->email . '/ids//');
+                $nationalIDBackFilePath = $filesHandler->uploadFile($request->nationalIDBack, "buyers/" . $request->email . '/ids');
             }
             $newBuyer = null;
             $error = null;
@@ -116,7 +116,7 @@ class BuyersProfileApi extends BaseApiController
             $displayImageFilePath = null;
 
             if ($request->hasFile("displayImage")) {
-                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "buyers/" . $user->BUYR_MAIL . '/ids//');
+                $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "buyers/" . $user->BUYR_MAIL . '/ids');
             }
 
             $res = $user->updateInfo($request->name, $request->mobNumber1, $request->bday, $request->gender, $request->mobNumber2, $displayImageFilePath);
