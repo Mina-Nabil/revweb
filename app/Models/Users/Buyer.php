@@ -52,7 +52,7 @@ class Buyer extends Authenticatable
         }
     }
     ///model function
-    public function updateInfo($name, $mobileNumber1, $bday, $gender, $birthday = null, $mobileNumber2 = null, $displayImage=null): bool
+    public function updateInfo($name, $mobileNumber1, $bday, $gender, $mobileNumber2 = null, $displayImage=null): bool
     {
         $this->BUYR_NAME = $name;
         if ($mobileNumber1 != $this->BUYR_MOB1) {
@@ -65,7 +65,6 @@ class Buyer extends Authenticatable
         $this->BUYR_MOB2 = $mobileNumber2;
         $this->BUYR_BDAY = $bday;
         $this->BUYR_GNDR = $gender;
-        $this->BUYR_BDAY = ($birthday) ? (new Carbon($birthday))->format('Y-m-d') : null;
 
         try {
             return $this->save();
