@@ -35,7 +35,7 @@ class Buyer extends Authenticatable
         $newbuyer->BUYR_MOB1 = $mobileNumber1;
         $newbuyer->BUYR_PASS = Hash::make($password);
         $newbuyer->BUYR_MOB2 = $mobileNumber2;
-        $newbuyer->BUYR_BDAY = $bday;
+        $newbuyer->BUYR_BDAY = (new Carbon($bday))->format('Y-m-d');
         $newbuyer->BUYR_GNDR = $gender;
         $newbuyer->BUYR_NTID = $buyerNationalID;
         $newbuyer->BUYR_BANK = $bankAccount;
@@ -65,7 +65,7 @@ class Buyer extends Authenticatable
             $this->BUYR_IMGE = $displayImage;
         }
         $this->BUYR_MOB2 = $mobileNumber2;
-        $this->BUYR_BDAY = $bday;
+        $this->BUYR_BDAY = (new Carbon($bday))->format('Y-m-d');
         $this->BUYR_GNDR = $gender;
 
         try {
