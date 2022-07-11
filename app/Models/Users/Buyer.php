@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Buyer extends Authenticatable
 {
@@ -23,6 +24,7 @@ class Buyer extends Authenticatable
     //table is Buyers
     const ACCESS_TOKEN = "access_buyers_api";
     protected $table = "buyers";
+    protected $appends = array('image_url');
     public $timestamps = true;
 
     static function create($name, $email, $mobileNumber1, $bday, $gender, $password, $buyerNationalID = null, $mobileNumber2 = null, $bankAccount = null, $ibanNumber = null, $accountImagePath = null, $buyerNationalIDFrontImagePath = null, $buyerNationalIDBackImagePath = null)
@@ -52,7 +54,7 @@ class Buyer extends Authenticatable
         }
     }
     ///model function
-    public function updateInfo($name, $mobileNumber1, $bday, $gender, $mobileNumber2 = null, $displayImage=null): bool
+    public function updateInfo($name, $mobileNumber1, $bday, $gender, $mobileNumber2 = null, $displayImage = null): bool
     {
         $this->BUYR_NAME = $name;
         if ($mobileNumber1 != $this->BUYR_MOB1) {
@@ -217,6 +219,12 @@ class Buyer extends Authenticatable
             Log::alert($e->getMessage(), ["DB" => self::class]);
             throw $e;
         }
+    }
+
+    //Accessors
+    public function getImageUrlAttribute()
+    {
+        return (isset($this->BUYR_IMGE)) ? Storage::url($this->BUYR_IMGE) : null;
     }
 
     function getActiveOffers()
