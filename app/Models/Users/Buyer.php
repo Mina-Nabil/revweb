@@ -229,24 +229,26 @@ class Buyer extends Authenticatable
 
     function getActiveOffers()
     {
-        $offers = $this->offers()->where('OFFR_STTS', Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", ">=", date('Y-m-d'))->cursorPaginate(15);
-        return $offers;
+        $offers = $this->offers()->where('OFFR_STTS', Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", ">=", date('Y-m-d'));
+        return $offers->cursorPaginate(15);
     }
 
     function getAllOffers()
     {
-        $offers = $this->offers()->cursorPaginate(15);
-        return $offers;
+        $offers = $this->offers();
+        return $offers->cursorPaginate(15);
     }
 
     function getActiveRequests()
     {
-        return $this->offer_requests()->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->cursorPaginate(15);
+        $requests = $this->offer_requests()->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY]);
+        return $requests->cursorPaginate(15);
     }
 
     function getRequestsHistory()
     {
-        return $this->offer_requests()->cursorPaginate(15);
+        $requests = $this->offer_requests();
+        return $requests->cursorPaginate(15);
     }
 
 
