@@ -88,8 +88,18 @@ class OffersApiController extends BaseApiController
         /** @var Buyer */
         $buyer = $request->user();
         if ($buyer != null) {
-            $buyer->load('offer_requests');
             parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $buyer->getActiveRequests()]);
+        } else {
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
+        }
+    }
+
+    function getRequestsHistory(Request $request)
+    {
+        /** @var Buyer */
+        $buyer = $request->user();
+        if ($buyer != null) {
+            parent::sendResponse(true, "Offer Requests retrieved", (object)["requests" => $buyer->getRequestsHistory()]);
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
         }

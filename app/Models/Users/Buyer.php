@@ -244,6 +244,11 @@ class Buyer extends Authenticatable
         return $this->offer_requests()->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->get();
     }
 
+    function getRequestsHistory()
+    {
+        return $this->offer_requests()->cursor();
+    }
+
 
     //relations
     function favCars()
