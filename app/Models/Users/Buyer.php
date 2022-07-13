@@ -229,7 +229,13 @@ class Buyer extends Authenticatable
 
     function getActiveOffers()
     {
-        $offers = $this->offers()->where('OFFR_STTS', Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", ">=", date('Y-m-d'))->get();
+        $offers = $this->offers()->where('OFFR_STTS', Offer::NEW_KEY)->whereDate("OFFR_EXPR_DATE", ">=", date('Y-m-d'))->cursor();
+        return $offers;
+    }
+
+    function getAllOffers()
+    {
+        $offers = $this->offers()->cursor();
         return $offers;
     }
 
