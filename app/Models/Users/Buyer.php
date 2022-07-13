@@ -248,7 +248,7 @@ class Buyer extends Authenticatable
     function getRequestsHistory()
     {
         $requests = $this->offer_requests();
-        return $requests->cursorPaginate(15);
+        return $requests->paginate(15);
     }
 
 
