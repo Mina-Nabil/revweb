@@ -14,29 +14,23 @@ class CarModel extends Model
     protected $appends = ['image_url', 'pdf_url'];
     protected $with = ["brand", "type"];
 
-    public function brand()
+
+    ///////attributes
+
+
+    public function getImageUrlAttribute()
     {
-        return $this->belongsTo(Brand::class, 'MODL_BRND_ID');
+        return (isset($this->MODL_IMGE)) ? Storage::url($this->MODL_IMGE) : null;
     }
 
-    public function type()
+    public function getPdfUrlAttribute()
     {
-        return $this->belongsTo(CarType::class, 'MODL_TYPE_ID');
+        return (isset($this->attributes['MODL_BRCH'])) ? Storage::url($this->attributes['MODL_BRCH']) : null;
     }
 
-    public function cars()
+    public function getTitleAttribute()
     {
-        return $this->hasMany(Car::class, 'CAR_MODL_ID');
-    }
-
-    public function colors()
-    {
-        return $this->hasMany(ModelColor::class, 'COLR_MODL_ID');
-    }
-
-    public function images()
-    {
-        return $this->hasMany(ModelImage::class, 'MOIM_MODL_ID');
+        return $this->MODL_NAME + " " + $this->MODL_YEAR;
     }
 
     static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
@@ -91,15 +85,6 @@ class CarModel extends Model
         }
     }
 
-    public function getImageUrlAttribute()
-    {
-        return (isset($this->MODL_IMGE)) ? Storage::url($this->MODL_IMGE) : null;
-    }
-
-    public function getPdfUrlAttribute()
-    {
-        return (isset($this->attributes['MODL_BRCH'])) ? Storage::url($this->attributes['MODL_BRCH']) : null;
-    }
 
     function toggleMain()
     {
@@ -127,5 +112,32 @@ class CarModel extends Model
     {
         return self::selectRaw('DISTINCT MODL_YEAR')->join('brands', 'brands.id', '=', 'MODL_BRND_ID')
             ->where('MODL_ACTV', 1)->where('BRND_ACTV', 1)->get()->pluck('MODL_YEAR');
+    }
+
+    ///////relations
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'MODL_BRND_ID');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(CarType::class, 'MODL_TYPE_ID');
+    }
+
+    public function cars()
+    {
+        return $this->hasMany(Car::class, 'CAR_MODL_ID');
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(ModelColor::class, 'COLR_MODL_ID');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ModelImage::class, 'MOIM_MODL_ID');
     }
 }

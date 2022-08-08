@@ -8,6 +8,7 @@ use App\Models\Offers\OfferRequest;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
+use App\Notifications\RequestOfferCreated;
 use App\Services\PushNotificationsHandler;
 use DateInterval;
 use DateTime;
@@ -49,14 +50,20 @@ class OffersApiController extends BaseApiController
             "colors"    => "nullable|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
+        /** @var Buyer */
         $buyer = $request->user();
         $newRequest = OfferRequest::createRequest($buyer->id, $request->carID, $request->pymtType, $request->comment, $request->colors);
         if ($newRequest != null) {
             parent::sendResponse(true, "Offers Request Created", $newRequest->fresh(), false);
-            $car = Car::findOrFail($request->carID);
+            /** @var Car */
+            $car = Car::with('model')->findOrFail($request->carID);
             $pushService = new PushNotificationsHandler();
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
-            $pushService->sendPushNotification("New Offer Request", $car->model->brand->BRND_NAME . " " . $car->model->MODL_NAME . " request submitted", $sellersSellingCar->pluck('id'), "route/to/offer");
+            foreach($sellersSellingCar as $seller){
+                /** @var Seller */
+                $seller->notify(new RequestOfferCreated("Seller", $seller->id, $car->model->brand->BRND_NAME, $car->model->title, $car->CAR_CATG, $car->id));
+            }
+          
         } else {
         }
     }

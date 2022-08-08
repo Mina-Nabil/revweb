@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 
 class Seller extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes;
+    use HasApiTokens, SoftDeletes, Notifiable;
 
     //table is Sellers
     const ACCESS_TOKEN = "access_sellers_api";
@@ -41,7 +42,7 @@ class Seller extends Authenticatable
         }
     }
 
-    function updateInfo($name, $mobileNumber1, $mobileNumber2 = null,  $accountImagePath = null) : bool
+    function updateInfo($name, $mobileNumber1, $mobileNumber2 = null,  $accountImagePath = null): bool
     {
         $this->SLLR_NAME = $name;
         if ($this->SLLR_MOB1 != $mobileNumber1) {
@@ -52,6 +53,17 @@ class Seller extends Authenticatable
         if ($accountImagePath != null) {
             $this->SLLR_IMGE = $accountImagePath;
         }
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
+    public function setToken($token): bool
+    {
+        $this->BUYR_PUSH_ID = $token;
         try {
             return $this->save();
         } catch (Exception $e) {
@@ -328,6 +340,16 @@ class Seller extends Authenticatable
     public function getAuthPassword()
     {
         return $this->SLLR_PASS;
+    }
+
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->SLLR_PUSH_ID;
     }
 
     protected $hidden = [
