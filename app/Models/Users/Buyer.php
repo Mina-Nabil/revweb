@@ -14,12 +14,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Buyer extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes;
+    use HasApiTokens, SoftDeletes, Notifiable;
 
     //table is Buyers
     const ACCESS_TOKEN = "access_buyers_api";
@@ -43,7 +44,6 @@ class Buyer extends Authenticatable
         $newbuyer->BUYR_IMGE = $accountImagePath;
         $newbuyer->BUYR_NTID_FRNT = $buyerNationalIDFrontImagePath;
         $newbuyer->BUYR_NTID_BACK = $buyerNationalIDBackImagePath;
-        $newbuyer->BUYR_BDAY = date('Y-m-d');
 
         try {
             $newbuyer->save();
@@ -76,7 +76,16 @@ class Buyer extends Authenticatable
         }
     }
 
-
+    public function setToken($token): bool
+    {
+        $this->BUYR_PUSH_ID = $token;
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
 
     //Authentication Stuff
     static function login($emailOrMob, $password, $deviceName)
@@ -294,6 +303,18 @@ class Buyer extends Authenticatable
     {
         return $this->BUYR_PASS;
     }
+
+
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->SLLR_PUSH_ID;
+    }
+
 
     protected $hidden = [
         "BUYR_PASS"

@@ -198,4 +198,5 @@ class BuyersProfileApi extends BaseApiController
     function verifyEmail(Request $request)
     {
     }
+
 }
