@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class NotificationsController extends Controller
     {
         /** @var Seller|Buyer */
         $user = Auth::user();
-        return response()->json($user->notifications()->unread()->simplePaginate(15));
+        return response()->json($user->notifications()->simplePaginate(25));
     }
 
     function readNotification($id)
