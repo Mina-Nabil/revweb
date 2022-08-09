@@ -24,7 +24,7 @@ class NotificationsController extends Controller
         /** @var Seller|Buyer */
         $user = Auth::user();
         try {
-            $user->notifications()->find($id)->markAsRead();
+            $user->notifications()->findOrFail($id)->markAsRead();
             return response()->json(["status" => true]);
         } catch (Exception $e) {
             report($e);
@@ -37,7 +37,7 @@ class NotificationsController extends Controller
         /** @var Seller|Buyer */
         $user = Auth::user();
         try {
-            $user->notifications()->find($id)->delete();
+            $user->notifications()->findOrFail($id)->delete();
             return response()->json(["status" => true]);
         } catch (Exception $e) {
             report($e);
