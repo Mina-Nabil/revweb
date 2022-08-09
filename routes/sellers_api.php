@@ -54,6 +54,11 @@ Route::get('/get/my/brands', "Api\ShowroomCatalogApiController@getShowroomBrands
 Route::get('/get/carpool', "Api\ShowroomCatalogApiController@getCatalogCarPool");
 Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
 
+//notifications functions
+Route::get('/notifications', [NotificationsController::class, 'getNotifications']);
+Route::get('/notifications/read/{id}', [NotificationsController::class, 'readNotification']);
+Route::delete('/notifications/{id}', [NotificationsController::class, 'deleteNotification']);
+Route::post('/notifications/settoken', [NotificationsController::class, 'setToken']);
 
 //profile functions
 Route::get('/user', "Api\SellersProfileApi@getUser");
