@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BuyersDataApi;
 use App\Http\Controllers\Api\BuyersProfileApi;
+use App\Http\Controllers\Api\NotificationsController;
 use App\Http\Controllers\Api\OffersApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/notifications', [NotificationsController::class, 'getNotifications']);
+Route::get('/notifications/read/{id}', [NotificationsController::class, 'readNotification']);
+Route::delete('/notifications/{id}', [NotificationsController::class, 'deleteNotification']);
+Route::post('/notifications/settoken', [NotificationsController::class, 'setToken']);
 
 Route::get('/models/{brandID}',  [BuyersDataApi::class, 'models']);
 Route::get('/brands', [BuyersDataApi::class, 'brands']);
