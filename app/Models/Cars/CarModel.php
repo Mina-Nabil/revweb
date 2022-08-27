@@ -30,7 +30,7 @@ class CarModel extends Model
 
     public function getTitleAttribute()
     {
-        return $this->MODL_NAME + " " + $this->MODL_YEAR;
+        return $this->MODL_NAME . " " . $this->MODL_YEAR;
     }
 
     static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
