@@ -63,7 +63,7 @@ class Seller extends Authenticatable
 
     public function setToken($token): bool
     {
-        $this->BUYR_PUSH_ID = $token;
+        $this->SLLR_PUSH_ID = $token;
         try {
             return $this->save();
         } catch (Exception $e) {
