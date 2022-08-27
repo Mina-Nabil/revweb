@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/customers', [CustomersApiController::class, 'getCustomers']);
 
 //Offer routes
-Route::post('/submit/offer', [OffersApiController::class, 'getShowroomCompatibleOfferRequests']);
+Route::post('/submit/offer', [OffersApiController::class, 'submitNewOffer']);
 Route::get('/offerrequests', [OffersApiController::class, 'getShowroomCompatibleOfferRequests']);
 Route::get('/offers/pending', [OffersApiController::class, 'getShowroomPendingOffers']);
 Route::get('/offers/approved', [OffersApiController::class, 'getShowroomApprovedOffers']);
