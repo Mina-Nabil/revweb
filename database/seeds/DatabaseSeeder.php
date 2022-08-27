@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(users::class);
-        $this->call(CarTypes::class);
-        $this->call(BrandsSeeder::class);
-        $this->call(CarsTestData::class);
+        // $this->call(users::class);
+        // $this->call(CarTypes::class);
+        // $this->call(BrandsSeeder::class);
+        // $this->call(CarsTestData::class);
         $this->call(CitiesSeedData::class);
    
     }
