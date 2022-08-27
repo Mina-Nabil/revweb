@@ -38,7 +38,7 @@ class BaseApiController extends Controller
      * @param int $status response status code
      */
     public static function sendResponse(bool $apiCallStatus, string $message, $body = null, $die = true, $status = 200)
-    {   Log::debug("Response Print: " . json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE));
+    {
         response(json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE), $status)->withHeaders(['Content-Type' => 'application/json'])->send();
         if ($die)
             die;
