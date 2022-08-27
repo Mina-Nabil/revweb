@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\CustomersApiController;
+use App\Http\Controllers\Api\NotificationsController;
+use App\Http\Controllers\Api\OffersApiController;
+use App\Http\Controllers\Api\SellersProfileApi;
+use App\Http\Controllers\Api\ShowroomCatalogApiController;
+use App\Http\Controllers\Api\ShowroomProfileApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,44 +21,44 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Customers routes
-Route::get('/customers', "Api\CustomersApiController@getCustomers");
+Route::get('/customers', [CustomersApiController::class, 'getCustomers']);
 
 //Offer routes
-Route::post('/submit/offer', 'Api\OffersApiController@submitNewOffer');
-Route::get('/offerrequests', "Api\OffersApiController@getShowroomCompatibleOfferRequests");
-Route::get('/offers/pending', "Api\OffersApiController@getShowroomPendingOffers");
-Route::get('/offers/approved', "Api\OffersApiController@getShowroomApprovedOffers");
-Route::get('/offers/expired', "Api\OffersApiController@getShowroomExpiredOffers");
-Route::post('/extend/offer', 'Api\OffersApiController@extendOffer');
-Route::post('/extend/offers', 'Api\OffersApiController@extendAllPendingOffers');
-Route::post('/cancel/offer', 'Api\OffersApiController@cancelOffer');
+Route::post('/submit/offer', [OffersApiController::class, 'getShowroomCompatibleOfferRequests']);
+Route::get('/offerrequests', [OffersApiController::class, 'getShowroomCompatibleOfferRequests']);
+Route::get('/offers/pending', [OffersApiController::class, 'getShowroomPendingOffers']);
+Route::get('/offers/approved', [OffersApiController::class, 'getShowroomApprovedOffers']);
+Route::get('/offers/expired', [OffersApiController::class, 'getShowroomExpiredOffers']);
+Route::post('/extend/offer', [OffersApiController::class, 'extendOffer']);
+Route::post('/extend/offers', [OffersApiController::class, 'extendAllPendingOffers']);
+Route::post('/cancel/offer', [OffersApiController::class, 'cancelOffer']);
 
 //Showroom Management routes
-Route::get('/showroom', "Api\ShowroomProfileApi@getShowroom");
-Route::get('/get/banking', "Api\ShowroomProfileApi@getBankInfo");
-Route::post('/set/banking', "Api\ShowroomProfileApi@setBankInfo");
-Route::delete('/delete/banking', "Api\ShowroomProfileApi@deleteBankInfo");
-Route::post('/create/showroom', "Api\ShowroomProfileApi@createShowroom");
-Route::get('/cities', "Api\ShowroomProfileApi@getCities");
-Route::get('get/team', "Api\ShowroomProfileApi@getTeam");
-Route::post('/search/sellers', "Api\ShowroomProfileApi@searchSellers");
-Route::get('/get/invitations', "Api\ShowroomProfileApi@getJoinRequestsAndInvitations");
-Route::post('/invite/seller', "Api\ShowroomProfileApi@inviteSellerToShowroom");
-Route::delete('/delete/request', "Api\ShowroomProfileApi@deleteSellerInvitation");
-Route::post('/accept/seller', "Api\ShowroomProfileApi@acceptJoinRequest");
+Route::get('/showroom', [ShowroomProfileApi::class, 'getShowroom']);
+Route::get('/get/banking', [ShowroomProfileApi::class, 'getBankInfo']);
+Route::post('/set/banking', [ShowroomProfileApi::class, 'setBankInfo']);
+Route::delete('/delete/banking', [ShowroomProfileApi::class, 'deleteBankInfo']);
+Route::post('/create/showroom', [ShowroomProfileApi::class, 'createShowroom']);
+Route::get('/cities', [ShowroomProfileApi::class, 'getCities']);
+Route::get('get/team', [ShowroomProfileApi::class, 'getTeam']);
+Route::post('/search/sellers', [ShowroomProfileApi::class, 'searchSellers']);
+Route::get('/get/invitations', [ShowroomProfileApi::class, 'getJoinRequestsAndInvitations']);
+Route::post('/invite/seller', [ShowroomProfileApi::class, 'inviteSellerToShowroom']);
+Route::delete('/delete/request', [ShowroomProfileApi::class, 'deleteSellerInvitation']);
+Route::post('/accept/seller', [ShowroomProfileApi::class, 'acceptJoinRequest']);
 
 //catalog functions
-Route::get('/get/catalog', "Api\ShowroomCatalogApiController@getCatalog");
-Route::delete('/remove/car', "Api\ShowroomCatalogApiController@removeCar");
-Route::get('/remove/year', "Api\ShowroomCatalogApiController@removeYear");
-Route::post('/set/brands', "Api\ShowroomCatalogApiController@setBrands");
-Route::get('/get/all/brands', "Api\ShowroomCatalogApiController@getAllBrands");
-Route::get('/get/models/{brandID}', "Api\ShowroomCatalogApiController@getModelsByBrand");
-Route::get('/get/cars/{modelID}', "Api\ShowroomCatalogApiController@getCarsByModel");
-Route::get('/get/colors/{modelID}', "Api\ShowroomCatalogApiController@getColorsByModel");
-Route::get('/get/my/brands', "Api\ShowroomCatalogApiController@getShowroomBrands");
-Route::get('/get/carpool', "Api\ShowroomCatalogApiController@getCatalogCarPool");
-Route::post('/add/car', "Api\ShowroomCatalogApiController@addCarsToCatalog");
+Route::get('/get/catalog', [ShowroomCatalogApiController::class, 'getCatalog']);
+Route::delete('/remove/car', [ShowroomCatalogApiController::class, 'removeCar']);
+Route::get('/remove/year', [ShowroomCatalogApiController::class, 'removeYear']);
+Route::post('/set/brands', [ShowroomCatalogApiController::class, 'setBrands']);
+Route::get('/get/all/brands', [ShowroomCatalogApiController::class, 'getAllBrands']);
+Route::get('/get/models/{brandID}', [ShowroomCatalogApiController::class, 'getModelsByBrand']);
+Route::get('/get/cars/{modelID}', [ShowroomCatalogApiController::class, 'getCarsByModel']);
+Route::get('/get/colors/{modelID}', [ShowroomCatalogApiController::class, 'getColorsByModel']);
+Route::get('/get/my/brands', [ShowroomCatalogApiController::class, 'getShowroomBrands']);
+Route::get('/get/carpool', [ShowroomCatalogApiController::class, 'getCatalogCarPool']);
+Route::post('/add/car', [ShowroomCatalogApiController::class, 'addCarsToCatalog']);
 
 //notifications functions
 Route::get('/notifications', [NotificationsController::class, 'getNotifications']);
@@ -61,11 +67,11 @@ Route::delete('/notifications/{id}', [NotificationsController::class, 'deleteNot
 Route::post('/notifications/settoken', [NotificationsController::class, 'setToken']);
 
 //profile functions
-Route::get('/user', "Api\SellersProfileApi@getUser");
-Route::post('/user', "Api\SellersProfileApi@editUser");
-Route::post('/search/showrooms', "Api\SellersProfileApi@searchShowrooms");
-Route::get('/get/joinrequests', "Api\SellersProfileApi@getJoinRequestsAndInvitations");
-Route::post('/submit/join/request', "Api\SellersProfileApi@submitShowroomJoinRequest");
-Route::post('/accept/invitation', "Api\SellersProfileApi@acceptShowroomInvitation");
-Route::get('/leave/showroom', "Api\SellersProfileApi@leaveShowroom");
-Route::delete('/delete/showroom', "Api\SellersProfileApi@deleteShowroom");
+Route::get('/user', [SellersProfileApi::class, 'getUser'] );
+Route::post('/user', [SellersProfileApi::class, 'editUser']);
+Route::post('/search/showrooms', [SellersProfileApi::class, 'searchShowrooms']);
+Route::get('/get/joinrequests', [SellersProfileApi::class, 'getJoinRequestsAndInvitations']);
+Route::post('/submit/join/request', [SellersProfileApi::class, 'submitShowroomJoinRequest']);
+Route::post('/accept/invitation', [SellersProfileApi::class, 'acceptShowroomInvitation']);
+Route::get('/leave/showroom', [SellersProfileApi::class, 'leaveShowroom']);
+Route::delete('/delete/showroom', [SellersProfileApi::class, 'deleteShowroom']);
