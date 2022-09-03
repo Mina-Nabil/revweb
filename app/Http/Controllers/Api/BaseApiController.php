@@ -39,7 +39,7 @@ class BaseApiController extends Controller
      */
     public static function sendResponse(bool $apiCallStatus, string $message, $body = null, $die = true, $status = 200)
     {
-        response(json_encode(new ApiMessage($apiCallStatus, $message, $body), JSON_UNESCAPED_UNICODE), $status)->withHeaders(['Content-Type' => 'application/json'])->send();
+        response()->json(new ApiMessage($apiCallStatus, $message, $body), $status)->withHeaders(['Content-Type' => 'application/json'])->send();
         if ($die)
             die;
     }
