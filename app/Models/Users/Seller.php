@@ -96,7 +96,7 @@ class Seller extends Authenticatable
         $query = self::join("showrooms", "SLLR_SHRM_ID", '=', "showrooms.id")
             ->join("showroom_catalog", "showrooms.id", '=', 'SRCG_SHRM_ID')
             ->where("showroom_catalog.SRCG_CAR_ID", '=', $carID)
-            ->select("sellers.id");
+            ->select("sellers.id", "sellers.SLLR_MAIL");
         if ($colorIDs != null && count($colorIDs) > 0) {
             $query = $query->join(
                 "showroom_catalog_details",
