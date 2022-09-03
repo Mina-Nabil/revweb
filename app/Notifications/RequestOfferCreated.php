@@ -12,7 +12,7 @@ use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
 
-class RequestOfferCreated extends Notification
+class RequestOfferCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
