@@ -2,10 +2,12 @@
 
 namespace App\Notifications;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
@@ -50,11 +52,16 @@ class RequestOfferCreated extends Notification
 
     public function toFcm($notifiable)
     {
-        return FcmMessage::create()
-            ->setData(['model' => $this->carModel, 'brand' => $this->carBrand])
-            ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('New Offer Request')
-                ->setBody("New offer requested created for {$this->carBrand} {$this->carModel} - {$this->carCategory} "));
+        try {
+            Log::debug("Barmy FCM message");
+            return FcmMessage::create()
+                ->setData(['model' => $this->carModel, 'brand' => $this->carBrand])
+                ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
+                    ->setTitle('New Offer Request')
+                    ->setBody("New offer requested created for {$this->carBrand} {$this->carModel} - {$this->carCategory} "));
+        } catch (Exception $e) {
+            report($e);
+        }
         //     ->setImage('http://example.com/url-to-image-here.png'))
         // ->setAndroid(
         //     AndroidConfig::create()

@@ -4,6 +4,8 @@ namespace App\Models\Cars;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -115,29 +117,33 @@ class CarModel extends Model
     }
 
     ///////relations
-
-    public function brand()
+    public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'MODL_BRND_ID');
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(CarType::class, 'MODL_TYPE_ID');
     }
 
-    public function cars()
+    public function cars(): HasMany
     {
         return $this->hasMany(Car::class, 'CAR_MODL_ID');
     }
 
-    public function colors()
+    public function colors(): HasMany
     {
         return $this->hasMany(ModelColor::class, 'COLR_MODL_ID');
     }
 
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(ModelImage::class, 'MOIM_MODL_ID');
+    }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(ModelAdjustment::class, 'ADJT_MODL_ID');
     }
 }

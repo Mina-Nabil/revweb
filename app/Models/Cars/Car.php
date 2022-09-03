@@ -56,7 +56,8 @@ class Car extends Model
         return $this->image;
     }
 
-    public function getNameAttribute(){
+    public function getNameAttribute()
+    {
         $this->loadMissing(["model", "model.brand"]);
         return $this->model->brand->BRND_NAME . " " . $this->model->MODL_NAME . " " . $this->CAR_CATG . " " . $this->model->MODL_YEAR;
     }
@@ -79,21 +80,7 @@ class Car extends Model
         return Storage::url($this->image);
     }
 
-    public function model()
-    {
-        return $this->belongsTo(CarModel::class, 'CAR_MODL_ID');
-    }
 
-    public function colors(){
-        // belongsTo-hasMany Combination!
-        return $this->belongsToMany(ModelColor::class, CarModel::class, "id", "id", "CAR_MODL_ID", "COLR_MODL_ID");
-    }
-
-    public function accessories()
-    {
-        return $this->belongsToMany(Accessories::class, "accessories_cars", "ACCR_CAR_ID", "ACCR_ACSR_ID")
-            ->withPivot('ACCR_VLUE');
-    }
 
     public function getAccessories()
     {
@@ -118,11 +105,6 @@ class Car extends Model
         $image->deleteImage();
     }
 
-    public function images()
-    {
-        return $this->hasMany(CarImage::class, 'CIMG_CAR_ID');
-    }
-
     public function getFullAccessoriesArray()
     {
         //Accessories table
@@ -139,5 +121,34 @@ class Car extends Model
             }
         }
         return $accessories;
+    }
+
+
+    ////////relations
+    public function model()
+    {
+        return $this->belongsTo(CarModel::class, 'CAR_MODL_ID');
+    }
+
+    public function colors()
+    {
+        // belongsTo-hasMany Combination!
+        return $this->belongsToMany(ModelColor::class, CarModel::class, "id", "id", "CAR_MODL_ID", "COLR_MODL_ID");
+    }
+
+    public function options()
+    {
+        return $this->belongsToMany(AdjustmentOption::class, "car_adjustment_options", "CRAD_CAR_ID", "CRAD_ADOP_ID");
+    }
+
+    public function accessories()
+    {
+        return $this->belongsToMany(Accessories::class, "accessories_cars", "ACCR_CAR_ID", "ACCR_ACSR_ID")
+            ->withPivot('ACCR_VLUE');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(CarImage::class, 'CIMG_CAR_ID');
     }
 }

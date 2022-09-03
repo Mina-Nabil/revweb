@@ -57,8 +57,8 @@ class OffersApiController extends BaseApiController
             parent::sendResponse(true, "Offers Request Created", $newRequest->fresh(), false);
             /** @var Car */
             $car = Car::with('model')->findOrFail($request->carID);
-            $pushService = new PushNotificationsHandler();
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
+            Log::debug($sellersSellingCar);
             foreach($sellersSellingCar as $seller){
                 /** @var Seller */
                 $seller->notify(new RequestOfferCreated("Seller", $seller->id, $car->model->brand->BRND_NAME, $car->model->title, $car->CAR_CATG, $car->id));
