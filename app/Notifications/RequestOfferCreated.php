@@ -52,16 +52,14 @@ class RequestOfferCreated extends Notification
 
     public function toFcm($notifiable)
     {
-        try {
-            Log::debug("Barmy FCM message");
-            return FcmMessage::create()
-                ->setData(['model' => $this->carModel, 'brand' => $this->carBrand])
-                ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                    ->setTitle('New Offer Request')
-                    ->setBody("New offer requested created for {$this->carBrand} {$this->carModel} - {$this->carCategory} "));
-        } catch (Exception $e) {
-            report($e);
-        }
+
+        Log::debug("Barmy FCM message");
+        return FcmMessage::create()
+            ->setData(['model' => $this->carModel, 'brand' => $this->carBrand])
+            ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
+                ->setTitle('New Offer Request')
+                ->setBody("New offer requested created for {$this->carBrand} {$this->carModel} - {$this->carCategory} "));
+
         //     ->setImage('http://example.com/url-to-image-here.png'))
         // ->setAndroid(
         //     AndroidConfig::create()
