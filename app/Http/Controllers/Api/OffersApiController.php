@@ -58,8 +58,8 @@ class OffersApiController extends BaseApiController
             /** @var Car */
             $car = Car::with('model')->findOrFail($request->carID);
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
-            Log::debug($sellersSellingCar);
             foreach($sellersSellingCar as $seller){
+                Log::debug($seller->SLLR_MAIL);
                 /** @var Seller */
                 $seller->notify(new RequestOfferCreated("Seller", $seller->id, $car->model->brand->BRND_NAME, $car->model->title, $car->CAR_CATG, $car->id));
             }
