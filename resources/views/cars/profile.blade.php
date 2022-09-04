@@ -17,6 +17,7 @@
             <ul class="nav nav-tabs profile-tab" role="tablist">
                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Car Info</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#accessories" role="tab">Accessories</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#options" role="tab">Options</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#images" role="tab">Images</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
             </ul>
@@ -171,6 +172,85 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane" id="options" role="tabpanel">
+                    <div class="card-body">
+                        <div class=col-12>
+                            <h4 class="card-title">Set Available options</h4>
+                            <hr>
+                            <form class="form pt-3" method="post" action="{{ url($setOptionsURL) }}" enctype="multipart/form-data">
+                                <input type=hidden name=carID value="{{$car->id}}" />
+                                <?php $i=0 ?>
+                                @foreach($car->model->adjustments as $adjust)
+                                <h3 class="card-title">'{{$adjust->ADJT_NAME}}' options</h3>
+                                <p>{{$adjust->default_option->ADOP_NAME}} is already available for the car</p>
+                                <?php $availableOptions = $adjust->options->pluck('id')->toArray();?>
+                                <div class="col-12">
+                                    <div id="dynamicContainer{{$adjust->id}}">
+                                    </div>
+                                </div>
+                                @foreach($car->options as $option)
+                                @if(in_array($option->id, $availableOptions))
+                                <div class="col-lg-12 removeclass{{$i}}">
+                                    <div class="input-group mb-2">
+                                        <select name="options[{{$i}}]" class="form-control select custom-select" required>
+                                            @foreach($adjust->options as $opt)
+                                            <option value="{{ $opt->id }}" @if($option->id == $opt->id) selected @endif>
+                                                {{$opt->ADOP_NAME}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        <button class="btn btn-danger" type="button" onclick="removeService({{$i++}})"><i class="fa fa-minus"></i></button>
+                                    </div>
+                                </div>
+                                @endif
+                                @endforeach
+                                <button type="button" class="btn btn-info mr-2" onclick="addOption{{$adjust->id}}()">Add {{$adjust->ADJT_NAME}} Option</button>
+                                <hr>
+                                <script>
+                                    var room = {{$i}};
+                                    function addOption{{$adjust->id}}(){
+                                        var objTo = document.getElementById('dynamicContainer{{$adjust->id}}')
+                                        var divtest = document.createElement("div");
+                                        divtest.setAttribute("class", "row removeclass" + room);
+
+                                        concatString =   `<div class="col-lg-11">\
+                                                                    <div class="input-group mb-2">\
+                                                                        <select name=options[` + room + `] class="form-control select custom-select"  required>`
+                                                                                @foreach($adjust->options as $opt)
+                                                                                concatString +=   '<option value="{{ $opt->id }}" > {{$opt->ADOP_NAME}} </option>';
+                                                                                @endforeach
+                                        concatString +=                 `</select><div class="input-group-append">\
+                                                                        <button class="btn btn-danger" type="button" onclick="removeService(`+room+`);"><i class="fa fa-minus"></i></button>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>`                
+        
+                                        divtest.innerHTML = concatString;
+                                        
+                                        objTo.appendChild(divtest);
+                                  
+                                                                
+                                        room++
+                                    }
+                               
+                                </script>
+                                @endforeach
+                                <button type="submit" class="btn btn-success mr-2">Submit</button>
+                                @if($isCancel)
+                                <a href="{{url($homeURL) }}" class="btn btn-dark">Cancel</a>
+                                @endif
+                                @csrf
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function removeService(rid) {
+                        $('.removeclass' + rid).remove();
+                    }
+                </script>
                 <div class="tab-pane" id="images" role="tabpanel">
                     <div class="card-body">
                         <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
@@ -185,8 +265,7 @@
                                 <?php $i=0; ?>
                                 @foreach($car->images as $image)
                                 <div class="carousel-item {{($i==0) ? 'active' : ''}}">
-                                    <img class="img-fluid" src="{{  $image->image_url }} "
-                                        style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
+                                    <img class="img-fluid" src="{{  $image->image_url }} " style="max-height:560px; max-width:900px; display: block;  margin-left: auto;  margin-right: auto;">
                                 </div>
                                 <?php $i++; ?>
                                 @endforeach
@@ -316,8 +395,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon11"><i class="fas fa-car"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Category Name - Example: Allure+" name=category
-                                            value="{{ (isset($car)) ? $car->CAR_CATG : old('category')}}" required>
+                                        <input type="text" class="form-control" placeholder="Category Name - Example: Allure+" name=category value="{{ (isset($car)) ? $car->CAR_CATG : old('category')}}" required>
                                     </div>
                                     <small class="text-danger">{{$errors->first('category')}}</small>
                                 </div>
@@ -374,8 +452,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-database"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" name=cc id=cc placeholder="Enter Engine CC Specs, Example: 1500 Turbo"
-                                            value="{{ (isset($car)) ? $car->CAR_ENCC : old('cc')}}">
+                                        <input type="text" class="form-control" name=cc id=cc placeholder="Enter Engine CC Specs, Example: 1500 Turbo" value="{{ (isset($car)) ? $car->CAR_ENCC : old('cc')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('cc')}}</small>
                                 </div>
@@ -386,8 +463,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-horse"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" name=hpwr id=hpwr placeholder="Enter Horse Power in Hp@rpm, Example: 129@6000"
-                                            value="{{ (isset($car)) ? $car->CAR_HPWR : old('hpwr')}}">
+                                        <input type="text" class="form-control" name=hpwr id=hpwr placeholder="Enter Horse Power in Hp@rpm, Example: 129@6000" value="{{ (isset($car)) ? $car->CAR_HPWR : old('hpwr')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('hpwr')}}</small>
                                 </div>
@@ -398,8 +474,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-cog"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" name=torq id=torq placeholder="Enter torque in Nm@rpm, Example: 230@1750"
-                                            value="{{ (isset($car)) ? $car->CAR_TORQ : old('torq')}}">
+                                        <input type="text" class="form-control" name=torq id=torq placeholder="Enter torque in Nm@rpm, Example: 230@1750" value="{{ (isset($car)) ? $car->CAR_TORQ : old('torq')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('torq')}}</small>
                                 </div>
@@ -433,8 +508,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-flag-checkered"></i></span>
                                         </div>
-                                        <input type="number" class="form-control" name=speed id=speed placeholder="Car Top Speed in Km/h, Example: 220"
-                                            value="{{ (isset($car)) ? $car->CAR_TPSP : old('speed')}}">
+                                        <input type="number" class="form-control" name=speed id=speed placeholder="Car Top Speed in Km/h, Example: 220" value="{{ (isset($car)) ? $car->CAR_TPSP : old('speed')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('speed')}}</small>
                                 </div>
@@ -457,8 +531,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-life-ring"></i></span>
                                         </div>
-                                        <input type="number" class="form-control" name=rims id=rims placeholder="Rims Tyre measure, Example: 16"
-                                            value="{{ (isset($car)) ? $car->CAR_RIMS : old('rims')}}">
+                                        <input type="number" class="form-control" name=rims id=rims placeholder="Rims Tyre measure, Example: 16" value="{{ (isset($car)) ? $car->CAR_RIMS : old('rims')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('rims')}}</small>
                                 </div>
@@ -469,8 +542,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon22"><i class="fas fa-flask"></i></span>
                                         </div>
-                                        <input type="number" class="form-control" name=tank id=tank placeholder="Gas Tank Capicity in Litres, Example: 45"
-                                            value="{{ (isset($car)) ? $car->CAR_TRNK : old('tank')}}">
+                                        <input type="number" class="form-control" name=tank id=tank placeholder="Gas Tank Capicity in Litres, Example: 45" value="{{ (isset($car)) ? $car->CAR_TRNK : old('tank')}}">
                                     </div>
                                     <small class="text-danger">{{$errors->first('tank')}}</small>
                                 </div>

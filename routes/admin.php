@@ -35,6 +35,7 @@ Route::post('cars/link/accessory', 'Catalog\CarsController@linkAccessory');
 Route::post('cars/load/data', 'Catalog\CarsController@loadData');
 Route::post('cars/load/accessories', 'Catalog\CarsController@loadAccessories');
 Route::post('cars/update/image', 'Catalog\CarsController@editImage');
+Route::post('cars/set/options', 'Catalog\CarsController@linkOptions');
 
 
 //Models routes

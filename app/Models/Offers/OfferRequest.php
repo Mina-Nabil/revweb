@@ -2,12 +2,14 @@
 
 namespace App\Models\Offers;
 
+use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Car;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +43,7 @@ class OfferRequest extends Model
     protected $with = ["colors", "buyer", "car", "car.model", "car.colors", "offers"];
     public $timestamps = true;
 
-    public static function createRequest(int $buyerID, int $carID, string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = [])
+    public static function createRequest(int $buyerID, int $carID, string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = [], array $options = [])
     {
 
         $newOffer = new self();
@@ -54,7 +56,7 @@ class OfferRequest extends Model
 
         $car = Car::with("colors")->findOrFail($carID);
         try {
-            DB::transaction(function () use ($newOffer, $car, $colors) {
+            DB::transaction(function () use ($newOffer, $car, $colors, $options) {
                 $newOffer->save();
                 $i = 0;
                 $colorsIDs = $car->colors->pluck('id')->toArray();
@@ -66,6 +68,7 @@ class OfferRequest extends Model
                         ]);
                     }
                 }
+                $newOffer->options()->sync($options);
             });
             return $newOffer;
         } catch (Exception $e) {
@@ -162,6 +165,11 @@ class OfferRequest extends Model
     public function colors()
     {
         return $this->hasMany(OfferRequestColors::class, "OFRC_OFRQ_ID");
+    }
+
+    public function options():BelongsToMany
+    {
+        return $this->belongsToMany(AdjustmentOption::class, "offer_request_adjustment_options", "CRAD_OFRQ_ID", "CRAD_ADOP_ID");
     }
 
     public function buyer()

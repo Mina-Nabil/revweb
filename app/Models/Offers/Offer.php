@@ -10,6 +10,7 @@ use DateInterval;
 use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -31,10 +32,10 @@ class Offer extends Model
     ];
 
     protected $table = "offers";
-    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors"];
+    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors", "options", "car.options"];
     public $timestamps = true;
 
-    static function createOffer(OfferRequest $request, Seller $seller, $isLoan, $price, $downpayment, DateTime $startDate, DateTime $endDate, array $colors, $comment = null)
+    static function createOffer(OfferRequest $request, Seller $seller, $isLoan, $price, $downpayment, DateTime $startDate, DateTime $endDate, array $colors, array $options, $comment = null)
     {
         $request->loadMissing(["buyer", "car"]);
         $seller->loadMissing("showroom");
@@ -52,13 +53,14 @@ class Offer extends Model
         $newOffer->OFFR_SLLR_CMNT = $comment;
         $newOffer->OFFR_STTS = self::NEW_KEY;
         try {
-            DB::transaction(function () use ($newOffer, $colors, $request) {
+            DB::transaction(function () use ($newOffer, $colors, $request, $options) {
                 $newOffer->save();
                 foreach ($colors as $color) {
                     $newOffer->colors()->create([
                         "OFCL_COLR_ID" => $color
                     ]);
                 }
+                $newOffer->options()->sync($options);
                 $request->setAsRepliedTo();
             });
         } catch (Exception $e) {
@@ -108,6 +110,10 @@ class Offer extends Model
     public function colors()
     {
         return $this->hasMany(OfferColor::class, "OFCL_OFFR_ID");
+    }
+    public function options():BelongsToMany
+    {
+        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "CRAD_OFFR_ID", "CRAD_ADOP_ID");
     }
     public function request()
     {

@@ -39,7 +39,7 @@ class Car extends Model
 
     static public function getCarsByModel($modelID)
     {
-        return self::with("images", "accessories")->where(["CAR_MODL_ID" => $modelID, "CAR_ACTV" => 1])->get();
+        return self::with("images", "accessories", "available_options")->where(["CAR_MODL_ID" => $modelID, "CAR_ACTV" => 1])->get();
     }
 
 

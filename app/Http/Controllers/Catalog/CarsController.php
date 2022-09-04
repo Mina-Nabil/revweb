@@ -30,6 +30,7 @@ class CarsController extends Controller
         $this->data['updateImageInfoURL'] = url("admin/cars/update/image");
         $this->data['toggleOffer'] = url("admin/cars/toggle/offer");
         $this->data['toggleTrending'] = url("admin/cars/toggle/trending");
+        $this->data['setOptionsURL'] = url("admin/cars/set/options");
         $this->data['isCancel'] = false;
         return view('cars.profile', $this->data);
     }
@@ -189,6 +190,18 @@ class CarsController extends Controller
     }
 
 
+    public function linkOptions(Request $request)
+    {
+        $request->validate([
+            'carID' => 'required|exists:cars,id',
+            'options.*' => 'required|exists:adjustments_options,id'
+        ]);
+        /** @var Car */
+        $car = Car::findOrFail($request->carID);
+        $car->setAdjustmentOptions($request->options);
+        return back();
+    }
+
     public function linkAccessory(Request $request)
     {
         $request->validate([
@@ -245,7 +258,7 @@ class CarsController extends Controller
     //////////////////// Data functions
     private function initProfileArr($carID)
     {
-        $this->data['car'] = Car::with('model', 'model.brand', 'model.type', 'accessories', 'images')->findOrFail($carID);
+        $this->data['car'] = Car::with('model', 'model.brand', 'model.type', 'model.adjustments', 'model.adjustments.options', 'options', 'accessories', 'images')->findOrFail($carID);
         $this->data['cars'] = Car::with('model', 'model.brand')->get();
 
         $this->data['accessories'] = $this->data['car']->getFullAccessoriesArray();

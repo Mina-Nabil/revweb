@@ -29,11 +29,12 @@ class OffersApiController extends BaseApiController
             "downPayment"   =>  "required",
             "startDate"     =>  "required|date",
             "expiryDate"    =>  "required|date",
-            "colors"        =>  "required|array"
+            "colors"        =>  "required|array",
+            "options"        =>  "required|array"
         ]);
         $offerRequest = OfferRequest::findOrFail($request->requestID);
         $seller = $request->user();
-        $newOffer = Offer::createOffer($offerRequest, $seller, $request->isLoan, $request->price, $request->downPayment, new DateTime($request->startDate), new DateTime($request->expiryDate), $request->colors, $request->comment);
+        $newOffer = Offer::createOffer($offerRequest, $seller, $request->isLoan, $request->price, $request->downPayment, new DateTime($request->startDate), new DateTime($request->expiryDate), $request->colors, $request->options, $request->comment);
         if ($newOffer != null) {
             parent::sendResponse(true, "Offers Request Created", (object)["offer" => $newOffer], false);
             $pushService = new PushNotificationsHandler();
@@ -48,6 +49,7 @@ class OffersApiController extends BaseApiController
         parent::validate($request, [
             "carID"     => "required:cars,id",
             "colors"    => "nullable|array",
+            "options"    => "nullable|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
         /** @var Buyer */

@@ -11,6 +11,7 @@ class ModelAdjustment extends Model
     protected $table = 'model_adjustments';
     public $timestamps = false;
     protected $with = ['options'];
+    protected $appends = ['default_option'];
 
     //////static queries
     public static function newModelAdjustment(int $modelID, string $name, string $desc = null): self
@@ -42,9 +43,16 @@ class ModelAdjustment extends Model
         $newOption = new AdjustmentOption;
         $newOption->ADOP_NAME = $name;
         $newOption->ADOP_IMGE = $image;
-        $newOption->ADOP_DFLT = false;
+        $newOption->ADOP_DFLT = $this->options()->count() == 0;
         $newOption->ADOP_DESC = $desc;
         return $this->options()->save($newOption);
+    }
+
+    ////accessors
+    public function getDefaultOptionAttribute()
+    {
+        $this->loadMissing('options');
+        return $this->options()->where('ADOP_DFLT', 1)->first();
     }
 
     //////relations
