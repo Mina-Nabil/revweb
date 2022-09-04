@@ -46,7 +46,7 @@ class CreateModelAdjustmentsTable extends Migration
         Schema::create('offer_request_adjustment_options', function (Blueprint $table) {
             $table->id();
             $table->foreignId('CRAD_ADOP_ID')->constrained('adjustments_options');
-            $table->foreignId('CRAD_OFRQ_ID')->constrained('offer_requests');
+            $table->foreignId('CRAD_OFRQ_ID')->constrained('offers_requests');
         });
     }
 
