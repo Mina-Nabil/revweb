@@ -135,7 +135,7 @@ class Car extends Model
     {
         return ModelAdjustment::with('options')
             ->where('ADJT_ACTV', 1)->where('ADOP_ACTV', 1)
-            ->whereIn('options.id', $this->options()->pluck('options.id')->toArray())
+            ->whereIn('options.id', $this->options()->pluck('adjustments_options.id')->toArray())
             ->orWhere('ADOP_DFLT', 1)
             ->get();
     }
