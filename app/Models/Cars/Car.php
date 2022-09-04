@@ -42,6 +42,57 @@ class Car extends Model
         return self::with("images", "accessories")->where(["CAR_MODL_ID" => $modelID, "CAR_ACTV" => 1])->get();
     }
 
+
+
+    //////model functions
+    public function addImage($imageURL, $sortValue)
+    {
+        $this->images()->create([
+            "CIMG_VLUE" =>  $sortValue,
+            "CIMG_URL"  =>  $imageURL
+        ]);
+    }
+
+    public function deleteImage($id)
+    {
+        $image = CarImage::findOrFail($id);
+        $image->deleteImage();
+    }
+
+    public function getAccessories()
+    {
+        return $this->join('accessories_cars', 'cars.id', '=', 'ACCR_CAR_ID')
+            ->join('accessories', 'ACCR_ACSR_ID', '=', 'accessories.id')
+            ->select('ACCR_VLUE', 'ACCR_ACSR_ID', 'ACCR_CAR_ID', 'ACSR_NAME', 'ACSR_ARBC_NAME')
+            ->where('ACCR_CAR_ID', $this->id)
+            ->get();
+    }
+
+    public function setAdjustmentOptions($optionsIDs)
+    {
+        $this->options()->sync($optionsIDs);
+    }
+
+
+    public function getFullAccessoriesArray()
+    {
+        //Accessories table
+        $allAccessories = Accessories::all();
+        $carAccessories = $this->getAccessories()->pluck('ACCR_VLUE', 'ACCR_ACSR_ID')->toArray();
+
+
+        $accessories = [];
+        foreach ($allAccessories as $accessory) {
+            if (key_exists($accessory->id, $carAccessories)) {
+                $accessories[$accessory->id] = ['ACSR_ARBC_NAME' =>  $accessory->ACSR_ARBC_NAME, 'ACSR_NAME' =>  $accessory->ACSR_NAME, 'isAvailable' => true, 'ACCR_VLUE' => $carAccessories[$accessory->id]];
+            } else {
+                $accessories[$accessory->id] = ['ACSR_ARBC_NAME' =>  $accessory->ACSR_ARBC_NAME, 'ACSR_NAME' =>  $accessory->ACSR_NAME, 'isAvailable' => false];
+            }
+        }
+        return $accessories;
+    }
+
+    //////accessors
     public function getImageAttribute()
     {
         if (isset($this->image)) return $this->image;
@@ -80,49 +131,14 @@ class Car extends Model
         return Storage::url($this->image);
     }
 
-
-
-    public function getAccessories()
+    public function getAvailableOptionsAttribute()
     {
-        return $this->join('accessories_cars', 'cars.id', '=', 'ACCR_CAR_ID')
-            ->join('accessories', 'ACCR_ACSR_ID', '=', 'accessories.id')
-            ->select('ACCR_VLUE', 'ACCR_ACSR_ID', 'ACCR_CAR_ID', 'ACSR_NAME', 'ACSR_ARBC_NAME')
-            ->where('ACCR_CAR_ID', $this->id)
+        return ModelAdjustment::with('options')
+            ->where('ADJT_ACTV', 1)->where('ADOP_ACTV', 1)
+            ->whereIn('options.id', $this->options()->pluck('id'))
+            ->orWhere('ADOP_DFLT', 1)
             ->get();
     }
-
-    public function addImage($imageURL, $sortValue)
-    {
-        $this->images()->create([
-            "CIMG_VLUE" =>  $sortValue,
-            "CIMG_URL"  =>  $imageURL
-        ]);
-    }
-
-    public function deleteImage($id)
-    {
-        $image = CarImage::findOrFail($id);
-        $image->deleteImage();
-    }
-
-    public function getFullAccessoriesArray()
-    {
-        //Accessories table
-        $allAccessories = Accessories::all();
-        $carAccessories = $this->getAccessories()->pluck('ACCR_VLUE', 'ACCR_ACSR_ID')->toArray();
-
-
-        $accessories = [];
-        foreach ($allAccessories as $accessory) {
-            if (key_exists($accessory->id, $carAccessories)) {
-                $accessories[$accessory->id] = ['ACSR_ARBC_NAME' =>  $accessory->ACSR_ARBC_NAME, 'ACSR_NAME' =>  $accessory->ACSR_NAME, 'isAvailable' => true, 'ACCR_VLUE' => $carAccessories[$accessory->id]];
-            } else {
-                $accessories[$accessory->id] = ['ACSR_ARBC_NAME' =>  $accessory->ACSR_ARBC_NAME, 'ACSR_NAME' =>  $accessory->ACSR_NAME, 'isAvailable' => false];
-            }
-        }
-        return $accessories;
-    }
-
 
     ////////relations
     public function model()

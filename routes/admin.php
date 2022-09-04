@@ -51,6 +51,13 @@ Route::get('models/image/delete/{id}', 'Catalog\ModelsController@delImage');
 Route::post('models/add/color', 'Catalog\ModelsController@attachColor');
 Route::post('models/update/color', 'Catalog\ModelsController@editColor');
 Route::get('models/color/delete/{id}', 'Catalog\ModelsController@delColor');
+Route::post('models/adjustment/add', 'Catalog\ModelsController@attachAdjustment');
+Route::post('models/adjustment/edit', 'Catalog\ModelsController@editAdjustment');
+Route::get('models/adjustment/state/toggle/{id}', 'Catalog\ModelsController@toggleAdjustmentState');
+Route::post('models/options/add', 'Catalog\ModelsController@addOption');
+Route::post('models/options/edit', 'Catalog\ModelsController@editOption');
+Route::get('models/options/state/toggle/{id}', 'Catalog\ModelsController@toggleOptionState');
+Route::get('models/options/set/default/{id}', 'Catalog\ModelsController@setOptionDefault');
 
 //Accessories routes
 Route::get('accessories/show', 'Catalog\AccessoriesController@home');
