@@ -13,7 +13,7 @@ class ModelAdjustment extends Model
     protected $with = ['options'];
 
     //////static queries
-    public static function newModelAdjustment(int $modelID, string $name, string $desc = null): self|false
+    public static function newModelAdjustment(int $modelID, string $name, string $desc = null): self
     {
         $newAdjustment = new self;
         $newAdjustment->ADJT_MODL_ID = $modelID;
@@ -31,12 +31,18 @@ class ModelAdjustment extends Model
         return $this->save();
     }
 
-    public function addOption(string $name, string $image, bool $is_default=false, string $desc=null)
+    public function setActiveState(bool $state): bool
+    {
+        $this->ADJT_ACTV = $state ? 1 : 0;
+        return $this->save();
+    }
+
+    public function addOption(string $name, string $image = null, string $desc = null)
     {
         $newOption = new AdjustmentOption;
         $newOption->ADOP_NAME = $name;
         $newOption->ADOP_IMGE = $image;
-        $newOption->ADOP_DFLT = $is_default;
+        $newOption->ADOP_DFLT = false;
         $newOption->ADOP_DESC = $desc;
         return $this->options()->save($newOption);
     }

@@ -19,6 +19,10 @@
                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Model Info</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cars" role="tab">Cars</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#colors" role="tab">Colors</a> </li>
+                @foreach($model->adjustments as $adjust)
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#ad{{$adjust->id}}" role="tab">{{$adjust->ADJT_NAME . ($adjust->ADJT_ACTV ? '' : ' (Disabled)')}}</a> </li>
+                @endforeach
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#adjusts" role="tab">Adjustables</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#images" role="tab">Images</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a> </li>
             </ul>
@@ -72,9 +76,6 @@
                         <hr>
                     </div>
                 </div>
-
-
-
 
                 <div class="tab-pane" id="cars" role="tabpanel">
                     <div class="card-body">
@@ -275,6 +276,167 @@
                     </div>
                 </div>
 
+                @foreach($model->adjustments as $adjust)
+                <div class="tab-pane" id="ad{{$adjust->id}}" role="tabpanel">
+                    <div class="card-body">
+                        <h4 class="card-title">{{$adjust->ADJT_NAME}} Options</h4>
+                        <div class=col>
+                            <div class="table-responsive m-t-40">
+                                <table class="table color-bordered-table table-striped full-color-table full-primary-table hover-table" data-display-length='-1' data-order="[]">
+                                    <thead>
+                                        <th>Name</th>
+                                        <th>Default?</th>
+                                        <th>Active?</th>
+                                        <th>Image</th>
+                                        {{-- <th>Url</th> --}}
+                                        <th>Actions</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($adjust->options as $option)
+                                        <div style="display: none">
+                                            <div id="optionName{{$option->id}}">{{$option->ADOP_NAME}}</div>
+                                            <div id="optionDesc{{$option->id}}">{{$option->ADOP_DESC}}</div>
+                                            {{-- <div id="optionURL{{$option->id}}">{{$option->image_url}}</div> --}}
+                                        </div>
+                                        <tr>
+                                            <td>{{$option->ADOP_NAME}}</td>
+                                            <td>
+                                                <button class="label label-{{($option->ADOP_DFLT) ? 'success' : 'danger'}}" 
+                                                @if(!$option->ADOP_DFLT)
+                                                onclick="confirmAndGoTo('{{$defaultOptionURL . '/'. $option->id}}', 'set as default?')"
+                                                @endif
+                                                >{{($option->ADOP_DFLT) ?
+                                                    'Default' : 'Not Default'}}</button>
+                                            </td>
+                                            <td>
+                                                <button class="label label-{{($option->ADOP_ACTV) ? 'success' : 'danger'}}" onclick="confirmAndGoTo('{{$toggleOptionURL . '/'. $option->id}}', '{{($option->ADOP_ACTV) ? 'deactivate the option?' : 'activate the option'}}')">{{($option->ADOP_ACTV) ?
+                                                    'Active' : 'In-Active'}}</button>
+                                            </td>
+                                            <td>
+                                                @isset($option->ADOP_IMGE)
+                                                <img src="{{ $option->image_url }} " width="60px">
+                                                @endisset
+                                            </td>
+                                            {{-- <td>
+                                                <a target="_blank" href="{{  $option->image_url }}">
+                                                    {{(strlen($option->ADOP_IMGE) < 25) ? $option->ADOP_IMGE : substr($option->ADOP_IMGE, 0, 25).'..' }}
+                                                </a>
+                                            </td> --}}
+                                            <td>
+                                                <div class=" row justify-content-center ">
+                                                    <a href="javascript:void(0)" onclick="loadOptionEditModal({{$option->id}})" data-toggle="modal" data-id="{{$option->id}}" data-target="#edit-option">
+                                                        <img src="{{ asset('images/edit.png') }}" width=25 height=25>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <h4>Add {{$adjust->ADJT_NAME}} Option</h4>
+                        <form class="form pt-3" method="post" action="{{ $addOptionFormURL }}" enctype="multipart/form-data">
+                            @csrf
+                            <input name=adjustmentID type=hidden value={{$adjust->id}} />
+                            <div class=row>
+                                <div class="col-12 form-group">
+                                    <label>Option Name</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Example: T5 Turbo, Red & Black Interior" name=name value="{{old('name')}}" required>
+                                    </div>
+                                    <small class="text-muted">Different options of the '{{$adjust->ADJT_NAME}}' Adjustable</small>
+                                    <small class="text-danger">{{$errors->first('name')}}</small>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label for="input-file-now-custom-1">Display Image</label>
+                                    <div class="input-group mb-3">
+                                        <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('image') }}" data-max-file-size="2M" />
+                                    </div>
+                                    <small class="text-muted">Optimum Resolution is 148 * 100</small>
+                                    <small class="text-danger">{{$errors->first('image')}}</small>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>Description</label>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" placeholder="Optional" name=desc>{{old('desc')}}</textarea>
+                                    </div>
+                                    <small class="text-danger">{{$errors->first('desc')}}</small>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <h4 class="card-title">Edit '{{$adjust->ADJT_NAME}}' Data</h4>
+                        <form class="form pt-3" method="post" action="{{ $editAdjustmentFormURL }}" enctype="multipart/form-data">
+                            @csrf
+                            <input name=id type=hidden value={{$adjust->id}} />
+                            <div class=row>
+                                <div class="col-12 form-group">
+                                    <label>Adjustable Title*</label>
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" placeholder="Example: Engine, Interior" name=name value="{{$adjust->ADJT_NAME}}" required>
+                                    </div>
+                                    <small class="text-muted">Extra car adjustable items</small>
+                                    <small class="text-danger">{{$errors->first('name')}}</small>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>Description</label>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" placeholder="Optional" name=desc>{{$adjust->ADJT_DESC}}</textarea>
+                                    </div>
+                                    <small class="text-danger">{{$errors->first('desc')}}</small>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                            <button type="button" onclick="confirmAndGoTo('{{$toggleAdjustmentFormURL . '/' . $adjust->id}}', '{{ ($adjust->ADJT_ACTV) ? 'disable the adjustment' : 'enable the adjustment' }}')"
+                                class="btn btn-{{($adjust->ADJT_ACTV) ? 'danger' : 'success'}} mr-2">{{ ($adjust->ADJT_ACTV) ? 'Disable' : 'Enable'}}</button>
+                        </form>
+                    </div>
+                </div>
+                @endforeach
+
+                <div class="tab-pane" id="adjusts" role="tabpanel">
+                    <div class="card-body">
+                        <h4 class="card-title">Add New Model Adjustable</h4>
+                        <form class="form pt-3" method="post" action="{{ $addAdjustmentFormURL }}" enctype="multipart/form-data">
+                            @csrf
+                            <input name=modelID type=hidden value={{$model->id}} />
+                            <div class=row>
+                                <div class="col-12 form-group">
+                                    <label>Adjustable Title*</label>
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" placeholder="Example: Engine, Interior" name=name value="{{old('name')}}" required>
+                                    </div>
+                                    <small class="text-muted">Extra car adjustable items</small>
+                                    <small class="text-danger">{{$errors->first('name')}}</small>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>Description</label>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" placeholder="Optional" name=desc>{{old('desc')}}</textarea>
+                                    </div>
+                                    <small class="text-danger">{{$errors->first('desc')}}</small>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mr-2">Submit</button>
+                        </form>
+                    </div>
+
+                </div>
+
                 <div class="tab-pane" id="images" role="tabpanel">
                     <div class="card-body">
                         <div id="carouselExampleIndicators3" class="carousel slide" data-ride="carousel">
@@ -470,8 +632,7 @@
                                 <div class="form-group">
                                     <label for="input-file-now-custom-1">Model Image</label>
                                     <div class="input-group mb-3">
-                                        <input type="file" id="input-file-now-custom-1" name=image class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_IMGE)) ? $model->getImageUrlAttribute() : old('image') }}" />
+                                        <input type="file" id="input-file-now-custom-1" name=image class="dropify" data-default-file="{{ (isset($model->MODL_IMGE)) ? $model->getImageUrlAttribute() : old('image') }}" />
                                     </div>
                                     <small class="text-muted">Image size should be 346 * 224 -- It appears on the home page if this is a main model -- The background should be transparent or white in
                                         color</small><br>
@@ -482,8 +643,7 @@
                                 <div class="form-group">
                                     <label for="input-file-now-custom-1">PDF Brochure</label>
                                     <div class="input-group mb-3">
-                                        <input type="file" id="input-file-now-custom-1" name=pdf class="dropify"
-                                            data-default-file="{{ (isset($model->MODL_BRCH)) ? $model->getPdfUrlAttribute() : old('pdf') }}" />
+                                        <input type="file" id="input-file-now-custom-1" name=pdf class="dropify" data-default-file="{{ (isset($model->MODL_BRCH)) ? $model->getPdfUrlAttribute() : old('pdf') }}" />
                                     </div>
                                     <small class="text-muted">PDF Brochure shall be used in case no interactive Brochure provided</small><br>
                                     <small class="text-danger">{{$errors->first('pdf')}}</small>
@@ -507,8 +667,8 @@
                             </form>
                             <hr>
                             <h4 class="card-title">Delete Model</h4>
-                            <button type="button" onclick="confirmAndGoTo('{{url('admin/models/delete/'.$model->id )}}', 'delete this Model and all the car linked to it ??')"
-                                class="btn btn-danger mr-2">Delete <strong>All</strong> Model Data (Cars/Images linked to the model)</button>
+                            <button type="button" onclick="confirmAndGoTo('{{url('admin/models/delete/'.$model->id )}}', 'delete this Model and all the car linked to it ??')" class="btn btn-danger mr-2">Delete
+                                <strong>All</strong> Model Data (Cars/Images linked to the model)</button>
                         </div>
                     </div>
                 </div>
@@ -643,6 +803,54 @@
     </div>
 </div>
 
+<div id="edit-option" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Option</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="form pt-3" method="post" action="{{ $editOptionFormURL }}" enctype="multipart/form-data">
+                    @csrf
+                    <input type=hidden name=id id=optionIDModal>
+
+                    <div class="form-group">
+                        <label>Option Name*</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Example: Baby Blue" name=name id=optionNameModal>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-file-now-custom-1">New Photo</label>
+                        <div class="input-group mb-3">
+                            <input type="file" id="input-file-now-custom-1" name=image class="dropify"  data-max-file-size="2M" />
+                        </div>
+                        <small class="text-muted">Optimum Resolution is 148 * 100</small>
+                        <small class="text-muted">Old Photo will be removed ONLY if another photo is added</small>
+                    </div>
+
+
+                    <div class="col-12 form-group">
+                        <label>Description</label>
+                        <div class="input-group mb-3">
+                            <textarea class="form-control" placeholder="Optional" id=optionDescModal name=desc>{{old('desc')}}</textarea>
+                        </div>
+                        <small class="text-danger">{{$errors->first('desc')}}</small>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group col-12 m-t-10">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-20">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js_content')
@@ -669,6 +877,16 @@
 
     }
 
+    function loadOptionEditModal (id) {
+        
+        var name = $('#optionName'+id).html();
+        var desc = $('#optionDesc'+id).html();
+
+        $(".modal-body #optionIDModal").val(id);
+        $(".modal-body #optionNameModal").val(name);
+        $(".modal-body #optionDescModal").html(desc);
+    }
+
     function loadImageEditModal (id) {
         
         var name = $('#imageSort'+id).html();
@@ -678,7 +896,6 @@
         $(".modal-body #sortModal").val(name);
 
     }
-
 
     function deleteImage(id){
             Swal.fire({

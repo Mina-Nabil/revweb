@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Brand;
 use App\Models\Cars\CarModel;
 use App\Models\Cars\CarType;
+use App\Models\Cars\ModelAdjustment;
 use App\Models\Cars\ModelColor;
 use App\Models\Cars\ModelImage;
 use App\Services\FilesHandler;
@@ -28,6 +30,13 @@ class ModelsController extends Controller
         $this->data['updateColorInfoURL'] = url("admin/models/update/color");
         $this->data['updateImageInfoURL'] = url("admin/models/update/image");
         $this->data['delImageUrl'] = url("admin/models/image/delete/");
+        $this->data['addAdjustmentFormURL'] = url("admin/models/adjustment/add");
+        $this->data['editAdjustmentFormURL'] = url("admin/models/adjustment/edit");
+        $this->data['toggleAdjustmentFormURL'] = url("admin/models/adjustment/state/toggle");
+        $this->data['addOptionFormURL'] = url("admin/models/options/add");
+        $this->data['editOptionFormURL'] = url("admin/models/options/edit");
+        $this->data['toggleOptionURL'] = url("admin/models/options/state/toggle");
+        $this->data['defaultOptionURL'] = url("admin/models/options/set/default");
         $this->data['isCancel'] = false;
         return view('models.profile', $this->data);
     }
@@ -290,10 +299,93 @@ class ModelsController extends Controller
         return back();
     }
 
+    public function attachAdjustment(Request $request)
+    {
+        $request->validate([
+            "modelID"   =>  "required|exists:models,id",
+            "name"      =>  "required",
+        ]);
+
+        ModelAdjustment::newModelAdjustment($request->modelID, $request->name, $request->desc);
+        return back();
+    }
+
+    public function editAdjustment(Request $request)
+    {
+        $request->validate([
+            "id"        =>  "required|exists:model_adjustments",
+            "name"      =>  "required",
+        ]);
+        /** @var ModelAdjustment */
+        $adj = ModelAdjustment::findOrFail($request->id);
+        $adj->updateInfo($request->name, $request->desc);
+        return back();
+    }
+
+    public function toggleAdjustmentState($id)
+    {
+        /** @var ModelAdjustment */
+        $adj = ModelAdjustment::findOrFail($id);
+        $adj->setActiveState(!$adj->ADJT_ACTV);
+        return back();
+    }
+
+    public function addOption(Request $request)
+    {
+        $request->validate([
+            "adjustmentID"  =>  "required|exists:model_adjustments,id",
+            "name"          =>  "required",
+            "image"         =>  "nullable|file",
+        ]);
+        /** @var ModelAdjustment */
+        $adj = ModelAdjustment::with('model')->findOrFail($request->adjustmentID);
+        $filesHandler = new FilesHandler();
+        $imageURL = null;
+        if ($request->hasFile('image')) {
+            $imageURL = $filesHandler->uploadFile($request->image, "models/" . $adj->model->MODL_NAME . '/options/' . $request->name);
+        }
+        $adj->addOption($request->name, $imageURL, $request->desc);
+        return back();
+    }
+
+    public function editOption(Request $request)
+    {
+        $request->validate([
+            "id"            =>  "required|exists:adjustments_options",
+            "name"          =>  "required",
+            "image"         =>  "nullable|file",
+        ]);
+        /** @var AdjustmentOption */
+        $option = AdjustmentOption::with('adjustment', 'adjustment.model')->findOrFail($request->id);
+        $filesHandler = new FilesHandler();
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $filesHandler->uploadFile($request->image, "models/" . $option->adjustment->model->MODL_NAME . '/options/' . $request->name);
+        }
+        $option->updateInfo($request->name, $imagePath, $request->desc);
+        return back();
+    }
+
+    public function toggleOptionState($id)
+    {
+        /** @var AdjustmentOption */
+        $option = AdjustmentOption::findOrFail($id);
+        $option->setState(!$option->ADOP_ACTV);
+        return back();
+    }
+
+    public function setOptionDefault($id)
+    {
+        /** @var AdjustmentOption */
+        $option = AdjustmentOption::findOrFail($id);
+        $option->setDefault();
+        return back();
+    }
+
     //////////////////// Data functions
     private function initProfileArr($modelID)
     {
-        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colors', 'images')->findOrFail($modelID);
+        $this->data['model'] = CarModel::with('cars', 'type', 'brand', 'colors', 'images', 'adjustments', 'adjustments.options')->findOrFail($modelID);
         //Model Categories
         $this->data['items'] = $this->data['model']->cars;
         $this->data['title'] = "Available Categories";
