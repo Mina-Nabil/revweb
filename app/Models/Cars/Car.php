@@ -10,8 +10,8 @@ class Car extends Model
 {
     protected $table = "cars";
     public $timestamps = true;
-    protected $appends = array('image', 'image_url', "name");
-    protected $with = ['accessories', 'available_options'];
+    protected $appends = array('image', 'image_url', "name", 'available_options');
+    protected $with = ['accessories'];
     protected $image;
 
     protected $casts = [
