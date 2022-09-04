@@ -63,7 +63,7 @@ class Brand extends Model
 
     function activeModels()
     {
-        return $this->models()->with(["type", "colors", "images", "options", "cars" => function ($query) {
+        return $this->models()->with(["type", "colors", "images", "adjustments", "cars" => function ($query) {
             $query->where("CAR_ACTV", 1);
         }, "cars.images", "cars.options", "brand"])->where(["MODL_ACTV" => 1])->whereHas('cars', function ($query){
             $query->where("CAR_ACTV", 1);

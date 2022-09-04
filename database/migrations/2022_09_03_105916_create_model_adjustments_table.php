@@ -13,11 +13,6 @@ class CreateModelAdjustmentsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('offer_request_adjustment_options');
-        Schema::dropIfExists('offer_adjustment_options');
-        Schema::dropIfExists('car_adjustment_options');
-        Schema::dropIfExists('adjustments_options');
-        Schema::dropIfExists('model_adjustments');
         Schema::create('model_adjustments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ADJT_MODL_ID')->constrained('models');
