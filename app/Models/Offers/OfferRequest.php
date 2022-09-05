@@ -4,6 +4,7 @@ namespace App\Models\Offers;
 
 use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Car;
+use App\Models\Cars\ModelAdjustment;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use Carbon\Carbon;
@@ -40,7 +41,7 @@ class OfferRequest extends Model
     ];
 
     protected $table = "offers_requests";
-    protected $with = ["colors", "buyer", "car", "car.model", "car.colors", "offers", "options"];
+    protected $with = ["colors", "buyer", "car", "car.model", "car.colors", "offers"];
     public $timestamps = true;
 
     public static function createRequest(int $buyerID, int $carID, string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = [], array $options = [])
@@ -129,6 +130,14 @@ class OfferRequest extends Model
         return $this->OFRQ_BUYR_ID == $buyer->id;
     }
 
+    public function getOptionsAttribute()
+    {
+        ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
+            ->with(['options', function ($query) {
+                $query->whereIn('model_adjustments.id', $this->options->pluck('id')->toArray());
+            }])->get();
+    }
+
 
     /**
      * @param $showroomID offer requests available for the mentioned showroom
@@ -167,7 +176,7 @@ class OfferRequest extends Model
         return $this->hasMany(OfferRequestColors::class, "OFRC_OFRQ_ID");
     }
 
-    public function options():BelongsToMany
+    public function options(): BelongsToMany
     {
         return $this->belongsToMany(AdjustmentOption::class, "offer_request_adjustment_options", "CRAD_OFRQ_ID", "CRAD_ADOP_ID");
     }
