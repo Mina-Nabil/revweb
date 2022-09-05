@@ -108,7 +108,7 @@ class Offer extends Model
         return $this->save();
     }
 
-    public function getOptionsAttribute()
+    public function getAvailableOptionsAttribute()
     {
         ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
             ->with(['options', function ($query) {

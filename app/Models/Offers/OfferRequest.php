@@ -131,7 +131,7 @@ class OfferRequest extends Model
         return $this->OFRQ_BUYR_ID == $buyer->id;
     }
 
-    public function getOptionsAttribute()
+    public function getAvailableOptionsAttribute()
     {
         ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
             ->with(['options', function ($query) {
