@@ -4,6 +4,7 @@ namespace App\Models\Offers;
 
 use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Car;
+use App\Models\Cars\ModelAdjustment;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
@@ -33,7 +34,7 @@ class Offer extends Model
     ];
 
     protected $table = "offers";
-    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors", "options"];
+    protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors"];
     public $timestamps = true;
 
     static function createOffer(OfferRequest $request, Seller $seller, $isLoan, $price, $downpayment, DateTime $startDate, DateTime $endDate, array $colors, array $options, $comment = null)
@@ -107,6 +108,14 @@ class Offer extends Model
         return $this->save();
     }
 
+    public function getOptionsAttribute()
+    {
+        ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
+            ->with(['options', function ($query) {
+                $query->whereIn('model_adjustments.id', $this->options->pluck('id')->toArray());
+            }])->get();
+    }
+    
     //relations
     public function colors()
     {
