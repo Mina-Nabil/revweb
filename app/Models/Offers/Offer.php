@@ -111,9 +111,10 @@ class Offer extends Model
 
     public function getAvailableOptionsAttribute()
     {
-        return ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
-            ->with(['options' => function ($query) {
-                $query->whereIn('model_adjustments.id', $this->options()->get()->pluck('id')->toArray());
+        $availableOptionIDs = $this->options()->get()->pluck('id')->toArray();
+        return ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')->where('adjustments_options.id', '=', $availableOptionIDs)
+            ->with(['options' => function ($query) use ($availableOptionIDs) {
+                $query->whereIn('model_adjustments.id', $availableOptionIDs);
             }])->get();
     }
 
