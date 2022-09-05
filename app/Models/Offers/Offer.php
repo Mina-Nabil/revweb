@@ -111,18 +111,18 @@ class Offer extends Model
 
     public function getAvailableOptionsAttribute()
     {
-        ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
+        return ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
             ->with(['options' => function ($query) {
                 $query->whereIn('model_adjustments.id', $this->options()->get()->pluck('id')->toArray());
             }])->get();
     }
-    
+
     //relations
     public function colors()
     {
         return $this->hasMany(OfferColor::class, "OFCL_OFFR_ID");
     }
-    public function options():BelongsToMany
+    public function options(): BelongsToMany
     {
         return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "CRAD_OFFR_ID", "CRAD_ADOP_ID");
     }
