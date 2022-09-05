@@ -35,6 +35,7 @@ class Offer extends Model
 
     protected $table = "offers";
     protected $with = ["showroom", "seller", "buyer", "car", "colors", "car.model", "car.colors"];
+    protected $appends = ['available_options'];
     public $timestamps = true;
 
     static function createOffer(OfferRequest $request, Seller $seller, $isLoan, $price, $downpayment, DateTime $startDate, DateTime $endDate, array $colors, array $options, $comment = null)

@@ -42,7 +42,7 @@ class OfferRequest extends Model
 
     protected $table = "offers_requests";
     protected $with = ["colors", "buyer", "car", "car.model", "car.colors", "offers"];
-    protected $appends = ['options'];
+    protected $appends = ['available_options'];
     public $timestamps = true;
 
     public static function createRequest(int $buyerID, int $carID, string $paymentMethod = self::CASH_KEY, string $comment = null, array $colors = [], array $options = [])
