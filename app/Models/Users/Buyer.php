@@ -250,13 +250,13 @@ class Buyer extends Authenticatable
 
     function getActiveRequests()
     {
-        $requests = $this->offer_requests()->appends('options')->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY]);
+        $requests = $this->offer_requests()->append('options')->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY]);
         return $requests->get();
     }
 
     function getRequestsHistory()
     {
-        $requests = $this->offer_requests()->appends('options');
+        $requests = $this->offer_requests()->append('options');
         return $requests->simplePaginate(7);
     }
 
