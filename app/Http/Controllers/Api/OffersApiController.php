@@ -54,7 +54,7 @@ class OffersApiController extends BaseApiController
         ]);
         /** @var Buyer */
         $buyer = $request->user();
-        $newRequest = OfferRequest::createRequest($buyer->id, $request->carID, $request->pymtType, $request->comment, $request->colors);
+        $newRequest = OfferRequest::createRequest($buyer->id, $request->carID, $request->pymtType, $request->comment, $request->colors, $request->options);
         if ($newRequest != null) {
             parent::sendResponse(true, "Offers Request Created", $newRequest->fresh(), false);
             /** @var Car */
