@@ -68,6 +68,7 @@ class Offer extends Model
             });
         } catch (Exception $e) {
             report($e);
+            return false;
         }
         return $newOffer->fresh();
     }

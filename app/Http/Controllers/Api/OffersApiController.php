@@ -67,6 +67,7 @@ class OffersApiController extends BaseApiController
             }
           
         } else {
+            parent::sendResponse(false, "Offers Request Failed", null, true, 500);
         }
     }
 
