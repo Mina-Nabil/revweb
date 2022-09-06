@@ -52,6 +52,7 @@ class OffersApiController extends BaseApiController
             "options"    => "nullable|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
+        dd($request->options);
         /** @var Buyer */
         $buyer = $request->user();
         $newRequest = OfferRequest::createRequest($buyer->id, $request->carID, $request->pymtType, $request->comment, $request->colors, $request->options);
