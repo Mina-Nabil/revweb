@@ -70,7 +70,11 @@ class OfferRequest extends Model
                         ]);
                     }
                 }
-                $newOffer->options()->sync($options);
+                $optionsArr = array();
+                foreach($options as $key => $opt){
+                    $optionsArr[$key] = ["ORAO_ADJT_ID" => $opt];
+                }
+                $newOffer->options()->sync($optionsArr);
             });
             return $newOffer;
         } catch (Exception $e) {

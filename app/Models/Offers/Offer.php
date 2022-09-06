@@ -63,7 +63,11 @@ class Offer extends Model
                         "OFCL_COLR_ID" => $color
                     ]);
                 }
-                $newOffer->options()->sync($options);
+                $optionsArr = array();
+                foreach ($options as $key => $opt) {
+                    $optionsArr[$key] = ["OADO_ADJT_ID" => $opt];
+                }
+                $newOffer->options()->sync($optionsArr);
                 $request->setAsRepliedTo();
             });
         } catch (Exception $e) {
