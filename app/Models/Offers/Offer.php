@@ -112,11 +112,11 @@ class Offer extends Model
     public function getAvailableOptionsAttribute()
     {
         $availableOptionIDs = $this->options()->get()->pluck('id')->toArray();
-        return ModelAdjustment::join('adjustments_options', 'ADOP_ADJT_ID', '=', 'model_adjustments.id')
-            ->whereIn('adjustments_options.id', $availableOptionIDs)
-            ->select('adjustments_options.*')
+        $availableAdjustmentIDs = $this->adjustments()->get()->pluck('id')->toArray();
+
+        return ModelAdjustment::whereIn('model_adjustments.id', $availableAdjustmentIDs)
             ->with(['options' => function ($query) use ($availableOptionIDs) {
-                $query->where('adjustments_options.ADOP_ADJT_ID', '=', $this->id)->whereIn('adjustments_options.id', $availableOptionIDs);
+                $query->whereIn('adjustments_options.id', $availableOptionIDs);
             }])->get();
     }
 
@@ -125,9 +125,14 @@ class Offer extends Model
     {
         return $this->hasMany(OfferColor::class, "OFCL_OFFR_ID");
     }
+    public function adjustments(): BelongsToMany
+    {
+        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "ORAO_OFRQ_ID", "ORAO_ADJT_ID");
+    }
+
     public function options(): BelongsToMany
     {
-        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "CRAD_OFFR_ID", "CRAD_ADOP_ID");
+        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "ORAO_OFRQ_ID", "ORAO_ADOP_ID");
     }
     public function request()
     {

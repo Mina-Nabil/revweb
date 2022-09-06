@@ -39,14 +39,16 @@ class CreateModelAdjustmentsTable extends Migration
 
         Schema::create('offer_adjustment_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('CRAD_ADOP_ID')->constrained('adjustments_options');
-            $table->foreignId('CRAD_OFFR_ID')->constrained('offers');
+            $table->foreignId('OADO_ADOP_ID')->constrained('adjustments_options');
+            $table->foreignId('OADO_ADJT_ID')->constrained('model_adjustments');
+            $table->foreignId('OADO_OFFR_ID')->constrained('offers');
         });
 
         Schema::create('offer_request_adjustment_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('CRAD_ADOP_ID')->constrained('adjustments_options');
-            $table->foreignId('CRAD_OFRQ_ID')->constrained('offers_requests');
+            $table->foreignId('ORAO_ADOP_ID')->constrained('adjustments_options');
+            $table->foreignId('ORAO_ADJT_ID')->constrained('model_adjustments');
+            $table->foreignId('ORAO_OFRQ_ID')->constrained('offers_requests');
         });
     }
 
