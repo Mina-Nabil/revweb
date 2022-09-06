@@ -187,7 +187,7 @@ class OfferRequest extends Model
 
     public function options(): BelongsToMany
     {
-        return $this->belongsToMany(AdjustmentOption::class, "offer_request_adjustment_options", "ORAO_OFRQ_ID", "ORAO_ADOP_ID");
+        return $this->belongsToMany(AdjustmentOption::class, "offer_request_adjustment_options", "ORAO_OFRQ_ID", "ORAO_ADOP_ID")->withPivot(['ORAO_ADJT_ID']);
     }
 
     public function buyer()
