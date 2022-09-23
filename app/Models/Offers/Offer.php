@@ -137,7 +137,7 @@ class Offer extends Model
 
     public function options(): BelongsToMany
     {
-        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "ORAO_OFRQ_ID", "ORAO_ADOP_ID");
+        return $this->belongsToMany(AdjustmentOption::class, "offer_adjustment_options", "OADO_OFFR_ID", "OADO_ADOP_ID");
     }
     public function request()
     {
