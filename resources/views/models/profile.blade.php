@@ -353,7 +353,7 @@
                                 <div class="col-12 form-group">
                                     <label for="input-file-now-custom-1">Display Image</label>
                                     <div class="input-group mb-3">
-                                        <input type="file" id="input-file-now-custom-1" name=photo class="dropify" data-default-file="{{ old('image') }}" data-max-file-size="2M" />
+                                        <input type="file" id="input-file-now-custom-1" name=image class="dropify" data-default-file="{{ old('image') }}" data-max-file-size="2M" />
                                     </div>
                                     <small class="text-muted">Optimum Resolution is 148 * 100</small>
                                     <small class="text-danger">{{$errors->first('image')}}</small>
