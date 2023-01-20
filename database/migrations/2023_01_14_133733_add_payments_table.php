@@ -16,8 +16,8 @@ class AddPaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->morphs('payable');
-            $table->foreign('showroom_id');
-            $table->foreign('seller_id');
+            $table->foreignId('showroom_id')->constrained("showrooms");
+            $table->foreignId('seller_id')->constrained("sellers");
             $table->string('transaction_id');
             $table->float('amount');
             $table->string('title');
