@@ -5,6 +5,7 @@ namespace App\Models\Users;
 use App\Models\Offers\Offer;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
+use App\Subscriptions\Plan;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
@@ -114,6 +115,10 @@ class Seller extends Authenticatable
     {
         $seller = self::where("SLLR_MAIL", $emailOrMob)->orWhere("SLLR_MOB1", $emailOrMob)->first();
         if ($seller != null) {
+            $seller->load('showroom');
+            if( is_a($seller->showroom, Showroom::class)){
+                $seller->showroom->checkLimit(Plan::USERS_LIMIT, true);
+            }
             $passwordStatus = Hash::check($password, $seller->SLLR_PASS);
             if ($passwordStatus) {
                 $seller->load("showroom");

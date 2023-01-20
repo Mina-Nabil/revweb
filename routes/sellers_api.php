@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OffersApiController;
 use App\Http\Controllers\Api\SellersProfileApi;
 use App\Http\Controllers\Api\ShowroomCatalogApiController;
 use App\Http\Controllers\Api\ShowroomProfileApi;
+use App\Http\Controllers\Api\SubscriptionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -75,3 +76,8 @@ Route::post('/submit/join/request', [SellersProfileApi::class, 'submitShowroomJo
 Route::post('/accept/invitation', [SellersProfileApi::class, 'acceptShowroomInvitation']);
 Route::get('/leave/showroom', [SellersProfileApi::class, 'leaveShowroom']);
 Route::delete('/delete/showroom', [SellersProfileApi::class, 'deleteShowroom']);
+
+//subscription API
+Route::post('/plans', [SubscriptionsController::class, 'plans']);
+Route::post('/subscriptions', [SubscriptionsController::class, 'addSubscriptions']);
+

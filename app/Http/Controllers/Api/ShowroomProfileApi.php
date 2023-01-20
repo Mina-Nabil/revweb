@@ -9,6 +9,7 @@ use App\Models\Users\Showroom;
 use App\Rules\Iban;
 use App\Services\FilesHandler;
 use App\Services\PushNotificationsHandler;
+use App\Subscriptions\Plan;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,7 @@ class ShowroomProfileApi extends BaseApiController
         $seller = $request->user();
         $seller->load("showroom");
         if ($seller->showroom == NULL)  parent::sendResponse(false, "Unable to load Showroom");
+        $seller->showroom->append('active_plan');
         parent::sendResponse(true, "Showroom Successfully Retrieved", $seller->showroom);
     }
 
@@ -109,6 +111,7 @@ class ShowroomProfileApi extends BaseApiController
         $seller = $request->user();
         $seller->load('showroom');
         if ($seller->showroom->isManager()) {
+            $seller->showroom->checkLimit(Plan::USERS_LIMIT, true);
             $ret = $seller->showroom->acceptJoinRequest($request->joinRequestID);
             if ($ret) {
                 parent::sendResponse(true, "Request Accepted", null, false);
@@ -135,6 +138,10 @@ class ShowroomProfileApi extends BaseApiController
         if ($seller->showroom->hasSeller($request->sellerID)) {
             parent::sendResponse(false, "Inapplicable");
         }
+        /** @var Showroom */
+        $showroom = $seller->showroom;
+        $showroom->checkLimit(Plan::USERS_LIMIT, true);
+
         $ret = $seller->showroom->inviteSellerToShowroom($request->sellerID);
         if ($ret) {
             parent::sendResponse(true, "Request Submitted", (object)["request" => $ret->fresh()], false);

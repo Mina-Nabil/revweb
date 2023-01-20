@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,24 +18,7 @@ class CarModel extends Model
     protected $with = ["brand", "type"];
 
 
-    ///////attributes
-
-
-    public function getImageUrlAttribute()
-    {
-        return (isset($this->MODL_IMGE)) ? Storage::url($this->MODL_IMGE) : null;
-    }
-
-    public function getPdfUrlAttribute()
-    {
-        return (isset($this->attributes['MODL_BRCH'])) ? Storage::url($this->attributes['MODL_BRCH']) : null;
-    }
-
-    public function getTitleAttribute()
-    {
-        return $this->MODL_NAME . " " . $this->MODL_YEAR;
-    }
-
+    ////static functions
     static function create($brandID, $typeID, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
     {
         $newModel = new self();
@@ -52,7 +36,7 @@ class CarModel extends Model
         if ($pdfPath != null) {
             $newModel->MODL_BRCH = $pdfPath;
         }
-        $newModel->MODL_ACTV = $isActive ;
+        $newModel->MODL_ACTV = $isActive;
 
         try {
             $newModel->save();
@@ -63,16 +47,26 @@ class CarModel extends Model
         }
     }
 
-    function updateInfo($brand, $type, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0 ) {
+    public static function getModelIDs($carIDs = []): array
+    {
+        return DB::table('models')->join('cars', 'cars.CAR_MODL_ID', '=', 'models.id')
+            ->selectRaw('DISTINCT models.id')
+            ->whereIn("cars.id", $carIDs)
+            ->get()->pluck('id')->toArray();
+    }
+
+    ////model functions
+    function updateInfo($brand, $type, $name, $arbcName, $year, $overview, $imagePath = null, $pdfPath = null, int $isActive = 0)
+    {
         $this->MODL_BRND_ID = $brand;
         $this->MODL_TYPE_ID = $type;
         $this->MODL_NAME = $name;
         $this->MODL_ARBC_NAME = $arbcName;
         $this->MODL_YEAR = $year;
-        if ($imagePath!=null) {
+        if ($imagePath != null) {
             $this->MODL_IMGE = $imagePath;
         }
-        if ($pdfPath!=null) {
+        if ($pdfPath != null) {
             $this->MODL_BRCH = $pdfPath;
         }
         $this->MODL_ACTV = $isActive;
@@ -145,5 +139,22 @@ class CarModel extends Model
     public function adjustments(): HasMany
     {
         return $this->hasMany(ModelAdjustment::class, 'ADJT_MODL_ID');
+    }
+
+
+    ///////attributes
+    public function getImageUrlAttribute()
+    {
+        return (isset($this->MODL_IMGE)) ? Storage::url($this->MODL_IMGE) : null;
+    }
+
+    public function getPdfUrlAttribute()
+    {
+        return (isset($this->attributes['MODL_BRCH'])) ? Storage::url($this->attributes['MODL_BRCH']) : null;
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->MODL_NAME . " " . $this->MODL_YEAR;
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cars\Brand;
 use App\Models\Cars\Car;
 use App\Models\Cars\CarModel;
+use App\Models\Users\Showroom;
+use App\Subscriptions\Plan;
 use Illuminate\Http\Request;
 
 class ShowroomCatalogApiController extends BaseApiController
@@ -29,7 +31,11 @@ class ShowroomCatalogApiController extends BaseApiController
 
         $seller = $request->user();
         $seller->load("showroom");
+        /** @var Showroom */
         $showroom = $seller->showroom;
+        $modelIDs = CarModel::getModelIDs($request->carIDs);
+        $showroom->checkLimit(Plan::MODELS_LIMIT, true, count($modelIDs));
+
         if ($showroom == NULL) {
             parent::sendResponse(false, "Failed to load Showroom");
         }

@@ -10,6 +10,7 @@ use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Notifications\RequestOfferCreated;
 use App\Services\PushNotificationsHandler;
+use App\Subscriptions\Plan;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -34,6 +35,16 @@ class OffersApiController extends BaseApiController
         ]);
         $offerRequest = OfferRequest::findOrFail($request->requestID);
         $seller = $request->user();
+        $seller->load('showroom');
+        /** @var Showroom */
+        $showroom = $seller->showroom;
+
+        if ($showroom == null) {
+            abort(403, "No showroom linked to the user");
+        }
+
+        $showroom->checkLimit(Plan::OFFERS_LIMIT, true);
+
         $newOffer = Offer::createOffer($offerRequest, $seller, $request->isLoan, $request->price, $request->downPayment, new DateTime($request->startDate), new DateTime($request->expiryDate), $request->colors, $request->options, $request->comment);
         if ($newOffer != null) {
             parent::sendResponse(true, "Offers Request Created", (object)["offer" => $newOffer], false);
@@ -52,7 +63,7 @@ class OffersApiController extends BaseApiController
             "options"    => "nullable|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
-        
+
         /** @var Buyer */
         $buyer = $request->user();
         $newRequest = OfferRequest::createRequest($buyer->id, $request->carID, $request->pymtType, $request->comment, $request->colors, $request->options);
@@ -61,12 +72,11 @@ class OffersApiController extends BaseApiController
             /** @var Car */
             $car = Car::with('model')->findOrFail($request->carID);
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
-            foreach($sellersSellingCar as $seller){
+            foreach ($sellersSellingCar as $seller) {
                 Log::debug($seller->SLLR_MAIL);
                 /** @var Seller */
                 $seller->notify(new RequestOfferCreated("Seller", $seller->id, $car->model->brand->BRND_NAME, $car->model->title, $car->CAR_CATG, $car->id));
             }
-          
         } else {
             parent::sendResponse(false, "Offers Request Failed", null, true, 500);
         }

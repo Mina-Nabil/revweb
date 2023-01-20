@@ -8,15 +8,21 @@ use App\Models\Cars\CatalogItem;
 use App\Models\Cars\CatalogItemDetails;
 use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
+use App\Payment;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
+use App\Subscriptions\Plan;
+use App\Subscriptions\Subscription;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Showroom extends Model
@@ -187,6 +193,124 @@ class Showroom extends Model
             return false;
         }
         return true;
+    }
+
+    function addSubscription(int $plan_id, string $type, int $days, float $amount, string $transaction_id): Subscription
+    {
+        $owner = Auth::user();
+
+        if ($owner == null || !is_a($owner, Seller::class) || $owner->id !== $this->SHRM_OWNR_ID)
+            abort(403, "Unauthorized request");
+
+        $subscription = new Subscription;
+
+        try {
+
+            DB::transaction(function () use ($subscription, $amount, $transaction_id, $plan_id, $type, $days, $owner) {
+                $newPayment = new Payment;
+
+                $newPayment->seller_id = $owner->id;
+                $newPayment->transaction_id = $transaction_id;
+                $newPayment->amount = $amount;
+                $newPayment->title = "Subscription Payment";
+
+                $subscription = $this->subscriptions()->create([
+                    "plan_id"   =>  $plan_id,
+                    "state"      =>  Subscription::ACTIVE_STATE,
+                    "type"      =>  $type,
+                    "plan_id"   => (new Carbon())->addDays($days),
+                    "seller_id" =>  $owner->id
+                ]);
+
+                $newPayment->payable()->associate($subscription);
+                $newPayment->save();
+            });
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+
+        return $subscription;
+    }
+
+    function checkLimit(int $limit_type, bool $abortIfFalse = false, int $capacityToAdd = 0): int
+    {
+        $this->append('active_plan');
+
+        $res = 0;
+
+        switch ($limit_type) {
+            case Plan::USERS_LIMIT:
+                $res = $this->checkUsersLimit($capacityToAdd);
+                break;
+
+            case Plan::ADMINS_LIMIT:
+                $res = $this->checkAdminsLimit($capacityToAdd);
+                break;
+
+            case Plan::MODELS_LIMIT:
+                $res = $this->checkModelsLimit($capacityToAdd);
+                break;
+
+            default:
+                $res = PHP_INT_MAX;
+        }
+
+        if (!$res && $abortIfFalse) {
+            abort(406, "Limit reached");
+        }
+
+        return $res;
+    }
+
+    private function checkAdminsLimit(int $capacityToAdd = 0): int
+    {
+        $limit = $this->active_plan->admins_limit;
+        if ($limit === -1) return PHP_INT_MAX;
+
+        $sellersCount = $this->sellers()->get()->count();
+        return $limit - ($sellersCount + $capacityToAdd);
+    }
+
+    private function checkUsersLimit(int $capacityToAdd = 0): int
+    {
+        $limit = $this->active_plan->users_limit;
+        if ($limit === -1) return PHP_INT_MAX;
+
+        $sellersCount = $this->sellers()->get()->count() + $capacityToAdd;
+        return $limit - ($sellersCount + $capacityToAdd);
+    }
+
+    private function checkModelsLimit(int $capacityToAdd = 0)
+    {
+        $limit = $this->active_plan->models_limit;
+
+        if ($limit === -1) return PHP_INT_MAX;
+
+        $modelsCount = DB::table('models')
+            ->selectRaw('DISTINCT models.id')
+            ->join('cars', 'CAR_MODL_ID', '=', 'models.id')
+            ->join('showroom_catalog', 'SRCG_CAR_ID', '=', 'cars.id')
+            ->where('SRCG_SHRM_ID', $this->id)
+            ->get()->count();
+        return $limit - ($modelsCount + $capacityToAdd);
+    }
+
+    private function checkOffersLimit(int $capacityToAdd = 0)
+    {
+        $limit = $this->active_plan->offers_limit;
+
+        if ($limit === -1) return PHP_INT_MAX;
+
+        $startOfMonth = (new Carbon)->format('Y-m-01');
+        $endOfMonth = (new Carbon)->format('Y-m-t');
+
+        $offersCount = $this->offers()->whereBetween("created_at", [
+            $startOfMonth,
+            $endOfMonth,
+        ])
+            ->get()->count();
+        return $limit - ($offersCount + $capacityToAdd);
     }
 
     function deleteBankInfo()
@@ -492,50 +616,70 @@ class Showroom extends Model
         return (isset($this->SHRM_IMGE)) ? Storage::url($this->SHRM_IMGE) : null;
     }
 
-    ///relations
-    public function cars()
+    /////////relations
+    public function cars(): BelongsToMany
     {
         return $this->belongsToMany(Car::class, CatalogItem::class, "SRCG_SHRM_ID", "SRCG_CAR_ID");
     }
 
-    public function catalogItems()
+    public function catalogItems(): HasMany
     {
         return $this->hasMany(CatalogItem::class, "SRCG_SHRM_ID");
     }
 
-    public function sellers()
+    public function sellers(): HasMany
     {
         return $this->hasMany(Seller::class, "SLLR_SHRM_ID");
     }
 
-    public function city()
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, "SHRM_CITY_ID");
     }
 
-    public function owner()
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(Seller::class, "SHRM_OWNR_ID");
     }
 
-    public function bankInfo()
+    public function bankInfo(): BelongsTo
     {
         return $this->belongsTo(BankInfo::class, "SHRM_BANK_ID");
     }
 
-    public function joinRequests()
+    public function joinRequests(): HasMany
     {
         return $this->hasMany(JoinRequest::class, "JNRQ_SHRM_ID");
     }
 
-    public function joinRequesters()
+    public function joinRequesters(): BelongsToMany
     {
         return $this->belongsToMany(Seller::class, JoinRequest::class, "JNRQ_SHRM_ID", "JNRQ_SLLR_ID");
     }
 
-    public function offers()
+    public function offers(): HasMany
     {
         return $this->hasMany(Offer::class, "OFFR_SHRM_ID");
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class, "showroom_id")->orderBy('id', 'desc');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, "showroom_id")->orderBy('id', 'desc');
+    }
+
+    public function getActivePlanAttribute(): Plan
+    {
+        return $this->subscriptions()
+            ->whereDate("subscriptions.expiry_date", "<=", date('Y-m-d'))
+            ->latest()
+            ->orderBy('id', 'desc')
+            ->limit(1)
+            ->first()->plan ?? Plan::free();
     }
 
     public function getBuyers()
