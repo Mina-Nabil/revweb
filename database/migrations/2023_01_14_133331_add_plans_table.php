@@ -18,11 +18,11 @@ class AddPlansTable extends Migration
             $table->string('name')->unique();
             $table->double('monthly_price');
             $table->double('annual_price');
-            $table->unsignedInteger('admins_limit');
-            $table->unsignedInteger('users_limit');
-            $table->unsignedInteger('models_limit');
-            $table->unsignedInteger('offers_limit');
-            $table->unsignedInteger('services_limit');
+            $table->integer('admins_limit');
+            $table->integer('users_limit');
+            $table->integer('models_limit');
+            $table->integer('offers_limit');
+            $table->integer('services_limit');
             $table->boolean('facility_payment');
             $table->boolean('email_support');
             $table->boolean('chat_support');
