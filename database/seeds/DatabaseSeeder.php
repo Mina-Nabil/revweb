@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BrandsSeeder::class);
         $this->call(CarsTestData::class);
         $this->call(CitiesSeedData::class);
+        $this->call(PlansSeeder::class);
    
     }
 }
