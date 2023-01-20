@@ -8,11 +8,13 @@ use App\Models\Cars\CatalogItem;
 use App\Models\Cars\CatalogItemDetails;
 use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
-use App\Payment;
+use App\Models\Subscriptions\Payment;
+use App\Models\Subscriptions\Plan;
+use App\Models\Subscriptions\Subscription;
+
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
-use App\Subscriptions\Plan;
-use App\Subscriptions\Subscription;
+
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -207,7 +209,7 @@ class Showroom extends Model
         try {
 
             DB::transaction(function () use ($subscription, $amount, $transaction_id, $plan_id, $type, $days, $owner) {
-                $newPayment = new Payment;
+                $newPayment = new Payment();
 
                 $newPayment->seller_id = $owner->id;
                 $newPayment->transaction_id = $transaction_id;

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Subscriptions\Plan;
+use App\Models\Subscriptions\Subscription;
 use App\Models\Users\Showroom;
-use App\Subscriptions\Plan;
-use App\Subscriptions\Subscription;
+
+
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

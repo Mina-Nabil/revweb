@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Subscriptions;
+namespace App\Models\Subscriptions;
 
-use App\Models\Users\Showroom;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

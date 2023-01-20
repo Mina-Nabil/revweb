@@ -3,9 +3,9 @@
 namespace App\Models\Users;
 
 use App\Models\Offers\Offer;
+use App\Models\Subscriptions\Plan;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
-use App\Subscriptions\Plan;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
