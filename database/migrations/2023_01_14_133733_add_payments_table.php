@@ -13,6 +13,8 @@ class AddPaymentsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('payments');
+
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->morphs('payable');
