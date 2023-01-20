@@ -1,6 +1,6 @@
 <?php
 
-use App\Subscriptions\Plan;
+use App\Models\Subscriptions\Plan;
 use Illuminate\Database\Seeder;
 
 class PlansSeeder extends Seeder
