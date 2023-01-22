@@ -279,7 +279,7 @@ class Showroom extends Model
         $limit = $this->active_plan->users_limit;
         if ($limit === -1) return PHP_INT_MAX;
 
-        $sellersCount = $this->sellers()->get()->count() + $capacityToAdd;
+        $sellersCount = $this->users_count + $capacityToAdd;
         return $limit - ($sellersCount + $capacityToAdd);
     }
 
@@ -289,13 +289,7 @@ class Showroom extends Model
 
         if ($limit === -1) return PHP_INT_MAX;
 
-        $modelsCount = DB::table('models')
-            ->selectRaw('DISTINCT models.id')
-            ->join('cars', 'CAR_MODL_ID', '=', 'models.id')
-            ->join('showroom_catalog', 'SRCG_CAR_ID', '=', 'cars.id')
-            ->where('SRCG_SHRM_ID', $this->id)
-            ->get()->count();
-        return $limit - ($modelsCount + $capacityToAdd);
+        return $limit - ($this->models_count + $capacityToAdd);
     }
 
     private function checkOffersLimit(int $capacityToAdd = 0)
@@ -304,15 +298,33 @@ class Showroom extends Model
 
         if ($limit === -1) return PHP_INT_MAX;
 
+        return $limit - ($this->monthly_offers + $capacityToAdd);
+    }
+
+    public function getUsersCountAttribute()
+    {
+        return $this->sellers()->get()->count();
+    }
+
+    public function getModelsCountAttribute()
+    {
+        return DB::table('models')
+        ->selectRaw('DISTINCT models.id')
+        ->join('cars', 'CAR_MODL_ID', '=', 'models.id')
+        ->join('showroom_catalog', 'SRCG_CAR_ID', '=', 'cars.id')
+        ->where('SRCG_SHRM_ID', $this->id)
+        ->get()->count();
+    }
+
+    public function getMonthlyOffersAttribute()
+    {
         $startOfMonth = (new Carbon)->format('Y-m-01');
         $endOfMonth = (new Carbon)->format('Y-m-t');
-
-        $offersCount = $this->offers()->whereBetween("created_at", [
+        return $this->offers()->whereBetween("created_at", [
             $startOfMonth,
             $endOfMonth,
         ])
             ->get()->count();
-        return $limit - ($offersCount + $capacityToAdd);
     }
 
     function deleteBankInfo()

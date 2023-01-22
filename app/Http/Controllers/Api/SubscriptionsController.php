@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Subscriptions\Plan;
 use App\Models\Subscriptions\Subscription;
+use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 
 
@@ -35,6 +36,31 @@ class SubscriptionsController extends BaseApiController
             parent::sendResponse(false, "Subscription false");
             throw (new Exception("Subscription failed. Debug info " . print_r($ret, true)));
         }
+    }
+
+    public function limits()
+    {
+        /////return limits API
+        /** @var Seller */
+        $seller = Auth::user();
+
+        if (!is_a($seller, Seller::class)) {
+            parent::sendResponse(false, "User Unauthorized", null, true);
+        }
+
+        $seller->load('showroom');
+        /** @var Showroom */
+        $showroom = $seller->showroom;
+
+        parent::sendResponse(true, "Success", [
+            "plan"     =>  $showroom->active_plan,
+            "current"   =>  [
+                "users"     =>   $showroom->users_count,
+                "admins"    =>  1,
+                "offers"    =>  $showroom->monthly_offers,
+                "models"    =>  $showroom->models_count,
+            ]
+        ]);
     }
 
     public function plans()

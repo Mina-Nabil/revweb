@@ -79,5 +79,6 @@ Route::delete('/delete/showroom', [SellersProfileApi::class, 'deleteShowroom']);
 
 //subscription API
 Route::get('/plans', [SubscriptionsController::class, 'plans']);
+Route::get('/limits', [SubscriptionsController::class, 'limits']);
 Route::post('/subscriptions', [SubscriptionsController::class, 'addSubscriptions']);
 
