@@ -117,7 +117,7 @@ class Seller extends Authenticatable
         if ($seller != null) {
             $seller->load('showroom');
             if( is_a($seller->showroom, Showroom::class)){
-                $seller->showroom->checkLimit(Plan::USERS_LIMIT, true);
+                // $seller->showroom->checkLimit(Plan::USERS_LIMIT, true);
             }
             $passwordStatus = Hash::check($password, $seller->SLLR_PASS);
             if ($passwordStatus) {
