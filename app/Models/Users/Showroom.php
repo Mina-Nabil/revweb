@@ -237,6 +237,7 @@ class Showroom extends Model
 
     function checkLimit(int $limit_type, bool $abortIfFalse = false, int $capacityToAdd = 0): int
     {
+        return true;
         $this->append('active_plan');
 
         $res = 0;
