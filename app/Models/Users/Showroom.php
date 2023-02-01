@@ -690,7 +690,7 @@ class Showroom extends Model
     public function getActiveSubscriptionAttribute()
     {
         return $this->subscriptions()
-            ->whereDate("subscriptions.expiry_date", "<=", date('Y-m-d'))
+            ->whereDate("subscriptions.expiry_date", ">=", date('Y-m-d'))
             ->latest()
             ->orderBy('id', 'desc')
             ->limit(1)

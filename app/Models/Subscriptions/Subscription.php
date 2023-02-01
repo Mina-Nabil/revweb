@@ -10,9 +10,16 @@ class Subscription extends Model
     ////////subscription types
     const TRIAL_TYPE = 'trial';
     const PAID_TYPE = 'paid';
-
+    
     const SUBSCRIPTION_TYPES = [
         self::TRIAL_TYPE, self::PAID_TYPE
+    ];
+    
+    const MONTHLY_RANGE = 'monthly';
+    const YEARLY_RANGE = 'yearly';
+
+    const SUBSCRIPTION_RANGES = [
+        self::MONTHLY_RANGE, self::YEARLY_RANGE
     ];
 
     ////////states
