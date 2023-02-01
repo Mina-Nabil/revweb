@@ -686,7 +686,7 @@ class Showroom extends Model
         return $this->hasMany(Payment::class, "showroom_id")->orderBy('id', 'desc');
     }
 
-    public function getActiveSubscriptionAttribute(): Subscription
+    public function getActiveSubscriptionAttribute(): Subscription|null
     {
         return $this->subscriptions()
             ->whereDate("subscriptions.expiry_date", "<=", date('Y-m-d'))
