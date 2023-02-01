@@ -60,7 +60,7 @@ class SubscriptionsController extends BaseApiController
                 "offers"    =>  $showroom->monthly_offers,
                 "models"    =>  $showroom->models_count,
             ],
-            "subscription"  =>  $showroom->active_subcription
+            "subscription"  =>  $showroom->active_subscription
         ]);
     }
 
