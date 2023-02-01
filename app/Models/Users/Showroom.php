@@ -217,11 +217,11 @@ class Showroom extends Model
                 $newPayment->title = "Subscription Payment";
 
                 $subscription = $this->subscriptions()->create([
-                    "plan_id"   =>  $plan_id,
-                    "state"      =>  Subscription::ACTIVE_STATE,
-                    "type"      =>  $type,
-                    "plan_id"   => (new Carbon())->addDays($days),
-                    "seller_id" =>  $owner->id
+                    "plan_id"       =>  $plan_id,
+                    "state"         =>  Subscription::ACTIVE_STATE,
+                    "type"          =>  $type,
+                    "expiry_date"   => (new Carbon())->addDays($days),
+                    "seller_id"     =>  $owner->id
                 ]);
 
                 $newPayment->payable()->associate($subscription);
