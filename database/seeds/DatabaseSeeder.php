@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(users::class);
         // $this->call(CarTypes::class);
-        // $this->call(BrandsSeeder::class);
-        // $this->call(CarsTestData::class);
+        $this->call(BrandsSeeder::class);
+        $this->call(CarsTestData::class);
         // $this->call(CitiesSeedData::class);
-        $this->call(PlansSeeder::class);
+        // $this->call(PlansSeeder::class);
    
     }
 }

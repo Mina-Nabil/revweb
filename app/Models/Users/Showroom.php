@@ -237,7 +237,6 @@ class Showroom extends Model
 
     function checkLimit(int $limit_type, bool $abortIfFalse = false, int $capacityToAdd = 0): int
     {
-        return true;
         $this->append('active_plan');
 
         $res = 0;
@@ -687,14 +686,19 @@ class Showroom extends Model
         return $this->hasMany(Payment::class, "showroom_id")->orderBy('id', 'desc');
     }
 
-    public function getActivePlanAttribute(): Plan
+    public function getActiveSubscriptionAttribute(): Subscription
     {
         return $this->subscriptions()
             ->whereDate("subscriptions.expiry_date", "<=", date('Y-m-d'))
             ->latest()
             ->orderBy('id', 'desc')
             ->limit(1)
-            ->first()->plan ?? Plan::free();
+            ->first();
+    }
+
+    public function getActivePlanAttribute(): Plan
+    {
+        return $this->active_subscription->plan ?? Plan::free();
     }
 
     public function getBuyers()
