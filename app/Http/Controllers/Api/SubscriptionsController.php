@@ -17,7 +17,7 @@ class SubscriptionsController extends BaseApiController
     public function addSubscriptions(Request $request)
     {
         parent::validateRequest($request, [
-            "plan_id"   =>  "required|exists:plans.id",
+            "plan_id"   =>  "required|exists:plans,id",
             "type"      =>  "required|in:" . implode(",", Subscription::SUBSCRIPTION_TYPES),
             "days"      =>  "required|numeric", //number of days
             "amount"    =>  "required", //amount paid
