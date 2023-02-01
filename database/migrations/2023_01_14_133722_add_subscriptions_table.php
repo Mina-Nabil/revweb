@@ -21,6 +21,7 @@ class AddSubscriptionsTable extends Migration
             $table->foreignId('plan_id');
             $table->enum('state', Subscription::STATES)->default(Subscription::ACTIVE_STATE);
             $table->enum('type', Subscription::SUBSCRIPTION_TYPES);
+            $table->enum('range', Subscription::SUBSCRIPTION_RANGES);
             $table->dateTime('expiry_date');
             $table->dateTime('cancellation_date')->nullable();
             $table->timestamps();

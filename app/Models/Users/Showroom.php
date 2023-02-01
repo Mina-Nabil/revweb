@@ -222,7 +222,8 @@ class Showroom extends Model
                     "state"         =>  Subscription::ACTIVE_STATE,
                     "type"          =>  $type,
                     "expiry_date"   => (new Carbon())->addDays($days),
-                    "seller_id"     =>  $owner->id
+                    "seller_id"     =>  $owner->id,
+                    "range"          =>  $days != 365 ? Subscription::MONTHLY_RANGE : Subscription::YEARLY_RANGE,
                 ]);
 
                 $newPayment->payable()->associate($subscription);
@@ -310,11 +311,11 @@ class Showroom extends Model
     public function getModelsCountAttribute()
     {
         return DB::table('models')
-        ->selectRaw('DISTINCT models.id')
-        ->join('cars', 'CAR_MODL_ID', '=', 'models.id')
-        ->join('showroom_catalog', 'SRCG_CAR_ID', '=', 'cars.id')
-        ->where('SRCG_SHRM_ID', $this->id)
-        ->get()->count();
+            ->selectRaw('DISTINCT models.id')
+            ->join('cars', 'CAR_MODL_ID', '=', 'models.id')
+            ->join('showroom_catalog', 'SRCG_CAR_ID', '=', 'cars.id')
+            ->where('SRCG_SHRM_ID', $this->id)
+            ->get()->count();
     }
 
     public function getMonthlyOffersAttribute()
