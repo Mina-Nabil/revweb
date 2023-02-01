@@ -1,11 +1,11 @@
 <?php
 
-use Database\Seeders\BrandsSeeder;
-use Database\Seeders\CarsTestData;
-use Database\Seeders\CarTypes;
-use Database\Seeders\CitiesSeedData;
-use Database\Seeders\PlansSeeder;
-use Database\Seeders\users;
+use Database\Seeds\BrandsSeeder;
+use Database\Seeds\CarsTestData;
+use Database\Seeds\CarTypes;
+use Database\Seeds\CitiesSeedData;
+use Database\Seeds\PlansSeeder;
+use Database\Seeds\users;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
