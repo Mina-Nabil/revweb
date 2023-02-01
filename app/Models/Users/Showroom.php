@@ -218,6 +218,7 @@ class Showroom extends Model
 
                 $subscription = $this->subscriptions()->create([
                     "plan_id"       =>  $plan_id,
+                    "showroom_id"       =>  $this->id,
                     "state"         =>  Subscription::ACTIVE_STATE,
                     "type"          =>  $type,
                     "expiry_date"   => (new Carbon())->addDays($days),

@@ -24,7 +24,7 @@ class Subscription extends Model
     ];
 
     protected $fillable = [
-        'seller_id', 'plan_id', 'type', 'expiry_date'
+        'seller_id', 'plan_id', 'type', 'expiry_date', 'showroom_id', 'state'
     ];
     protected $with = ['plan'];
     public $timestamps = true;

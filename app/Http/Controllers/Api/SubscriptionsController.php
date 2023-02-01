@@ -33,7 +33,7 @@ class SubscriptionsController extends BaseApiController
                 "subscription"  =>  $ret,
             ], true);
         } else {
-            parent::sendResponse(false, "Subscription false");
+            parent::sendResponse(false, "Subscription failed");
             throw (new Exception("Subscription failed. Debug info " . print_r($ret, true)));
         }
     }
