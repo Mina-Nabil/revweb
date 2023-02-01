@@ -197,7 +197,7 @@ class Showroom extends Model
         return true;
     }
 
-    function addSubscription(int $plan_id, string $type, int $days, float $amount, string $transaction_id): Subscription
+    function addSubscription(int $plan_id, string $type, int $days, float $amount, string $transaction_id)
     {
         $owner = Auth::user();
 
