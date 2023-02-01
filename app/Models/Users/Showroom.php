@@ -208,7 +208,7 @@ class Showroom extends Model
 
         try {
 
-    
+            DB::transaction(function () use (&$subscription, $amount, $transaction_id, $plan_id, $type, $days, $owner) {
                 $newPayment = new Payment();
 
                 $newPayment->seller_id = $owner->id;
@@ -227,7 +227,7 @@ class Showroom extends Model
 
                 $newPayment->payable()->associate($subscription);
                 $newPayment->save();
-   
+            });
         } catch (Exception $e) {
             report($e);
             return false;
