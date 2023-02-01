@@ -233,7 +233,7 @@ class Showroom extends Model
             return false;
         }
 
-        return $subscription;
+        return $subscription->loadMissing('plan');
     }
 
     function checkLimit(int $limit_type, bool $abortIfFalse = false, int $capacityToAdd = 0): int
