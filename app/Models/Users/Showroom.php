@@ -212,13 +212,13 @@ class Showroom extends Model
                 $newPayment = new Payment();
 
                 $newPayment->seller_id = $owner->id;
+                $newPayment->showroom_id = $this->id;
                 $newPayment->transaction_id = $transaction_id;
                 $newPayment->amount = $amount;
                 $newPayment->title = "Subscription Payment";
 
                 $subscription = $this->subscriptions()->create([
                     "plan_id"       =>  $plan_id,
-                    "showroom_id"       =>  $this->id,
                     "state"         =>  Subscription::ACTIVE_STATE,
                     "type"          =>  $type,
                     "expiry_date"   => (new Carbon())->addDays($days),
