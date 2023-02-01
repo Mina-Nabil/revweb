@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeds;
+
 use App\Models\Subscriptions\Plan;
 use Illuminate\Database\Seeder;
 
