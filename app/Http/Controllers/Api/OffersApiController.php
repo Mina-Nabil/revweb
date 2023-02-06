@@ -10,8 +10,6 @@ use App\Models\Users\Buyer;
 use App\Models\Users\Notification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
-use App\Notifications\RequestOfferCreated;
-use App\Services\PushNotificationsHandler;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -164,6 +162,33 @@ class OffersApiController extends BaseApiController
             parent::sendResponse(true, "Offers retrieved", (object)["offers" => $buyer->getAllOffers()]);
         } else {
             parent::sendResponse(false, "Unauthorized", null, true, 403);
+        }
+    }
+
+    function acceptOffer(Request $request)
+    {
+        $request->validate([
+            "offer_id"      =>  "required|exists:offers,id",
+            "comment"       =>  "nullable"
+        ]);
+
+        $offer = Offer::findOrFail($request->offer_id);
+        $res = $offer->acceptOffer($request->comment);
+        if ($res) {
+            parent::sendResponse(true, "Succeeded", null, false);
+            $tmpNotf = Notification::newNotification(
+                Notification::TYPE_OFFER_ACCEPTED,
+                "Offer Accepted!",
+                "{$offer->buyer->BUYR_NAME} has accepted your offer. You can now check his contact details",
+                $offer->seller,
+                [
+                    "model"     =>  $offer->car->model->MODL_NAME,
+                    "brand"     =>  $offer->car->model->brand->BRND_NAME
+                ]
+            );
+            $tmpNotf->send();
+        } else {
+            parent::sendResponse(false, "Failed");
         }
     }
 
