@@ -71,7 +71,7 @@ class OfferRequest extends Model
                     }
                 }
                 $optionsArr = array();
-                foreach($options as $key => $opt){
+                foreach ($options as $key => $opt) {
                     $optionsArr[$key] = ["ORAO_ADJT_ID" => $opt];
                 }
                 $newOffer->options()->sync($optionsArr);
@@ -153,6 +153,11 @@ class OfferRequest extends Model
      */
     public static function getAvailableOffers($showroomID)
     {
+        $repliedToOfferRequestIDs = DB::table('offers_requests')
+            ->selectRaw('DISTINCT offers_requests.id')
+            ->join('offers', 'offers.OFFR_OFRQ_ID', '=', 'offers_requests.id')
+            ->where('OFFR_SHRM_ID', $showroomID)
+            ->get()->pluck('id');
 
         $query = self::selectRaw("DISTINCT offers_requests.id, offers_requests.*")->join("offers_requests_colors as offerDetails", "offers_requests.id", "=", "OFRC_OFRQ_ID")
             ->join("showroom_catalog as catalog1",  function ($join) use ($showroomID) {
@@ -161,7 +166,9 @@ class OfferRequest extends Model
             })->join("showroom_catalog_details", function ($join) use ($showroomID) {
                 $join->on("SRCD_SRCG_ID", "=", "catalog1.id");
                 $join->whereRaw("offerDetails.OFRC_COLR_ID IN (SELECT SRCD_COLR_ID from showroom_catalog_details where SRCD_SRCG_ID = catalog1.id and catalog1.SRCG_SHRM_ID = {$showroomID} )");
-            })->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])->whereDate("created_at", ">", (new Carbon("now"))->subWeekdays(14));
+            })->whereIn("OFRQ_STTS", [OfferRequest::NEW_KEY, OfferRequest::REPLIED_KEY])
+            ->whereNotIn('offer_requests.id', $repliedToOfferRequestIDs)
+            ->whereDate("created_at", ">", (new Carbon("now"))->subWeekdays(14));
 
         return $query->get();
     }
