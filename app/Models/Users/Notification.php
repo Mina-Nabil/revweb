@@ -2,6 +2,7 @@
 
 namespace App\Models\Users;
 
+use App\Notifications\FcmNotificationSender;
 use App\Notifications\RequestOfferCreated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -11,16 +12,16 @@ use Illuminate\Support\Str;
 class Notification extends Model
 {
 
-    CONST TYPE_REQUEST_OFFER_CREATED = 'request_offer_created';
-    CONST TYPE_OFFER_CREATED = 'offer_created';
-    CONST TYPE_OFFER_CANCELLED = 'offer_cancelled';
-    CONST TYPE_OFFER_DECLINED = 'offer_declined';
-    CONST TYPE_OFFER_ACCEPTED = 'offer_accepted';
+    const TYPE_REQUEST_OFFER_CREATED = 'request_offer_created';
+    const TYPE_OFFER_CREATED = 'offer_created';
+    const TYPE_OFFER_CANCELLED = 'offer_cancelled';
+    const TYPE_OFFER_DECLINED = 'offer_declined';
+    const TYPE_OFFER_ACCEPTED = 'offer_accepted';
 
     protected $hidden = ['type'];
 
     ///static functions
-    public static function newNotification($type, $title, $body, $user, array $data, $route = null) : self
+    public static function newNotification($type, $title, $body, $user, array $data, $route = null): self
     {
         $newNotf = new self;
         $newNotf->id = Str::uuid()->toString();
@@ -39,15 +40,7 @@ class Notification extends Model
     public function send()
     { //""
         $this->loadMissing('user');
-        switch ($this->type) {
-            case self::TYPE_REQUEST_OFFER_CREATED:
-                $this->user->notify(new RequestOfferCreated($this));
-                break;
-            
-            default:
-                # code...
-                break;
-        }
+        $this->user->notify(new FcmNotificationSender($this));
     }
 
 
@@ -59,7 +52,7 @@ class Notification extends Model
 
 
     //////relations
-    public function notifiable() : MorphTo
+    public function notifiable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -13,7 +13,7 @@ use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
 
-class RequestOfferCreated extends Notification implements ShouldQueue
+class FcmNotificationSender extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -47,7 +47,7 @@ class RequestOfferCreated extends Notification implements ShouldQueue
         return FcmMessage::create()
             ->setData(json_decode($this->notification->data))
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('New Offer Request')
+                ->setTitle($this->notification->title)
                 ->setBody($this->notification->body));
 
         //     ->setImage('http://example.com/url-to-image-here.png'))

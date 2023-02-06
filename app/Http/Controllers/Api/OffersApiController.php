@@ -48,9 +48,19 @@ class OffersApiController extends BaseApiController
 
         $newOffer = Offer::createOffer($offerRequest, $seller, $request->isLoan, $request->price, $request->downPayment, new DateTime($request->startDate), new DateTime($request->expiryDate), $request->colors, $request->options, $request->comment);
         if ($newOffer != null) {
+            $car = $newOffer->car;
             parent::sendResponse(true, "Offers Request Created", (object)["offer" => $newOffer], false);
-            $pushService = new PushNotificationsHandler();
-            $pushService->sendPushNotification("Offer Submitted", "New offer submitted for " . $offerRequest->car->name, [$offerRequest->buyer->id], "route/to/offer");
+            $tmpNotf = Notification::newNotification(
+                Notification::TYPE_OFFER_CREATED,
+                "New Offer Reply!",
+                "New offer sent for {$car->model->brand->BRND_NAME} {$car->model->MODL_NAME} - {$car->CAR_CATG}",
+                $offerRequest->buyer,
+                [
+                    "model"     =>  $car->model->MODL_NAME,
+                    "brand"     =>  $car->model->brand->BRND_NAME
+                ]
+            );
+            $tmpNotf->send();
         } else {
             parent::sendResponse(false, "Can't create offer");
         }
