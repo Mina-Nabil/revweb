@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Relation::enforceMorphMap([
+        Relation::morphMap([
             "seller"    =>  Seller::class,
             "buyer"     =>  Buyer::class
         ]);
