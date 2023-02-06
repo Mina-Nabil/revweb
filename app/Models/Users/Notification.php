@@ -6,6 +6,7 @@ use App\Notifications\RequestOfferCreated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
 
 class Notification extends Model
 {
@@ -22,6 +23,7 @@ class Notification extends Model
     public static function newNotification($type, $title, $body, $user, array $data, $route = null) : self
     {
         $newNotf = new self;
+        $newNotf->id = Str::uuid()->toString();
         $newNotf->type = $type;
         $newNotf->title = $title;
         $newNotf->body = $body;
