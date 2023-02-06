@@ -7,6 +7,7 @@ use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
 use App\Models\Subscriptions\Plan;
 use App\Models\Users\Buyer;
+use App\Models\Users\Notification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Notifications\RequestOfferCreated;
@@ -59,8 +60,8 @@ class OffersApiController extends BaseApiController
     {
         parent::validate($request, [
             "carID"     => "required:cars,id",
-            "colors"    => "nullable|array",
-            "options"    => "nullable|array",
+            "colors"    => "required|array",
+            "options"    => "required|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
 
@@ -73,9 +74,17 @@ class OffersApiController extends BaseApiController
             $car = Car::with('model')->findOrFail($request->carID);
             $sellersSellingCar = Seller::getCarSellers($car->id, $request->colors);
             foreach ($sellersSellingCar as $seller) {
-                Log::debug($seller->SLLR_MAIL);
-                /** @var Seller */
-                $seller->notify(new RequestOfferCreated("Seller", $seller->id, $car->model->brand->BRND_NAME, $car->model->title, $car->CAR_CATG, $car->id));
+                $tmpNotf = Notification::newNotification(
+                    Notification::TYPE_REQUEST_OFFER_CREATED,
+                    "New Offer Request",
+                    "New offer requested created for {$car->model->brand->BRND_NAME} {$car->model->MODL_NAME} - {$car->CAR_CATG}",
+                    $seller,
+                    [
+                        "model"     =>  $car->model->MODL_NAME,
+                        "brand"     =>  $car->model->brand->BRND_NAME
+                    ]
+                );
+                $tmpNotf->send();
             }
         } else {
             parent::sendResponse(false, "Offers Request Failed", null, true, 500);

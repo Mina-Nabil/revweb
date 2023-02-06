@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Users\Notification as UsersNotification;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,26 +17,16 @@ class RequestOfferCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private $userType;
-    private $userID;
-    private $carID;
-    private $carModel;
-    private $carBrand;
-    private $carCategory;
+    private $notification;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($userType, $userID, string $carBrand, string $carModel, string $carCategory, int $carID)
+    public function __construct(UsersNotification $notification)
     {
-        $this->carBrand = $carBrand;
-        $this->carModel = $carModel;
-        $this->carCategory = $carCategory;
-        $this->userType = $userType;
-        $this->userID = $userID;
-        $this->carID = $carID;
+        $this->notification = $notification;
     }
 
     /**
@@ -53,12 +44,11 @@ class RequestOfferCreated extends Notification implements ShouldQueue
     public function toFcm($notifiable)
     {
 
-        Log::debug("Barmy FCM message");
         return FcmMessage::create()
-            ->setData(['model' => $this->carModel, 'brand' => $this->carBrand])
+            ->setData(json_decode($this->notification->data))
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
                 ->setTitle('New Offer Request')
-                ->setBody("New offer requested created for {$this->carBrand} {$this->carModel} - {$this->carCategory} "));
+                ->setBody($this->notification->body));
 
         //     ->setImage('http://example.com/url-to-image-here.png'))
         // ->setAndroid(
@@ -93,9 +83,8 @@ class RequestOfferCreated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'userType'  =>  $this->userType,
-            'userID'    =>  $this->userID,
-            'car'  =>   $this->carID,
+            'userType'  =>  $this->notification->notifiable_type,
+            'userID'    =>  $this->notification->notifiable_id,
         ];
     }
 }
