@@ -312,7 +312,7 @@ class Buyer extends Authenticatable
      */
     public function routeNotificationForFcm()
     {
-        return $this->SLLR_PUSH_ID;
+        return $this->BUYR_PUSH_ID;
     }
 
 
