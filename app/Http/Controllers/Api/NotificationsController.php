@@ -16,7 +16,7 @@ class NotificationsController extends Controller
     {
         /** @var Seller|Buyer */
         $user = Auth::user();
-        return response()->json($user->notifications()->simplePaginate(25));
+        return response()->json($user->notifications()->latest()->simplePaginate(25));
     }
 
     function readNotification($id)
