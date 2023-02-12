@@ -32,7 +32,7 @@ class Notification extends Model
         $newNotf->route = $route;
         $newNotf->notifiable()->associate($user);
         $newNotf->save();
-        return $newNotf();
+        return $newNotf;
     }
 
 
