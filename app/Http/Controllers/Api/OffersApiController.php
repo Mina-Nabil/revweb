@@ -51,7 +51,7 @@ class OffersApiController extends BaseApiController
             $tmpNotf = Notification::newNotification(
                 Notification::TYPE_OFFER_CREATED,
                 "New Offer Reply!",
-                "New offer sent for {$car->model->brand->BRND_NAME} {$car->model->MODL_NAME} - {$car->CAR_CATG}",
+                "New offer received for {$car->model->brand->BRND_NAME} {$car->model->MODL_NAME} - {$car->CAR_CATG}",
                 $offerRequest->buyer,
                 [
                     "model"     =>  $car->model->MODL_NAME,
