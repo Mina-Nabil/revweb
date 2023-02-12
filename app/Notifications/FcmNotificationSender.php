@@ -45,7 +45,7 @@ class FcmNotificationSender extends Notification implements ShouldQueue
     {
 
         return FcmMessage::create()
-            ->setData(json_decode($this->notification->data))
+            ->setData((array) json_decode($this->notification->data))
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
                 ->setTitle($this->notification->title)
                 ->setBody($this->notification->body));
