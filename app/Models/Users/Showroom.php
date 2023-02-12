@@ -610,7 +610,7 @@ class Showroom extends Model
     {
         return $this->offers()
         ->whereIn("OFFR_STTS", [Offer::NEW_KEY, Offer::EXPIRED_KEY])
-        ->whereDate("OFFR_EXPR_DATE", "<", date("Y-m-d"))
+        ->whereDate("OFFR_EXPR_DATE", ">", date("Y-m-d"))
         ->whereDate("created_at", ">", (new Carbon())->subMonth())->get();
     }
 
