@@ -39,8 +39,8 @@ class Notification extends Model
     //////functions
     public function send()
     { //""
-        $this->loadMissing('user');
-        $this->user->notify(new FcmNotificationSender($this));
+        $this->loadMissing('notifiable');
+        $this->notifiable->notify(new FcmNotificationSender($this));
     }
 
 
