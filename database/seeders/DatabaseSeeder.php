@@ -1,4 +1,5 @@
 <?php
+namespace Database\Seeders;
 
 use Database\Seeds\BrandsSeeder;
 use Database\Seeds\CarsTestData;

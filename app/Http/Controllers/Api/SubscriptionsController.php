@@ -53,7 +53,7 @@ class SubscriptionsController extends BaseApiController
         $showroom = $seller->showroom;
 
         parent::sendResponse(true, "Success", [
-            "plan"     =>  $showroom->active_plan,
+            "plan"     =>  $showroom == null ? null : $showroom->active_plan,
             "current"   =>  [
                 "users"     =>   $showroom->users_count,
                 "admins"    =>  1,
