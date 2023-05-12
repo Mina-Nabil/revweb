@@ -19,7 +19,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "sentry/sentry-laravel": "^2.10"
+        "sentry/sentry-laravel": "^2.10",
+        "barryvdh/laravel-cors": "^3.0.0"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
