@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Showroom extends Model
 {
+    const MORPH_TYPE = 'showroom';
 
     protected $dates = [
         'created_at',
@@ -441,7 +442,7 @@ class Showroom extends Model
     function initiateEmailVerfication()
     {
         $emailHandler = new EmailsHandler();
-        return $emailHandler->sendEmailVerficationCode($this->SHRM_MAIL);
+        return $emailHandler->sendEmailVerficationCode($this);
     }
 
     function initiateMobileNumber1Verification()
@@ -469,21 +470,16 @@ class Showroom extends Model
         }
     }
 
-    function verifyEmail($emailCode)
+    function verifyEmail()
     {
-        $emailHandler = new EmailsHandler();
-
-        if ($emailHandler->confirmEmailVerfication($this->SHRM_MAIL, $emailCode)) {
-            $this->SHRM_MAIL_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-            return true;
-        } else {
+        $this->SHRM_MAIL_VRFD = 1;
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
+        return true;
     }
 
     function verifyMobileNumber1Code($sentSMSCode)

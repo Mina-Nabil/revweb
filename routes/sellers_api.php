@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Api\CustomersApiController;
 use App\Http\Controllers\Api\NotificationsController;
 use App\Http\Controllers\Api\OffersApiController;
@@ -81,4 +82,7 @@ Route::delete('/delete/showroom', [SellersProfileApi::class, 'deleteShowroom']);
 Route::get('/plans', [SubscriptionsController::class, 'plans']);
 Route::get('/limits', [SubscriptionsController::class, 'limits']);
 Route::post('/subscriptions', [SubscriptionsController::class, 'addSubscriptions']);
+
+
+Route::post('/verify/email', [BaseApiController::class, 'verifyCode']);
 

@@ -30,6 +30,7 @@ class ShowroomProfileApi extends BaseApiController
 
         $filesHandler = new FilesHandler();
         $displayImageFilePath = null;
+        /** @var Seller */
         $seller = $request->user();
         if ($request->hasFile("displayImage")) {
             $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "showrooms/" . $request->name . '/photos');
@@ -39,8 +40,10 @@ class ShowroomProfileApi extends BaseApiController
         $error = null;
         $failed = true;
         try {
+            /** @var Showroom */
             $newShowroom = Showroom::create($request->name, $request->email, $request->mobNumber1, $request->cityID, $request->address, $seller->id, $request->mobNumber2, $displayImageFilePath);
             $seller->setShowroom($newShowroom->id);
+            $newShowroom->initiateEmailVerfication();
             $failed = false;
         } catch (Exception $e) {
             $error = $e;

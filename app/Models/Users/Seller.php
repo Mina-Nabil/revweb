@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Storage;
 
 class Seller extends Authenticatable
 {
+
     use HasApiTokens, SoftDeletes, Notifiable;
 
     //table is Sellers
+    public const MORPH_TYPE = 'seller';
     const ACCESS_TOKEN = "access_sellers_api";
     protected $table = "sellers";
     protected $appends = array('cars_sold_price', 'cars_sold_count', 'image_url');
@@ -116,7 +118,7 @@ class Seller extends Authenticatable
         $seller = self::where("SLLR_MAIL", $emailOrMob)->orWhere("SLLR_MOB1", $emailOrMob)->first();
         if ($seller != null) {
             $seller->load('showroom');
-            if( is_a($seller->showroom, Showroom::class)){
+            if (is_a($seller->showroom, Showroom::class)) {
                 // $seller->showroom->checkLimit(Plan::USERS_LIMIT, true);
             }
             $passwordStatus = Hash::check($password, $seller->SLLR_PASS);
@@ -147,7 +149,7 @@ class Seller extends Authenticatable
     function initiateEmailVerfication()
     {
         $emailHandler = new EmailsHandler();
-        return $emailHandler->sendEmailVerficationCode($this->SLLR_MAIL);
+        return $emailHandler->sendEmailVerficationCode($this);
     }
 
     function initiateMobileNumber1Verification()
@@ -175,21 +177,16 @@ class Seller extends Authenticatable
         }
     }
 
-    function verifyEmail($emailCode)
+    function verifyEmail()
     {
-        $emailHandler = new EmailsHandler();
-
-        if ($emailHandler->confirmEmailVerfication($this->SLLR_MAIL, $emailCode)) {
-            $this->SLLR_MAIL_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-            return true;
-        } else {
+        $this->SLLR_MAIL_VRFD = 1;
+        try {
+            return $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
+        return true;
     }
 
     function verifyMobileNumber1Code($sentSMSCode)
@@ -238,6 +235,7 @@ class Seller extends Authenticatable
         try {
             return $this->save();
         } catch (Exception $e) {
+            report($e);
             return false;
         }
     }
@@ -248,6 +246,7 @@ class Seller extends Authenticatable
         try {
             return $this->save();
         } catch (Exception $e) {
+            report($e);
             return false;
         }
     }

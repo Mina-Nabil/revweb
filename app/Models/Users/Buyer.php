@@ -20,9 +20,11 @@ use Illuminate\Support\Facades\Storage;
 
 class Buyer extends Authenticatable
 {
+
     use HasApiTokens, SoftDeletes, Notifiable;
 
     //table is Buyers
+    public const MORPH_TYPE = 'buyer';
     const ACCESS_TOKEN = "access_buyers_api";
     protected $table = "buyers";
     protected $appends = array('image_url');
@@ -114,7 +116,7 @@ class Buyer extends Authenticatable
     function initiateEmailVerfication()
     {
         $emailHandler = new EmailsHandler();
-        return $emailHandler->sendEmailVerficationCode($this->BUYR_MAIL);
+        return $emailHandler->sendEmailVerficationCode($this);
     }
 
     function initiateMobileNumber1Verification()
@@ -142,20 +144,13 @@ class Buyer extends Authenticatable
         }
     }
 
-    function verifyEmail($emailCode)
+    function verifyEmail()
     {
-        $emailHandler = new EmailsHandler();
-
-        if ($emailHandler->confirmEmailVerfication($this->BUYR_MAIL, $emailCode)) {
-            $this->BUYR_MAIL_VRFD = 1;
-            try {
-                $this->save();
-            } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class]);
-                throw $e;
-            }
-            return true;
-        } else {
+        $this->BUYR_MAIL_VRFD = 1;
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
     }

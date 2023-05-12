@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Api\BuyersDataApi;
 use App\Http\Controllers\Api\BuyersProfileApi;
 use App\Http\Controllers\Api\NotificationsController;
@@ -34,3 +35,4 @@ Route::post('/edit/request/{id}', [OffersApiController::class, 'editOfferRequest
 Route::put('/cancel/request/{id}', [OffersApiController::class, 'cancelRequest']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
 Route::post('/user', [BuyersProfileApi::class, 'editUser']);
+Route::post('/verify/email', [BaseApiController::class, 'verifyCode']);

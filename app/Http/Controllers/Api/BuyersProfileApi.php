@@ -50,7 +50,9 @@ class BuyersProfileApi extends BaseApiController
             $error = null;
             $failed = true;
             try {
+                /** @var Buyer */
                 $newBuyer = Buyer::create($request->name, $request->email, $request->mobNumber1, $request->bday, $request->gender, $request->password, $request->nationalID, $request->mobNumber2, $request->bankAccount, $request->iban, $displayImageFilePath, $nationalIDFrontFilePath, $nationalIDBackFilePath);
+                $newBuyer->initiateEmailVerfication();
                 $failed = false;
             } catch (Exception $e) {
                 $error = $e;

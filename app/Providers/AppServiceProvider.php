@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
 use App\Services\FilesHandler;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -27,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Relation::morphMap([
-            "seller"    =>  Seller::class,
-            "buyer"     =>  Buyer::class
+            Seller::MORPH_TYPE    =>  Seller::class,
+            Buyer::MORPH_TYPE     =>  Buyer::class,
+            Showroom::MORPH_TYPE     =>  Showroom::class,
         ]);
     }
 }

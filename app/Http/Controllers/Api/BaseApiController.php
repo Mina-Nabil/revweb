@@ -3,12 +3,39 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Buyer;
+use App\Models\Users\MailVerification;
+use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class BaseApiController extends Controller
 {
+
+    public function verifyCode(Request $request)
+    {
+        self::validateRequest($request, [
+            "code"  =>  "required|exists:email_verifications",
+            "email" =>  "required|exists:email_verifications"
+        ]);
+        $code = MailVerification::getMailVerfication($request->email);
+        $expire = new Carbon($code->expiry);
+
+        if ($code->code != $request->code) {
+            self::sendResponse(false, "Code mismatch");
+        }
+
+        if ($expire->isPast()) {
+            self::sendResponse(false, "Code expired");
+        }
+        $code->loadMissing('mailer');
+        /** @var Seller|Buyer|Showroom */
+        $mailer = $code->mailer;
+        $mailer->verifyEmail();
+        self::sendResponse(true, "Email verified");
+    }
 
     /**
      * validate request via passed rules

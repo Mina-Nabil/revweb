@@ -35,8 +35,10 @@ class SellersProfileApi extends BaseApiController
         $error = null;
         $failed = true;
         try {
+            /** @var Seller */
             $newSeller = Seller::create($request->name, $request->email, $request->mobNumber1, $request->password, $request->mobNumber2, $displayImageFilePath);
             $failed = false;
+            $newSeller->initiateEmailVerfication();
         } catch (Exception $e) {
             $error = $e;
         }
@@ -127,6 +129,7 @@ class SellersProfileApi extends BaseApiController
 
     function updateSellerData(Request $request)
     {
+        /** @var Seller */
         $seller = $request->user();
 
         parent::validateRequest($request, [
@@ -137,8 +140,13 @@ class SellersProfileApi extends BaseApiController
             "displayImage"  =>  "nullable|image|size:10000", //10 MB max
 
         ], "Seller Update Failed");
-
-        $res = $seller->updateInfo($request->name, $request->email, $request->mobNumber1, $request->password, $request->mobNumber2);
+        $filesHandler = new FilesHandler();
+        $displayImageFilePath = null;
+        if ($request->hasFile("displayImage")) {
+            $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos');
+        }
+        $res = $seller->updateInfo($request->name, $request->mobNumber1, $request->mobNumber2, $displayImageFilePath);
+   
         if ($res) {
             parent::sendResponse(true, "Seller updated Successfully");
         } else {
