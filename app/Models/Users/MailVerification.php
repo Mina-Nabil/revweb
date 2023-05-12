@@ -4,13 +4,11 @@ namespace App\Models\Users;
 
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class MailVerification extends Model
 {
-    use HasFactory;
 
     protected $table = 'mail_verifications';
 
