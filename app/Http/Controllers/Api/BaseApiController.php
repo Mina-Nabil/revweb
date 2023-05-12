@@ -18,7 +18,7 @@ class BaseApiController extends Controller
     {
         self::validateRequest($request, [
             "code"  =>  "required|exists:mail_verifications",
-            "email" =>  "required|exists:mail_verifications"
+            "mail" =>  "required|exists:mail_verifications"
         ]);
         $code = MailVerification::getMailVerfication($request->email);
         $expire = new Carbon($code->expiry);
