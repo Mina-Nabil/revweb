@@ -29,7 +29,7 @@ class MailVerification extends Model
         }
     }
 
-    public static function getMailVerfication($mail) : self
+    public static function getMailVerfication($mail) : self|null
     {
         return self::where("mail", $mail)->latest()->get()->first();
     }
