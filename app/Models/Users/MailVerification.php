@@ -31,7 +31,7 @@ class MailVerification extends Model
 
     public static function getMailVerfication($mail) : self
     {
-        return self::where("email", $mail)->latest()->get()->first();
+        return self::where("mail", $mail)->latest()->get()->first();
     }
 
     //scopes
