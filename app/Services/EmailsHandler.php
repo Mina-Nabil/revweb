@@ -14,7 +14,7 @@ class EmailsHandler
 {
 
 
-    function sendEmailVerficationCode(Seller|Buyer|Showroom $user): bool
+    function sendEmailVerficationCode($user): bool
     {
         if ($user != null) {
             $mail = null;
