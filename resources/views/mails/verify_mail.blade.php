@@ -146,7 +146,7 @@
 
         /*
 	@tab Page
-	@section background style
+	--section background style
 	@tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
 	*/
         body,
@@ -158,7 +158,7 @@
 
         /*
 	@tab Page
-	@section background style
+	--section background style
 	@tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
 	*/
         #bodyCell {
@@ -168,7 +168,7 @@
 
         /*
 	@tab Page
-	@section heading 1
+	--section heading 1
 	@tip Set the styling for all first-level headings in your emails. These should be the largest of your headings.
 	@style heading 1
 	*/
@@ -193,7 +193,7 @@
 
         /*
 	@tab Page
-	@section heading 2
+	--section heading 2
 	@tip Set the styling for all second-level headings in your emails.
 	@style heading 2
 	*/
@@ -218,7 +218,7 @@
 
         /*
 	@tab Page
-	@section heading 3
+	--section heading 3
 	@tip Set the styling for all third-level headings in your emails.
 	@style heading 3
 	*/
@@ -243,7 +243,7 @@
 
         /*
 	@tab Page
-	@section heading 4
+	--section heading 4
 	@tip Set the styling for all fourth-level headings in your emails. These should be the smallest of your headings.
 	@style heading 4
 	*/
@@ -268,7 +268,7 @@
 
         /*
 	@tab Preheader
-	@section preheader style
+	--section preheader style
 	@tip Set the background color and borders for your email's preheader area.
 	*/
         #templatePreheader {
@@ -282,7 +282,7 @@
 
         /*
 	@tab Preheader
-	@section preheader text
+	--section preheader text
 	@tip Set the styling for your email's preheader text. Choose a size and color that is easy to read.
 	*/
         .preheaderContainer .mcnTextContent,
@@ -301,7 +301,7 @@
 
         /*
 	@tab Preheader
-	@section preheader link
+	--section preheader link
 	@tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 	*/
         .preheaderContainer .mcnTextContent a {
@@ -315,7 +315,7 @@
 
         /*
 	@tab Header
-	@section header style
+	--section header style
 	@tip Set the background color and borders for your email's header area.
 	*/
         #templateHeader {
@@ -329,7 +329,7 @@
 
         /*
 	@tab Header
-	@section header text
+	--section header text
 	@tip Set the styling for your email's header text. Choose a size and color that is easy to read.
 	*/
         .headerContainer .mcnTextContent,
@@ -348,7 +348,7 @@
 
         /*
 	@tab Header
-	@section header link
+	--section header link
 	@tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 	*/
         .headerContainer .mcnTextContent a {
@@ -362,7 +362,7 @@
 
         /*
 	@tab Body
-	@section body style
+	--section body style
 	@tip Set the background color and borders for your email's body area.
 	*/
         #templateBody {
@@ -376,7 +376,7 @@
 
         /*
 	@tab Body
-	@section body text
+	--section body text
 	@tip Set the styling for your email's body text. Choose a size and color that is easy to read.
 	*/
         .bodyContainer .mcnTextContent,
@@ -395,7 +395,7 @@
 
         /*
 	@tab Body
-	@section body link
+	--section body link
 	@tip Set the styling for your email's body links. Choose a color that helps them stand out from your text.
 	*/
         .bodyContainer .mcnTextContent a {
@@ -409,7 +409,7 @@
 
         /*
 	@tab Footer
-	@section footer style
+	--section footer style
 	@tip Set the background color and borders for your email's footer area.
 	*/
         #templateFooter {
@@ -421,7 +421,7 @@
 
         /*
 	@tab Footer
-	@section footer text
+	--section footer text
 	@tip Set the styling for your email's footer text. Choose a size and color that is easy to read.
 	*/
         .footerContainer .mcnTextContent,
@@ -440,7 +440,7 @@
 
         /*
 	@tab Footer
-	@section footer link
+	--section footer link
 	@tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 	*/
         .footerContainer .mcnTextContent a {
@@ -609,7 +609,7 @@
 
             /*
 	@tab Mobile Styles
-	@section heading 1
+	--section heading 1
 	@tip Make the first-level headings larger in size for better readability on small screens.
 	*/
             h1 {
@@ -625,7 +625,7 @@
 
             /*
 	@tab Mobile Styles
-	@section heading 2
+	--section heading 2
 	@tip Make the second-level headings larger in size for better readability on small screens.
 	*/
             h2 {
@@ -641,7 +641,7 @@
 
             /*
 	@tab Mobile Styles
-	@section heading 3
+	--section heading 3
 	@tip Make the third-level headings larger in size for better readability on small screens.
 	*/
             h3 {
@@ -657,7 +657,7 @@
 
             /*
 	@tab Mobile Styles
-	@section heading 4
+	--section heading 4
 	@tip Make the fourth-level headings larger in size for better readability on small screens.
 	*/
             h4 {
@@ -673,7 +673,7 @@
 
             /*
 	@tab Mobile Styles
-	@section Boxed Text
+	--section Boxed Text
 	@tip Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
 	*/
             .mcnBoxedTextContentContainer .mcnTextContent,
@@ -690,7 +690,7 @@
 
             /*
 	@tab Mobile Styles
-	@section Preheader Visibility
+	--section Preheader Visibility
 	@tip Set the visibility of the email's preheader on small screens. You can hide it to save space.
 	*/
             #templatePreheader {
@@ -704,7 +704,7 @@
 
             /*
 	@tab Mobile Styles
-	@section Preheader Text
+	--section Preheader Text
 	@tip Make the preheader text larger in size for better readability on small screens.
 	*/
             .preheaderContainer .mcnTextContent,
@@ -721,7 +721,7 @@
 
             /*
 	@tab Mobile Styles
-	@section Header Text
+	--section Header Text
 	@tip Make the header text larger in size for better readability on small screens.
 	*/
             .headerContainer .mcnTextContent,
@@ -738,7 +738,7 @@
 
             /*
 	@tab Mobile Styles
-	@section Body Text
+	--section Body Text
 	@tip Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
 	*/
             .bodyContainer .mcnTextContent,
@@ -755,7 +755,7 @@
 
             /*
 	@tab Mobile Styles
-	@section footer text
+	--section footer text
 	@tip Make the body content text larger in size for better readability on small screens.
 	*/
             .footerContainer .mcnTextContent,
