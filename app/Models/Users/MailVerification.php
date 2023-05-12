@@ -15,7 +15,7 @@ class MailVerification extends Model
     protected $table = 'mail_verifications';
 
     ///static functions
-    public static function newVerification(Buyer|Seller|Showroom $mailer, $mail, $code)
+    public static function newVerification($mailer, $mail, $code)
     {
         $newVerf = new self;
         $newVerf->code = $code;
@@ -37,7 +37,7 @@ class MailVerification extends Model
     }
 
     //scopes
-    public function scopeByUser($query, Buyer|Seller $mailer)
+    public function scopeByUser($query, $mailer)
     {
         return $query->where('mailer_type', $mailer->MORPH_TYPE)->where('mailer_id', $mailer->id);
     }
