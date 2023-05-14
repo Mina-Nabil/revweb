@@ -35,4 +35,6 @@ Route::post('/edit/request/{id}', [OffersApiController::class, 'editOfferRequest
 Route::put('/cancel/request/{id}', [OffersApiController::class, 'cancelRequest']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
 Route::post('/user', [BuyersProfileApi::class, 'editUser']);
+
 Route::post('/verify/email', [BaseApiController::class, 'verifyCode']);
+Route::post('/resend/email', [BaseApiController::class, 'resendCode']);

@@ -9,6 +9,7 @@ use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BaseApiController extends Controller
@@ -35,6 +36,14 @@ class BaseApiController extends Controller
         $mailer = $code->mailer;
         $mailer->verifyEmail();
         self::sendResponse(true, "Email verified");
+    }
+
+    public function resendCode()
+    {
+        /** @var Seller|Buyer */
+        $user = Auth::user();
+        $user->initiateEmailVerfication();
+        self::sendResponse(true, "Email resent");
     }
 
     /**
