@@ -47,9 +47,7 @@ class SellersProfileApi extends BaseApiController
             parent::sendResponse(false, "Registration Failed", ["Message" => $error->getMessage()], false);
             $filesHandler->deleteFile($displayImageFilePath);
         }
-        parent::sendResponse(true, "Registration Succeeded!", (object)["seller" => $newSeller, "token" => $newSeller->getApiToken($request->deviceName)], false);
-        $newSeller->delete();
-        $filesHandler->deleteFile($displayImageFilePath);
+        parent::sendResponse(true, "Registration Succeeded!", (object)["seller" => $newSeller, "token" => $newSeller->getApiToken($request->deviceName)]);
 
     }
 

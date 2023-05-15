@@ -46,6 +46,13 @@ class BaseApiController extends Controller
         self::sendResponse(true, "Email resent");
     }
 
+    public function deleteUser()
+    {
+        /** @var Seller|Buyer */
+        $user = Auth::user();
+        $user->delete();
+    }
+
     /**
      * validate request via passed rules
      * 
