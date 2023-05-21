@@ -1,16 +1,20 @@
-<?php 
+<?php
 
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 
-class FilesHandler {
+class FilesHandler
+{
 
-    public function uploadFile($requestFile, $path){
+    public function uploadFile($requestFile, $path)
+    {
         return $requestFile->store($path, "s3");
     }
 
-    public function deleteFile($path){
-        return Storage::disk('s3')->delete($path);//or false
+    public function deleteFile($path)
+    {
+        if ($path)
+            return Storage::disk('s3')->delete($path); //or false
     }
 }
