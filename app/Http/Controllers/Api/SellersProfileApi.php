@@ -38,7 +38,7 @@ class SellersProfileApi extends BaseApiController
             /** @var Seller */
             $newSeller = Seller::create($request->name, $request->email, $request->mobNumber1, $request->password, $request->mobNumber2, $displayImageFilePath);
             $failed = false;
-            $newSeller->initiateMobileNumber1Verification();
+            $newSeller->initiateEmailVerfication();
         } catch (Exception $e) {
             $error = $e;
         }

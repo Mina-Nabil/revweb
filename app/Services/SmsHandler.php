@@ -22,7 +22,7 @@ class SmsHandler
         ]);
     }
 
-    public static function  sendMobileVerficationCode($user, $mob1 = true)
+    public function sendMobileVerficationCode($user, $mob1 = true)
     {
         if ($user != null) {
             $mob = null;
