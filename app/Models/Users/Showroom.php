@@ -449,7 +449,7 @@ class Showroom extends Model
     {
         if ($this->SHRM_MOB1_VRFD == 0) { //not verified already
             $smsHandler = new SmsHandler();
-            return $smsHandler->sendMobileVerficationCode($this->SHRM_MOB1);
+            return $smsHandler->sendMobileVerficationCode($this);
         } else {
             return true;
         }
@@ -460,7 +460,7 @@ class Showroom extends Model
         if ($this->SHRM_MOB2 != null)
             if ($this->SHRM_MOB2_VRFD == 0) { //not verified already
                 $smsHandler = new SmsHandler();
-                return $smsHandler->sendMobileVerficationCode($this->SHRM_MOB1);
+                return $smsHandler->sendMobileVerficationCode($this, false);
             } else {
                 return true;
             }
@@ -482,32 +482,17 @@ class Showroom extends Model
         return true;
     }
 
-    function verifyMobileNumber1Code($sentSMSCode)
+    function verifyMob($mob)
     {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->SHRM_MOB1, $sentSMSCode)) {
+        if ($mob == $this->SHRM_MOB1)
             $this->SHRM_MOB1_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    function verifyMobileNumber2Code($sentSMSCode)
-    {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->SHRM_MOB2, $sentSMSCode)) {
+        else if ($mob == $this->SHRM_MOB2)
             $this->SHRM_MOB2_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
+
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
     }
@@ -605,9 +590,9 @@ class Showroom extends Model
     public function getExpiredOffers()
     {
         return $this->offers()
-        ->whereIn("OFFR_STTS", [Offer::NEW_KEY, Offer::EXPIRED_KEY])
-        ->whereDate("OFFR_EXPR_DATE", ">", date("Y-m-d"))
-        ->whereDate("created_at", ">", (new Carbon())->subMonth())->get();
+            ->whereIn("OFFR_STTS", [Offer::NEW_KEY, Offer::EXPIRED_KEY])
+            ->whereDate("OFFR_EXPR_DATE", ">", date("Y-m-d"))
+            ->whereDate("created_at", ">", (new Carbon())->subMonth())->get();
     }
 
     public function getAvailableJoinRequests()

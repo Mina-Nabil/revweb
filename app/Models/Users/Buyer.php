@@ -123,7 +123,7 @@ class Buyer extends Authenticatable
     {
         if ($this->BUYR_MOB1_VRFD == 0) { //not verified already
             $smsHandler = new SmsHandler();
-            return $smsHandler->sendMobileVerficationCode($this->BUYR_MOB1);
+            return $smsHandler->sendMobileVerficationCode($this);
         } else {
             return true;
         }
@@ -134,7 +134,7 @@ class Buyer extends Authenticatable
         if ($this->BUYR_MOB2 != null)
             if ($this->BUYR_MOB2_VRFD == 0) { //not verified already
                 $smsHandler = new SmsHandler();
-                return $smsHandler->sendMobileVerficationCode($this->BUYR_MOB1);
+                return $smsHandler->sendMobileVerficationCode($this, false);
             } else {
                 return true;
             }
@@ -155,34 +155,17 @@ class Buyer extends Authenticatable
         }
     }
 
-    function verifyMobileNumber1Code($sentSMSCode)
+    function verifyMob($mob)
     {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->BUYR_MOB1, $sentSMSCode)) {
+        if ($mob == $this->BUYR_MOB1)
             $this->BUYR_MOB1_VRFD = 1;
-            try {
-                $this->save();
-            } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class]);
-                throw $e;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    function verifyMobileNumber2Code($sentSMSCode)
-    {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->BUYR_MOB2, $sentSMSCode)) {
+        else if ($mob == $this->BUYR_MOB2)
             $this->BUYR_MOB2_VRFD = 1;
-            try {
-                $this->save();
-            } catch (Exception $e) {
-                Log::alert($e->getMessage(), ["DB" => self::class]);
-                throw $e;
-            }
-        } else {
+
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Users\Buyer;
 use App\Models\Users\MailVerification;
+use App\Models\Users\MobVerification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use Carbon\Carbon;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class BaseApiController extends Controller
 {
 
-    public function verifyCode(Request $request)
+    public function verifyMailCode(Request $request)
     {
         self::validateRequest($request, [
             "code"  =>  "required|exists:mail_verifications,code",
@@ -38,12 +39,51 @@ class BaseApiController extends Controller
         self::sendResponse(true, "Email verified");
     }
 
-    public function resendCode()
+    public function verifyMobCode(Request $request)
+    {
+        self::validateRequest($request, [
+            "code"  =>  "required|exists:mob_verifications,code",
+            "mob" =>  "required|exists:mob_verifications,mob"
+        ]);
+        $code = MobVerification::getMobVerfication($request->mob);
+        $expire = new Carbon($code->expiry);
+
+        if ($code->code != $request->code) {
+            self::sendResponse(false, "Code mismatch");
+        }
+
+        if ($expire->isPast()) {
+            self::sendResponse(false, "Code expired");
+        }
+        $code->loadMissing('mober');
+        /** @var Seller|Buyer|Showroom */
+        $mober = $code->mober;
+        $mober->verifyMob($request->mob);
+        self::sendResponse(true, "Email verified");
+    }
+
+    public function resendMailCode()
     {
         /** @var Seller|Buyer */
         $user = Auth::user();
         $user->initiateEmailVerfication();
         self::sendResponse(true, "Email resent");
+    }
+
+    public function resendMob1Code()
+    {
+        /** @var Seller|Buyer */
+        $user = Auth::user();
+        $user->initiateMobileNumber1Verification();
+        self::sendResponse(true, "Sms resent");
+    }
+
+    public function resendMob2Code()
+    {
+        /** @var Seller|Buyer */
+        $user = Auth::user();
+        $user->initiateMobileNumber2Verification();
+        self::sendResponse(true, "Sms resent");
     }
 
     public function deleteUser()

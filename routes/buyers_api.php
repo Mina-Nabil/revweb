@@ -36,6 +36,9 @@ Route::put('/cancel/request/{id}', [OffersApiController::class, 'cancelRequest']
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
 Route::post('/user', [BuyersProfileApi::class, 'editUser']);
 
-Route::post('/verify/email', [BaseApiController::class, 'verifyCode']);
-Route::post('/resend/email', [BaseApiController::class, 'resendCode']);
+Route::post('/verify/email', [BaseApiController::class, 'verifyMailCode']);
+Route::post('/verify/mob', [BaseApiController::class, 'verifyMobCode']);
+Route::post('/resend/email', [BaseApiController::class, 'resendMailCode']);
+Route::post('/resend/mob1', [BaseApiController::class, 'resendMob1Code']);
+Route::post('/resend/mob2', [BaseApiController::class, 'resendMob2Code']);
 Route::post('/delete/user', [BaseApiController::class, 'deleteUser']);

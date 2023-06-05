@@ -156,7 +156,7 @@ class Seller extends Authenticatable
     {
         if ($this->SLLR_MOB1_VRFD == 0) { //not verified already
             $smsHandler = new SmsHandler();
-            return $smsHandler->sendMobileVerficationCode($this->SLLR_MOB1);
+            return $smsHandler->sendMobileVerficationCode($this, false);
         } else {
             return true;
         }
@@ -167,7 +167,7 @@ class Seller extends Authenticatable
         if ($this->SLLR_MOB2 != null)
             if ($this->SLLR_MOB2_VRFD == 0) { //not verified already
                 $smsHandler = new SmsHandler();
-                return $smsHandler->sendMobileVerficationCode($this->SLLR_MOB1);
+                return $smsHandler->sendMobileVerficationCode($this, false);
             } else {
                 return true;
             }
@@ -189,32 +189,17 @@ class Seller extends Authenticatable
         return true;
     }
 
-    function verifyMobileNumber1Code($sentSMSCode)
+    function verifyMob($mob)
     {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->SLLR_MOB1, $sentSMSCode)) {
+        if ($mob == $this->SLLR_MOB1)
             $this->SLLR_MOB1_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    function verifyMobileNumber2Code($sentSMSCode)
-    {
-        $smsHandler = new SmsHandler();
-        if ($smsHandler->confirmMobNumber($this->SLLR_MOB2, $sentSMSCode)) {
+        else if ($mob == $this->SLLR_MOB2)
             $this->SLLR_MOB2_VRFD = 1;
-            try {
-                return $this->save();
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
+
+        try {
+            $this->save();
+        } catch (Exception $e) {
+            report($e);
             return false;
         }
     }

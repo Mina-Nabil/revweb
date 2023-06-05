@@ -43,7 +43,7 @@ class ShowroomProfileApi extends BaseApiController
             /** @var Showroom */
             $newShowroom = Showroom::create($request->name, $request->email, $request->mobNumber1, $request->cityID, $request->address, $seller->id, $request->mobNumber2, $displayImageFilePath);
             $seller->setShowroom($newShowroom->id);
-            $newShowroom->initiateEmailVerfication();
+            $newShowroom->initiateMobileNumber1Verification();
             $failed = false;
         } catch (Exception $e) {
             $error = $e;
