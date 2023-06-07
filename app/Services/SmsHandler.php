@@ -6,6 +6,7 @@ use App\Models\Users\MobVerification;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SmsHandler
 {
@@ -27,6 +28,9 @@ class SmsHandler
         if ($user != null) {
             $mob = null;
             $name = null;
+            
+            Log::info(get_class($user));
+
             if (is_a($user, Seller::class)) {
                 $mob = $mob1 ? $user->SLLR_MOB1 : $user->SLLR_MOB2;
                 $name = $user->SLLR_NAME;
