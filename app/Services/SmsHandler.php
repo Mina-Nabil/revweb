@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Users\Buyer;
 use App\Models\Users\MobVerification;
+use App\Models\Users\Seller;
+use App\Models\Users\Showroom;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -28,8 +31,6 @@ class SmsHandler
         if ($user != null) {
             $mob = null;
             $name = null;
-            
-            Log::info(get_class($user));
 
             if (is_a($user, Seller::class)) {
                 $mob = $mob1 ? $user->SLLR_MOB1 : $user->SLLR_MOB2;
