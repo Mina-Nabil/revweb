@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Subscription extends Model
 {
+    const MORPH_TYPE = 'subscription';
+
     ////////subscription types
     const TRIAL_TYPE = 'trial';
     const PAID_TYPE = 'paid';

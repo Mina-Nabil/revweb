@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Subscriptions\Subscription;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             Seller::MORPH_TYPE    =>  Seller::class,
             Buyer::MORPH_TYPE     =>  Buyer::class,
             Showroom::MORPH_TYPE     =>  Showroom::class,
+            Subscription::MORPH_TYPE => Subscription::class
         ]);
     }
 }

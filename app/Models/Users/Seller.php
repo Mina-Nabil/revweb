@@ -156,7 +156,7 @@ class Seller extends Authenticatable
     {
         if ($this->SLLR_MOB1_VRFD == 0) { //not verified already
             $smsHandler = new SmsHandler();
-            return $smsHandler->sendMobileVerficationCode($this, false);
+            return $smsHandler->sendMobileVerficationCode($this);
         } else {
             return true;
         }
