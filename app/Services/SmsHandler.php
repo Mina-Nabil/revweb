@@ -52,7 +52,7 @@ class SmsHandler
 
                 $message = "Hi {$name} \n";
                 $message .= "Please use the following code to verify your mobile number";
-                $message .= "\n\n {$code} \n";
+                $message .= "\n{$code} \n";
                 $message .= "Thank you";
                 self::sendSms($mob, $message);
 
@@ -64,9 +64,5 @@ class SmsHandler
 
         return false;
         //return true if sms sent
-    }
-
-    function confirmMobNumber($mobile, $code)
-    {
     }
 }
