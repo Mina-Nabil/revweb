@@ -128,7 +128,7 @@ class Car extends Model
         } else {
             $this->image = $this->model->MODL_IMGE ?? null;
         }
-        return Storage::url($this->image);
+        return $this->image == null ? null : Storage::url($this->image);
     }
 
     public function getAvailableOptionsAttribute()
