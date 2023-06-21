@@ -69,7 +69,7 @@ class OffersApiController extends BaseApiController
         parent::validate($request, [
             "carID"     => "required:cars,id",
             "colors"    => "required|array",
-            "options"    => "required|array",
+            "options"   =>  "present|array",
             "pymtType"  => "required|in:" . OfferRequest::LOAN_KEY . ',' . OfferRequest::CASH_KEY
         ]);
 
