@@ -30,7 +30,7 @@ class OffersApiController extends BaseApiController
             "startDate"     =>  "required|date",
             "expiryDate"    =>  "required|date",
             "colors"        =>  "required|array",
-            "options"        =>  "required|array"
+            "options"        =>  "present|array"
         ]);
         $offerRequest = OfferRequest::findOrFail($request->requestID);
         $seller = $request->user();
