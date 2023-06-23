@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cars\Country;
 use App\Models\Subscriptions\Plan;
 use App\Models\Users\JoinRequest;
+use App\Models\Users\Notification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Rules\Iban;
@@ -119,9 +120,16 @@ class ShowroomProfileApi extends BaseApiController
             $ret = $seller->showroom->acceptJoinRequest($request->joinRequestID);
             if ($ret) {
                 parent::sendResponse(true, "Request Accepted", null, false);
-                $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
-                $pushNotificationService = new PushNotificationsHandler();
-                $pushNotificationService->sendPushNotification("Join Request Accepted", $seller->showroom->SHRM_NAME . " accepted you to join the showroom Sales Team!", [$joinRequest->JNRQ_SLLR_ID], 'path/to/join_requests_page');
+                $joinRequest = JoinRequest::with('seller')->findOrFail($request->joinRequestID);
+
+                $tmpNotf = Notification::newNotification(
+                    Notification::TYPE_TEAM_JOIN_ACCEPT,
+                    "Team Join Request Accepted",
+                    "Welcome to your new team!",
+                    $joinRequest->seller,
+                    []
+                );
+                $tmpNotf->send();
             } else
                 parent::sendResponse(false, "Operation Failed");
         } else {
@@ -150,8 +158,15 @@ class ShowroomProfileApi extends BaseApiController
         if ($ret) {
             parent::sendResponse(true, "Request Submitted", (object)["request" => $ret->fresh()], false);
             $invitedSeller = Seller::findOrFail($request->sellerID);
-            $pushNotificationService = new PushNotificationsHandler();
-            $pushNotificationService->sendPushNotification("New Showroom Invitation", $seller->showroom->SHRM_NAME . " invites you to join the showroom Sales Team!", [$invitedSeller->id], 'path/to/join_requests_page');
+
+            $tmpNotf = Notification::newNotification(
+                Notification::TYPE_TEAM_JOIN_ACCEPT,
+                "New Join team request",
+                $seller->showroom->SHRM_NAME . " invites you to join the showroom Sales Team!",
+                $invitedSeller,
+                []
+            );
+            $tmpNotf->send();
         } else {
             parent::sendResponse(false, "Unauthorized");
         }

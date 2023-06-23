@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Users\JoinRequest;
+use App\Models\Users\Notification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use App\Services\FilesHandler;
@@ -48,7 +49,6 @@ class SellersProfileApi extends BaseApiController
             $filesHandler->deleteFile($displayImageFilePath);
         }
         parent::sendResponse(true, "Registration Succeeded!", (object)["seller" => $newSeller, "token" => $newSeller->getApiToken($request->deviceName)]);
-
     }
 
 
@@ -147,7 +147,7 @@ class SellersProfileApi extends BaseApiController
             $displayImageFilePath = $filesHandler->uploadFile($request->displayImage, "sellers/" . $request->email . '/photos');
         }
         $res = $seller->updateInfo($request->name, $request->mobNumber1, $request->mobNumber2, $displayImageFilePath);
-   
+
         if ($res) {
             parent::sendResponse(true, "Seller updated Successfully");
         } else {
@@ -166,9 +166,20 @@ class SellersProfileApi extends BaseApiController
             parent::sendResponse(true, "Request Accepted", null, false);
             $joinRequest = JoinRequest::findOrFail($request->joinRequestID);
             $joinRequest->load('showroom');
-            $joinRequest->showroom->getManagers();
-            $pushNotificationService = new PushNotificationsHandler();
-            $pushNotificationService->sendPushNotification("Invitation Accepted", $seller->SLLR_NAME . " has joined your Team!", [$joinRequest->showroom->getManagers()], 'path/to/team_page');
+            $managersIDs = $joinRequest->showroom->getManagers();
+            foreach ($managersIDs as $manId) {
+                $tmpSeller = Seller::find($manId);
+                if ($tmpSeller) {
+                    $tmpNotf = Notification::newNotification(
+                        Notification::TYPE_SALES_JOIN_ACCEPT,
+                        "Team Invitation Accepted",
+                        $seller->SLLR_NAME . " has joined your Team!",
+                        $tmpSeller,
+                        []
+                    );
+                    $tmpNotf->send();
+                }
+            }
         } else
             parent::sendResponse(false, "Operation Failed");
     }
@@ -206,8 +217,20 @@ class SellersProfileApi extends BaseApiController
             if ($ret) {
                 parent::sendResponse(true, "Request Submitted", (object)["request" => $ret->fresh()]);
                 $showroom =  Showroom::findOrFail($request->showroomID);
-                $pushNotificationService = new PushNotificationsHandler();
-                $pushNotificationService->sendPushNotification("New Join Request", $seller->SLLR_NAME . " want to join your showroom!", [$showroom->getManagers()], 'path/to/join_requests_page');
+                $managersIDs = $showroom->getManagers();
+                foreach ($managersIDs as $manId) {
+                    $tmpSeller = Seller::find($manId);
+                    if ($tmpSeller) {
+                        $tmpNotf = Notification::newNotification(
+                            Notification::TYPE_SALES_JOIN_REQUEST,
+                            "New Team Join Request",
+                            $seller->SLLR_NAME . " want to join your showroom!",
+                            $tmpSeller,
+                            []
+                        );
+                        $tmpNotf->send();
+                    }
+                }
             } else {
                 parent::sendResponse(false, "Request Failed");
             }

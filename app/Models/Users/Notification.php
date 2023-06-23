@@ -17,6 +17,10 @@ class Notification extends Model
     const TYPE_OFFER_CANCELLED = 'offer_cancelled';
     const TYPE_OFFER_DECLINED = 'offer_declined';
     const TYPE_OFFER_ACCEPTED = 'offer_accepted';
+    const TYPE_TEAM_JOIN_REQUEST = 'team_join_request';
+    const TYPE_TEAM_JOIN_ACCEPT = 'team_join_accept';
+    const TYPE_SALES_JOIN_REQUEST = 'sales_join_request';
+    const TYPE_SALES_JOIN_ACCEPT = 'sales_join_accept';
 
     protected $hidden = ['type'];
 
