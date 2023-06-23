@@ -59,7 +59,7 @@ class BaseApiController extends Controller
         /** @var Seller|Buyer|Showroom */
         $mober = $code->mober;
         $mober->verifyMob($request->mob);
-        self::sendResponse(true, "Email verified");
+        self::sendResponse(true, "Mob verified");
     }
 
     public function resendMailCode()
