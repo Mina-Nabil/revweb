@@ -11,6 +11,7 @@ use App\Models\Users\Showroom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class BaseApiController extends Controller
@@ -41,6 +42,11 @@ class BaseApiController extends Controller
 
     public function verifyMobCode(Request $request)
     {
+
+        Log::info("Request data");
+        Log::info("Code: " . $request->code);
+        Log::info("Mobile: " . $request->mob);
+
         self::validateRequest($request, [
             "code"  =>  "required|exists:mob_verifications,code",
             "mob" =>  "required|exists:mob_verifications,mob"
