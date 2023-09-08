@@ -34,7 +34,7 @@ Route::post('/offers/accept', [OffersApiController::class, 'acceptOffer']);
 Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
 Route::post('/edit/request/{id}', [OffersApiController::class, 'editOfferRequest']);
 Route::put('/cancel/request/{id}', [OffersApiController::class, 'cancelRequest']);
-Route::post('/offers/upload/document', [OffersApiController::class, 'uploadDocument']);
+Route::post('/offers/document', [OffersApiController::class, 'uploadDocument']);
 Route::get('/user', [BuyersProfileApi::class, 'getUser']);
 Route::post('/user', [BuyersProfileApi::class, 'editUser']);
 
