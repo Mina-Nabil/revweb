@@ -15,11 +15,15 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("ALTER TABLE offers MODIFY COLUMN OFFR_STTS ENUM(\"". implode('","', Offer::STATES ). "\")");
+        DB::statement("ALTER TABLE offers MODIFY COLUMN OFFR_STTS ENUM(\"" . implode('","', Offer::STATES) . "\")");
 
 
         Schema::create('offer_docs', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Offer::class, "OFDC_OFFR_ID");
+            $table->string("title");
+            $table->string("doc_url");
+            $table->text("note")->nullable();
             $table->timestamps();
         });
     }
