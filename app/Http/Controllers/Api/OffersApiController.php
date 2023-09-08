@@ -327,7 +327,7 @@ class OffersApiController extends BaseApiController
     function uploadDocument(Request $request)
     {
         $request->validate([
-            "id"        =>  "required|exists:offer_doc",
+            "id"        =>  "required|exists:offer_docs",
             "document"  =>  "file|required|mimes:jpg,pdf,png"
         ]);
         /** @var OfferDoc */
