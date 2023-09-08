@@ -301,12 +301,12 @@ class OffersApiController extends BaseApiController
         }
     }
 
-    function addDocumentBySeller(Request $request)
+    function addDocument(Request $request)
     {
         $request->validate([
             "offer_id"  =>  "required:exists:offers,id",
             "title"     =>  "required",
-            "document"  =>  "file|nullable",
+            "document"  =>  "file|nullable|mimes:jpg,pdf,png",
             "note"      =>  "nullable"
         ]);
         /** @var Offer */
@@ -328,7 +328,7 @@ class OffersApiController extends BaseApiController
     {
         $request->validate([
             "id"        =>  "required|exists:offer_doc",
-            "document"  =>  "file|required"
+            "document"  =>  "file|required|mimes:jpg,pdf,png"
         ]);
         /** @var OfferDoc */
         $offerDoc = OfferDoc::with('offer')->findOrFail($request->id);

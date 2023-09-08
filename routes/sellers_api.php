@@ -34,6 +34,7 @@ Route::get('/offers/expired', [OffersApiController::class, 'getShowroomExpiredOf
 Route::post('/extend/offer', [OffersApiController::class, 'extendOffer']);
 Route::post('/extend/offers', [OffersApiController::class, 'extendAllPendingOffers']);
 Route::post('/cancel/offer', [OffersApiController::class, 'cancelOffer']);
+Route::post('/offers/document', [OffersApiController::class, 'addDocument']);
 
 //Showroom Management routes
 Route::get('/showroom', [ShowroomProfileApi::class, 'getShowroom']);
