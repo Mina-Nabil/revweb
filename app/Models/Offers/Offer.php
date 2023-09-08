@@ -5,6 +5,7 @@ namespace App\Models\Offers;
 use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Car;
 use App\Models\Cars\ModelAdjustment;
+use App\Models\Models\Offers\OfferDoc;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
@@ -24,6 +25,8 @@ class Offer extends Model
     public const CANCELLED_KEY = "Cancelled";
     public const NEW_KEY = "New";
     public const DECLINED_KEY = "Declined";
+    public const SOLD_KEY = "SOLD";         //Sold to customer
+    public const ABORTED_KEY = "ABORTED";   //aborted after accepted
 
     public const STATES = [
         0 => self::NEW_KEY,
@@ -31,6 +34,8 @@ class Offer extends Model
         2 => self::EXPIRED_KEY,
         3 => self::DECLINED_KEY,
         4 => self::CANCELLED_KEY,
+        5 => self::SOLD_KEY,
+        6 => self::ABORTED_KEY,
     ];
 
     protected $table = "offers";
@@ -125,10 +130,31 @@ class Offer extends Model
             }])->get();
     }
 
+    public function addDocument($title, $document_url = null, $note = null): OfferDoc|false
+    {
+        try {
+            $vals = array();
+            $vals["doc_url"] = $document_url;
+            if ($note) {
+                $vals["note"]  = $note;
+            }
+            return $this->documents()->firstOrCreate([
+                "title" =>  $title
+            ], $vals);
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
     //relations
     public function colors()
     {
         return $this->hasMany(OfferColor::class, "OFCL_OFFR_ID");
+    }
+    public function documents()
+    {
+        return $this->hasMany(OfferDoc::class, "OFDC_OFFR_ID");
     }
     public function adjustments(): BelongsToMany
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cars\Car;
+use App\Models\Models\Offers\OfferDoc;
 use App\Models\Offers\Offer;
 use App\Models\Offers\OfferRequest;
 use App\Models\Subscriptions\Plan;
@@ -10,6 +11,7 @@ use App\Models\Users\Buyer;
 use App\Models\Users\Notification;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
+use App\Services\FilesHandler;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -154,6 +156,17 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function getBuyerAcceptedOffers(Request $request)
+    {
+        /** @var Buyer */
+        $buyer = $request->user();
+        if ($buyer != null) {
+            parent::sendResponse(true, "Offers retrieved", (object)["offers" => $buyer->getActiveOffers()]);
+        } else {
+            parent::sendResponse(false, "Unauthorized", null, true, 403);
+        }
+    }
+
     function getBuyerOffersHistory(Request $request)
     {
         /** @var Buyer */
@@ -288,6 +301,57 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function addDocumentBySeller(Request $request)
+    {
+        $request->validate([
+            "offer_id"  =>  "required:exists:offers,id",
+            "title"     =>  "required",
+            "document"  =>  "file|nullable",
+            "note"      =>  "nullable"
+        ]);
+        /** @var Offer */
+        $offer = Offer::findOrFail($request->offer_id);
+        $doc_url = null;
+        $filesHandler = new FilesHandler();
+        if ($request->hasFile('document')) {
+            $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
+        }
+
+        if ($offer->addDocument($request->title, $doc_url, $request->note)) {
+            parent::sendResponse(true, "Doc Uploaded");
+        } else {
+            parent::sendResponse(false, "Something is wrong");
+        }
+    }
+
+    function uploadDocument(Request $request)
+    {
+        $request->validate([
+            "id"        =>  "required|exists:offer_doc",
+            "document"  =>  "file|required"
+        ]);
+        /** @var OfferDoc */
+        $offerDoc = OfferDoc::with('offer')->findOrFail($request->id);
+
+        $buyer = Auth::user();
+        if ($buyer->id != $offerDoc->offer->OFFR_BUYR_ID) {
+            abort(403, "Unauthorized buyer");
+        }
+
+        $doc_url = null;
+        $filesHandler = new FilesHandler();
+        if ($request->hasFile('document')) {
+            $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
+        } else {
+            parent::sendResponse(false, "No file to upload");
+        }
+
+        if ($offerDoc->setUrl($doc_url)) {
+            parent::sendResponse(true, "Doc Uploaded");
+        } else {
+            parent::sendResponse(false, "Something is wrong");
+        }
+    }
 
     function cancelOffer(Request $request)
     {
