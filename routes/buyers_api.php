@@ -29,7 +29,7 @@ Route::get('/offers/requests/history', [OffersApiController::class, 'getRequests
 Route::get('/offers/requests', [OffersApiController::class, 'getBuyerRequests']);
 Route::get('/offers/history', [OffersApiController::class, 'getBuyerOffersHistory']);
 Route::get('/offers', [OffersApiController::class, 'getBuyerOffers']);
-Route::post('/offers/accepted', [OffersApiController::class, 'getBuyerAcceptedOffers']);
+Route::get('/offers/accepted', [OffersApiController::class, 'getBuyerAcceptedOffers']);
 Route::post('/offers/accept', [OffersApiController::class, 'acceptOffer']);
 Route::post('/submit/request', [OffersApiController::class, 'submitOfferRequest']);
 Route::post('/edit/request/{id}', [OffersApiController::class, 'editOfferRequest']);
