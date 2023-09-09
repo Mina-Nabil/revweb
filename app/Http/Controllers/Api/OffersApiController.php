@@ -338,17 +338,16 @@ class OffersApiController extends BaseApiController
             abort(403, "Unauthorized buyer");
         }
 
+        if (!$request->hasFile('document'))  parent::sendResponse(false, "No file to upload");
+
         $doc_url = null;
         $filesHandler = new FilesHandler();
-        if ($request->hasFile('document')) {
-            $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
-        } else {
-            parent::sendResponse(false, "No file to upload");
-        }
+        $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
 
         if ($offerDoc->setUrl($doc_url)) {
             parent::sendResponse(true, "Doc Uploaded");
         } else {
+            $filesHandler->deleteFile($doc_url);
             parent::sendResponse(false, "Something is wrong");
         }
     }

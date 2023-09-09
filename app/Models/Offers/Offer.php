@@ -132,6 +132,7 @@ class Offer extends Model
 
     public function addDocument($title, $document_url = null, $note = null): OfferDoc|false
     {
+        if (!$this->is_accepted) abort(403, 'Offer is not accepted');
         try {
             $vals = array();
             $vals["doc_url"] = $document_url;
@@ -145,6 +146,12 @@ class Offer extends Model
             report($e);
             return false;
         }
+    }
+
+    //attributes
+    public function getIsAcceptedAttribute()
+    {
+        return $this->OFFR_STTS == self::ACCEPTED_KEY;
     }
 
     //relations
