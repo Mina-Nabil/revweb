@@ -222,7 +222,7 @@ class Buyer extends Authenticatable
 
     function getAcceptedOffers()
     {
-        $offers = $this->offers()->where('OFFR_STTS', Offer::ACCEPTED_KEY);
+        $offers = $this->offers()->with('documents')->where('OFFR_STTS', Offer::ACCEPTED_KEY);
         return $offers->simplePaginate(7);
     }
 
