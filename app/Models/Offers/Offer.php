@@ -5,7 +5,7 @@ namespace App\Models\Offers;
 use App\Models\Cars\AdjustmentOption;
 use App\Models\Cars\Car;
 use App\Models\Cars\ModelAdjustment;
-use App\Models\Models\Offers\OfferDoc;
+use App\Models\Offers\OfferDoc;
 use App\Models\Users\Buyer;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;

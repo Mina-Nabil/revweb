@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Models\Offers;
+namespace App\Models\Offers;
 
 use App\Models\Offers\Offer;
 use Exception;
