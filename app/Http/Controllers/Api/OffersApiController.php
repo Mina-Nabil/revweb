@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Cars\Car;
-use App\Models\Models\Offers\OfferDoc;
 use App\Models\Offers\Offer;
+use App\Models\Offers\OfferDoc;
 use App\Models\Offers\OfferRequest;
 use App\Models\Subscriptions\Plan;
 use App\Models\Users\Buyer;
