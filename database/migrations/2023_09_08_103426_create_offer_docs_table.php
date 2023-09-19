@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Offer::class, "OFDC_OFFR_ID");
             $table->string("title");
-            $table->string("doc_url");
+            $table->string("doc_url")->nullable();
             $table->text("note")->nullable();
             $table->timestamps();
         });
