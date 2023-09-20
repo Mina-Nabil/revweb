@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cars\Car;
 use App\Models\Offers\Offer;
 use App\Models\Offers\OfferDoc;
+use App\Models\Offers\OfferExtra;
 use App\Models\Offers\OfferRequest;
 use App\Models\Subscriptions\Plan;
 use App\Models\Users\Buyer;
@@ -178,6 +179,12 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function getOffer($id)
+    {
+        $offer = Offer::with(Offer::PROFILE_RELS)->findOrFail($id);
+        parent::sendResponse(true, "Offer Retrieved", $offer);
+    }
+
     function acceptOffer(Request $request)
     {
         $request->validate([
@@ -324,6 +331,24 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function addExtra(Request $request)
+    {
+        $request->validate([
+            "offer_id"  =>  "required:exists:offers,id",
+            "title"     =>  "required",
+            "price"     =>  "required|numeric",
+            "note"      =>  "nullable"
+        ]);
+        /** @var Offer */
+        $offer = Offer::findOrFail($request->offer_id);
+
+        if ($offer->addExtra($request->title, $request->price, $request->note)) {
+            parent::sendResponse(true, "Extra Uploaded");
+        } else {
+            parent::sendResponse(false, "Something is wrong");
+        }
+    }
+
     function uploadDocument(Request $request)
     {
         $request->validate([
@@ -349,6 +374,28 @@ class OffersApiController extends BaseApiController
         } else {
             $filesHandler->deleteFile($doc_url);
             parent::sendResponse(false, "Something is wrong");
+        }
+    }
+
+    function deleteDoc($id)
+    {
+        /** @var OfferDoc */
+        $doc = OfferDoc::findOrFail($id);
+        if ($doc->delete()) {
+            parent::sendResponse(true, "Doc Deleted");
+        } else {
+            parent::sendResponse(false, "Deletion failed");
+        }
+    }
+
+    function deleteExtra($id)
+    {
+        /** @var OfferExtra */
+        $extra = OfferExtra::findOrFail($id);
+        if ($extra->delete()) {
+            parent::sendResponse(true, "Extra Deleted");
+        } else {
+            parent::sendResponse(false, "Deletion failed");
         }
     }
 

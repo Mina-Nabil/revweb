@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\DB;
 
 class Offer extends Model
 {
+    const PROFILE_RELS = [
+        'colors', 'showroom', 'car', 'buyer', 'seller', 'options', 'adjustments', 'extras', 'documents', 'colors'
+    ];
+
     public const ACCEPTED_KEY = "Accepted";
     public const EXPIRED_KEY = "Expired";
     public const CANCELLED_KEY = "Cancelled";
@@ -148,6 +152,44 @@ class Offer extends Model
         }
     }
 
+    public function deleteDocument($id): bool
+    {
+        try {
+            return $this->documents()->where('id', $id)->delete;
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
+    public function addExtra($title, $price = null, $note = null): OfferExtra|false
+    {
+        if (!$this->is_accepted) abort(403, 'Offer is not accepted');
+        try {
+            $vals = array();
+            $vals["price"] = $price;
+            if ($note) {
+                $vals["note"]  = $note;
+            }
+            return $this->extras()->firstOrCreate([
+                "title" =>  $title
+            ], $vals);
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
+    public function deleteExtra($id): bool
+    {
+        try {
+            return $this->extras()->where('id', $id)->delete;
+        } catch (Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
     //attributes
     public function getIsAcceptedAttribute()
     {
@@ -162,6 +204,10 @@ class Offer extends Model
     public function documents()
     {
         return $this->hasMany(OfferDoc::class, "OFDC_OFFR_ID");
+    }
+    public function extras()
+    {
+        return $this->hasMany(OfferExtra::class, "OFXT_OFFR_ID");
     }
     public function adjustments(): BelongsToMany
     {

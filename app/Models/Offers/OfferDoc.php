@@ -3,9 +3,11 @@
 namespace App\Models\Offers;
 
 use App\Models\Offers\Offer;
+use App\Services\FilesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class OfferDoc extends Model
 {
@@ -15,7 +17,7 @@ class OfferDoc extends Model
     protected $fillable = ['title', 'doc_url', 'note'];
 
     //functions
-    public function setUrl($url) : bool
+    public function setUrl($url): bool
     {
         $this->doc_url = $url;
         try {
@@ -24,6 +26,13 @@ class OfferDoc extends Model
             report($e);
             return false;
         }
+    }
+
+    public function delete()
+    {
+        $fileHandler = new FilesHandler();
+        $fileHandler->deleteFile($this->doc_url);
+        return parent::delete();
     }
 
     ///relations
