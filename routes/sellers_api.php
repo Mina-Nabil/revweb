@@ -39,6 +39,8 @@ Route::delete('/offers/document/{$id}', [OffersApiController::class, 'deleteDoc'
 Route::post('/offers/extra', [OffersApiController::class, 'addExtra']);
 Route::delete('/offers/extra/{$id}', [OffersApiController::class, 'deleteExtra']);
 Route::get('/offers/{$id}', [OffersApiController::class, 'getOffer']);
+Route::get('/offers/{$id}/documents', [OffersApiController::class, 'getOfferDocuments']);
+Route::get('/offers/{$id}/extras', [OffersApiController::class, 'getOfferExtras']);
 
 //Showroom Management routes
 Route::get('/showroom', [ShowroomProfileApi::class, 'getShowroom']);

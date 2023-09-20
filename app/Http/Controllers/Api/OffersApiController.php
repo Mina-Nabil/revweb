@@ -24,7 +24,6 @@ class OffersApiController extends BaseApiController
 
     function submitNewOffer(Request $request)
     {
-        Log::debug($request->all());
         parent::validate($request, [
             "requestID" =>  "required:offers_requests,id",
             "price"     =>  "required|numeric",
@@ -183,6 +182,18 @@ class OffersApiController extends BaseApiController
     {
         $offer = Offer::with(Offer::PROFILE_RELS)->findOrFail($id);
         parent::sendResponse(true, "Offer Retrieved", $offer);
+    }
+
+    function getOfferDocuments($id)
+    {
+        $offer = Offer::with('documents')->findOrFail($id);
+        parent::sendResponse(true, "Docs Retrieved", $offer->documents);
+    }
+
+    function getOfferExtras($id)
+    {
+        $offer = Offer::with('extras')->findOrFail($id);
+        parent::sendResponse(true, "Extras Retrieved", $offer->extras);
     }
 
     function acceptOffer(Request $request)
@@ -357,7 +368,6 @@ class OffersApiController extends BaseApiController
         ]);
         /** @var OfferDoc */
         $offerDoc = OfferDoc::with('offer')->findOrFail($request->id);
-        Log::info($offerDoc);
 
         $buyer = Auth::user();
         if ($buyer->id != $offerDoc->offer->OFFR_BUYR_ID) {
@@ -369,8 +379,6 @@ class OffersApiController extends BaseApiController
         $doc_url = null;
         $filesHandler = new FilesHandler();
         $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
-        Log::info("DOC UPLOADED==========");
-        Log::info($doc_url);
 
         if ($offerDoc->setUrl($doc_url)) {
             parent::sendResponse(true, "Doc Uploaded");
