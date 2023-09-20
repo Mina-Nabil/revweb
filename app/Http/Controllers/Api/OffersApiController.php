@@ -187,7 +187,7 @@ class OffersApiController extends BaseApiController
 
     function acceptOffer(Request $request)
     {
-        $request->validate([
+        parent::validate($request, [
             "offer_id"      =>  "required|exists:offers,id",
             "comment"       =>  "nullable"
         ]);
@@ -277,7 +277,7 @@ class OffersApiController extends BaseApiController
 
     function extendOffer(Request $request)
     {
-        $request->validate([
+        parent::validate($request, [
             "offerID"   =>  "required"
         ]);
         /** @var Offer */
@@ -310,7 +310,7 @@ class OffersApiController extends BaseApiController
 
     function addDocument(Request $request)
     {
-        $request->validate([
+        parent::validate($request, [
             "offer_id"  =>  "required:exists:offers,id",
             "title"     =>  "required",
             "document"  =>  "file|nullable|mimes:jpg,pdf,png",
@@ -333,7 +333,7 @@ class OffersApiController extends BaseApiController
 
     function addExtra(Request $request)
     {
-        $request->validate([
+        parent::validate($request, [
             "offer_id"  =>  "required:exists:offers,id",
             "title"     =>  "required",
             "price"     =>  "required|numeric",
@@ -351,8 +351,7 @@ class OffersApiController extends BaseApiController
 
     function uploadDocument(Request $request)
     {
-        Log::info($request);
-        $request->validate([
+        parent::validate($request, [
             "id"        =>  "required|exists:offer_docs",
             "document"  =>  "file|required|mimes:jpg,pdf,png"
         ]);
@@ -405,7 +404,7 @@ class OffersApiController extends BaseApiController
 
     function cancelOffer(Request $request)
     {
-        $request->validate([
+        parent::validate($request, [
             "offerID"   =>  "required",
             "comment"   =>  "nullable"
         ]);
