@@ -35,12 +35,12 @@ Route::post('/extend/offer', [OffersApiController::class, 'extendOffer']);
 Route::post('/extend/offers', [OffersApiController::class, 'extendAllPendingOffers']);
 Route::post('/cancel/offer', [OffersApiController::class, 'cancelOffer']);
 Route::post('/offers/document', [OffersApiController::class, 'addDocument']);
-Route::delete('/offers/document/{$id}', [OffersApiController::class, 'deleteDoc']);
+Route::delete('/offers/document/{id}', [OffersApiController::class, 'deleteDoc']);
 Route::post('/offers/extra', [OffersApiController::class, 'addExtra']);
-Route::delete('/offers/extra/{$id}', [OffersApiController::class, 'deleteExtra']);
-Route::get('/offers/{$id}/documents', [OffersApiController::class, 'getOfferDocuments']);
-Route::get('/offers/{$id}/extras', [OffersApiController::class, 'getOfferExtras']);
-Route::get('/offers/{$id}', [OffersApiController::class, 'getOffer']);
+Route::delete('/offers/extra/{id}', [OffersApiController::class, 'deleteExtra']);
+Route::get('/offers/{id}/documents', [OffersApiController::class, 'getOfferDocuments']);
+Route::get('/offers/{id}/extras', [OffersApiController::class, 'getOfferExtras']);
+Route::get('/offers/{id}', [OffersApiController::class, 'getOffer']);
 
 //Showroom Management routes
 Route::get('/showroom', [ShowroomProfileApi::class, 'getShowroom']);
