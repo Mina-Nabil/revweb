@@ -140,6 +140,7 @@ class Offer extends Model
         try {
             $vals = array();
             $vals["doc_url"] = $document_url;
+            $vals["is_seller"] = ($document_url == null);
             if ($note) {
                 $vals["note"]  = $note;
             }
@@ -162,7 +163,7 @@ class Offer extends Model
         }
     }
 
-    public function addExtra($title, $price = null, $note = null): OfferExtra|false
+    public function addExtra($title, $price = null, $note = null, $image_url = null): OfferExtra|false
     {
         if (!$this->is_accepted) abort(403, 'Offer is not accepted');
         try {
@@ -170,6 +171,9 @@ class Offer extends Model
             $vals["price"] = $price;
             if ($note) {
                 $vals["note"]  = $note;
+            }
+            if ($image_url) {
+                $vals["image_url"]  = $image_url;
             }
             return $this->extras()->firstOrCreate([
                 "title" =>  $title

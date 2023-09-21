@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Offer::class, "OFXT_OFFR_ID");
             $table->string("title");
+            $table->string("image_url")->nullable();
             $table->string("price")->nullable();
             $table->text("note")->nullable();
             $table->timestamps();

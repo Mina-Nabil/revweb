@@ -187,7 +187,10 @@ class OffersApiController extends BaseApiController
     function getOfferDocuments($id)
     {
         $offer = Offer::with('documents')->findOrFail($id);
-        parent::sendResponse(true, "Docs Retrieved", $offer->documents);
+        parent::sendResponse(true, "Docs Retrieved", (object)[
+            "seller_docs"   =>  $offer->documents->where('is_seller', true),
+            "wanted_docs"   =>  $offer->documents->where('is_seller', false)
+        ]);
     }
 
     function getOfferExtras($id)
@@ -347,13 +350,18 @@ class OffersApiController extends BaseApiController
         parent::validate($request, [
             "offer_id"  =>  "required:exists:offers,id",
             "title"     =>  "required",
+            "image"     =>  "file|nullable|mimes:jpg,pdf,png",
             "price"     =>  "required|numeric",
             "note"      =>  "nullable"
         ]);
         /** @var Offer */
         $offer = Offer::findOrFail($request->offer_id);
-
-        if ($offer->addExtra($request->title, $request->price, $request->note)) {
+        $image_url = null;
+        $filesHandler = new FilesHandler();
+        if ($request->hasFile('image')) {
+            $image_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/extras");
+        }
+        if ($offer->addExtra($request->title, $request->price, $request->note, $image_url)) {
             parent::sendResponse(true, "Extra Uploaded");
         } else {
             parent::sendResponse(false, "Something is wrong");

@@ -14,7 +14,7 @@ class OfferDoc extends Model
     use HasFactory;
 
     protected $table = 'offer_docs';
-    protected $fillable = ['title', 'doc_url', 'note'];
+    protected $fillable = ['title', 'doc_url', 'note', 'is_seller'];
 
     //functions
     public function setUrl($url): bool

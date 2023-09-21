@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string("title");
             $table->string("doc_url")->nullable();
             $table->text("note")->nullable();
+            $table->boolean("is_seller")->default(false);
             $table->timestamps();
         });
     }
