@@ -15,7 +15,8 @@ class OfferDoc extends Model
 
     protected $table = 'offer_docs';
     protected $fillable = ['title', 'doc_url', 'note', 'is_seller'];
-
+    protected $appends = ['full_url'];
+    
     //functions
     public function setUrl($url): bool
     {
@@ -47,5 +48,11 @@ class OfferDoc extends Model
     public function offer()
     {
         return $this->belongsTo(Offer::class, "OFDC_OFFR_ID");
+    }
+
+    //Accessors
+    public function getFullUrlAttribute()
+    {
+        return (isset($this->doc_url)) ? Storage::url($this->doc_url) : null;
     }
 }

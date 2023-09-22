@@ -337,9 +337,9 @@ class OffersApiController extends BaseApiController
         if ($request->hasFile('document')) {
             $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
         }
-
-        if ($offer->addDocument($request->title, $doc_url, $request->note)) {
-            parent::sendResponse(true, "Doc Uploaded");
+        $doc = $offer->addDocument($request->title, $doc_url, $request->note);
+        if ($doc) {
+            parent::sendResponse(true, "Doc Uploaded", $doc);
         } else {
             parent::sendResponse(false, "Something is wrong");
         }
@@ -389,7 +389,7 @@ class OffersApiController extends BaseApiController
         $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
 
         if ($offerDoc->setUrl($doc_url)) {
-            parent::sendResponse(true, "Doc Uploaded");
+            parent::sendResponse(true, "Doc Uploaded", $offerDoc->fresh());
         } else {
             $filesHandler->deleteFile($doc_url);
             parent::sendResponse(false, "Something is wrong");
