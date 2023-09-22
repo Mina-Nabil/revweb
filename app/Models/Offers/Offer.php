@@ -156,7 +156,7 @@ class Offer extends Model
     public function deleteDocument($id): bool
     {
         try {
-            return $this->documents()->where('id', $id)->delete;
+            return $this->documents()->where('id', $id)->delete();
         } catch (Exception $e) {
             report($e);
             return false;
@@ -187,7 +187,7 @@ class Offer extends Model
     public function deleteExtra($id): bool
     {
         try {
-            return $this->extras()->where('id', $id)->delete;
+            return $this->extras()->where('id', $id)->delete();
         } catch (Exception $e) {
             report($e);
             return false;

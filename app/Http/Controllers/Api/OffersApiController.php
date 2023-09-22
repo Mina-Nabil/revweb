@@ -407,6 +407,17 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function deleteDocImage($id)
+    {
+        /** @var OfferDoc */
+        $doc = OfferDoc::findOrFail($id);
+        if ($doc->deleteDocumentImage()) {
+            parent::sendResponse(true, "Doc Deleted");
+        } else {
+            parent::sendResponse(false, "Deletion failed");
+        }
+    }
+
     function deleteExtra($id)
     {
         /** @var OfferExtra */

@@ -35,6 +35,14 @@ class OfferDoc extends Model
         return parent::delete();
     }
 
+    public function deleteImage()
+    {
+        $fileHandler = new FilesHandler();
+        $fileHandler->deleteFile($this->doc_url);
+        $this->doc_url = null;
+        return $this->save();
+    }
+
     ///relations
     public function offer()
     {
