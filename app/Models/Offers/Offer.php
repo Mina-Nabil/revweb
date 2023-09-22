@@ -140,7 +140,7 @@ class Offer extends Model
         try {
             $vals = array();
             $vals["doc_url"] = $document_url;
-            $vals["is_seller"] = ($document_url == null);
+            $vals["is_seller"] = ($document_url != null);
             if ($note) {
                 $vals["note"]  = $note;
             }
