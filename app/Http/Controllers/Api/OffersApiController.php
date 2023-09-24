@@ -335,7 +335,7 @@ class OffersApiController extends BaseApiController
         $doc_url = null;
         $filesHandler = new FilesHandler();
         if ($request->hasFile('document')) {
-            $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
+            $doc_url = $filesHandler->uploadFile($request->document, "offers/" . $request->offer_id . "/docs");
         }
         $doc = $offer->addDocument($request->title, $doc_url, $request->note);
         if ($doc) {
@@ -359,7 +359,7 @@ class OffersApiController extends BaseApiController
         $image_url = null;
         $filesHandler = new FilesHandler();
         if ($request->hasFile('image')) {
-            $image_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/extras");
+            $image_url = $filesHandler->uploadFile($request->document, "offers/" . $request->offer_id . "/extras");
         }
         if ($offer->addExtra($request->title, $request->price, $request->note, $image_url)) {
             parent::sendResponse(true, "Extra Uploaded");
@@ -386,7 +386,7 @@ class OffersApiController extends BaseApiController
 
         $doc_url = null;
         $filesHandler = new FilesHandler();
-        $doc_url = $filesHandler->uploadFile($request->document, "offers/$offerDoc->OFDC_OFFR_ID/docs");
+        $doc_url = $filesHandler->uploadFile($request->document, "offers/" . $offerDoc->OFDC_OFFR_ID . "/docs");
 
         if ($offerDoc->setUrl($doc_url)) {
             parent::sendResponse(true, "Doc Uploaded", $offerDoc->fresh());
