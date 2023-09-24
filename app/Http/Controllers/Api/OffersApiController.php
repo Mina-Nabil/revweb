@@ -386,7 +386,7 @@ class OffersApiController extends BaseApiController
 
         $doc_url = null;
         $filesHandler = new FilesHandler();
-        $doc_url = $filesHandler->uploadFile($request->document, "offers/$request->offer_id/docs");
+        $doc_url = $filesHandler->uploadFile($request->document, "offers/$offerDoc->OFDC_OFFR_ID/docs");
 
         if ($offerDoc->setUrl($doc_url)) {
             parent::sendResponse(true, "Doc Uploaded", $offerDoc->fresh());
