@@ -377,9 +377,12 @@ class OffersApiController extends BaseApiController
         /** @var OfferDoc */
         $offerDoc = OfferDoc::with('offer')->findOrFail($request->id);
 
-        $buyer = Auth::user();
-        if ($buyer->id != $offerDoc->offer->OFFR_BUYR_ID) {
-            abort(403, "Unauthorized buyer");
+        $user = Auth::user();
+        if (
+            (is_a($user, Buyer::class) && $user->id != $offerDoc->offer->OFFR_BUYR_ID)
+            || (is_a($user, Seller::class) && $user->id != $offerDoc->offer->OFFR_SLLR_ID)
+        ) {
+            abort(403, "Unauthorized user");
         }
 
         if (!$request->hasFile('document'))  parent::sendResponse(false, "No file to upload");
