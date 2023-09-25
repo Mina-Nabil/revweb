@@ -359,7 +359,7 @@ class OffersApiController extends BaseApiController
         $image_url = null;
         $filesHandler = new FilesHandler();
         if ($request->hasFile('image')) {
-            $image_url = $filesHandler->uploadFile($request->document, "offers/" . $request->offer_id . "/extras");
+            $image_url = $filesHandler->uploadFile($request->image, "offers/" . $request->offer_id . "/extras");
         }
         if ($offer->addExtra($request->title, $request->price, $request->note, $image_url)) {
             parent::sendResponse(true, "Extra Uploaded");
