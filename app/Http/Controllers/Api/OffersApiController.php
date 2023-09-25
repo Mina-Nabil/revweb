@@ -187,6 +187,10 @@ class OffersApiController extends BaseApiController
     function getOfferDocuments($id)
     {
         $offer = Offer::with('documents')->findOrFail($id);
+        Log::debug("Seller");
+        Log::debug($offer->documents->where('is_seller', true)->toArray());
+        Log::debug("Buyer");
+        Log::debug($offer->documents->where('is_seller', false)->toArray());
         parent::sendResponse(true, "Docs Retrieved", (object)[
             "seller_docs"   =>  $offer->documents->where('is_seller', true)->toArray(),
             "wanted_docs"   =>  $offer->documents->where('is_seller', false)->toArray()
