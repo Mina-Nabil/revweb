@@ -188,8 +188,8 @@ class OffersApiController extends BaseApiController
     {
         $offer = Offer::with('documents')->findOrFail($id);
         parent::sendResponse(true, "Docs Retrieved", (object)[
-            "seller_docs"   =>  $offer->documents->where('is_seller', true)->value()->all(),
-            "wanted_docs"   =>  $offer->documents->where('is_seller', false)->value()->all()
+            "seller_docs"   =>  $offer->documents->where('is_seller', true)->values()->all(),
+            "wanted_docs"   =>  $offer->documents->where('is_seller', false)->values()->all()
         ]);
     }
 
