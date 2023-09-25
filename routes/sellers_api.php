@@ -36,6 +36,7 @@ Route::post('/extend/offers', [OffersApiController::class, 'extendAllPendingOffe
 Route::post('/cancel/offer', [OffersApiController::class, 'cancelOffer']);
 Route::post('/offers/document', [OffersApiController::class, 'addDocument']);
 Route::delete('/offers/document/{id}', [OffersApiController::class, 'deleteDoc']);
+Route::delete('/offers/document/{id}/file', [OffersApiController::class, 'deleteDocImage']);
 Route::post('/offers/extra', [OffersApiController::class, 'addExtra']);
 Route::delete('/offers/extra/{id}', [OffersApiController::class, 'deleteExtra']);
 Route::get('/offers/{id}/documents', [OffersApiController::class, 'getOfferDocuments']);
