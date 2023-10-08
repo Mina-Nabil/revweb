@@ -322,6 +322,13 @@ class OffersApiController extends BaseApiController
         }
     }
 
+    function offerEvents($id)
+    {
+        /** @var Offer */
+        $offer = Offer::with('events')->findOrFail($id);
+        parent::sendResponse(false, "Events", $offer->events);
+    }
+
     function addDocument(Request $request)
     {
         parent::validate($request, [

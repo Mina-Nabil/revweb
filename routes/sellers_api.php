@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Controllers\Api\CustomersApiController;
+use App\Http\Controllers\Api\EventsApiController;
 use App\Http\Controllers\Api\NotificationsController;
 use App\Http\Controllers\Api\OffersApiController;
 use App\Http\Controllers\Api\SellersProfileApi;
@@ -42,7 +43,15 @@ Route::post('/offers/extra', [OffersApiController::class, 'addExtra']);
 Route::delete('/offers/extra/{id}', [OffersApiController::class, 'deleteExtra']);
 Route::get('/offers/{id}/documents', [OffersApiController::class, 'getOfferDocuments']);
 Route::get('/offers/{id}/extras', [OffersApiController::class, 'getOfferExtras']);
+Route::get('/offers/{id}/events', [OffersApiController::class, 'offerEvents']);
 Route::get('/offers/{id}', [OffersApiController::class, 'getOffer']);
+
+//events routes
+Route::get('/calendar', [EventsApiController::class, 'userEvents']);
+Route::get('/calendar/{id}', [EventsApiController::class, 'event']);
+Route::post('/calendar', [EventsApiController::class, 'createEvent']);
+Route::post('/calendar/{id}', [EventsApiController::class, 'editEvent']);
+Route::delete('/calendar/{id}', [EventsApiController::class, 'deleteEvent']);
 
 //Showroom Management routes
 Route::get('/showroom', [ShowroomProfileApi::class, 'getShowroom']);

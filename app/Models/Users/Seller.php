@@ -7,6 +7,7 @@ use App\Models\Subscriptions\Plan;
 use App\Services\EmailsHandler;
 use App\Services\SmsHandler;
 use Exception;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
@@ -310,6 +311,12 @@ class Seller extends Authenticatable
     {
         return $this->hasMany(Offer::class, "OFFR_SLLR_ID");
     }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
     ///Authentication attributes
     /**
      * Get the login username to be used by the controller.

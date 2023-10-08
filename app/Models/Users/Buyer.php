@@ -266,6 +266,10 @@ class Buyer extends Authenticatable
         return $this->hasManyThrough(Offer::class, OfferRequest::class, "OFRQ_BUYR_ID", "OFFR_OFRQ_ID");
     }
 
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
 
     ///Authentication attributes
     /**

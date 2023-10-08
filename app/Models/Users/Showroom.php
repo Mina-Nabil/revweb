@@ -672,6 +672,11 @@ class Showroom extends Model
         return $this->hasMany(Payment::class, "showroom_id")->orderBy('id', 'desc');
     }
 
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
     public function getActiveSubscriptionAttribute()
     {
         return $this->subscriptions()

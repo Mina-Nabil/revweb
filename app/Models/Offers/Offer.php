@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -241,5 +242,9 @@ class Offer extends Model
     public function showroom()
     {
         return $this->belongsTo(Showroom::class, "OFFR_SHRM_ID");
+    }
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 }
