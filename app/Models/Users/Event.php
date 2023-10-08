@@ -2,6 +2,7 @@
 
 namespace App\Models\Users;
 
+use App\Models\Offers\Offer;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
