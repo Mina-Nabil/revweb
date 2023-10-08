@@ -326,7 +326,7 @@ class OffersApiController extends BaseApiController
     {
         /** @var Offer */
         $offer = Offer::with('events')->findOrFail($id);
-        parent::sendResponse(false, "Events", $offer->events);
+        parent::sendResponse(true, "Events found", $offer->events);
     }
 
     function addDocument(Request $request)
