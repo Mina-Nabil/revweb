@@ -7,6 +7,7 @@ use App\Models\Cars\Car;
 use App\Models\Cars\ModelAdjustment;
 use App\Models\Offers\OfferDoc;
 use App\Models\Users\Buyer;
+use App\Models\Users\Event;
 use App\Models\Users\Seller;
 use App\Models\Users\Showroom;
 use DateInterval;
