@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class EventsApiController extends BaseApiController
 {
-    public function userEvents($from, $to, Request $request)
+    public function userEvents(Request $request)
     {
         parent::validateRequest($request, [
             "from"  =>  "required|date",
