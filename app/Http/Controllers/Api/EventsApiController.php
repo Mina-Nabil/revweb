@@ -19,8 +19,8 @@ class EventsApiController extends BaseApiController
         ]);
         $user = Auth::user();
         $type = is_a($user, Seller::class) ? 'seller' : 'buyer';
-        $from = new Carbon($from);
-        $to = new Carbon($to);
+        $from = new Carbon($request->from);
+        $to = new Carbon($request->to);
         $events = Event::byUser($type, $user->id)->fromTo($from, $to)->get();
         parent::sendResponse(true, "Events returned successfully", $events);
     }
