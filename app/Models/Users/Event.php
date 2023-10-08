@@ -23,7 +23,8 @@ class Event extends Model
         'note',
         'start',
         'end',
-        'location'
+        'location',
+        'notification_time'
     ];
 
     ///static functions
